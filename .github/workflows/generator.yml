@@ -1,0 +1,43 @@
+# netocc-generator: build and test netocc-gen, unit tests plus the golden tests (the whole pipeline over test/.../Golden, no
+# OCCT needed). Running on all three OSes also checks that the generated output doesn't depend on the host.
+name: generator
+
+# every push to main (no path filter: see build.yml), pull requests that change the generator
+on:
+  push:
+    branches: [main, next]
+  pull_request:
+    paths: ["netocc-generator/**", ".github/workflows/generator.yml"]
+  workflow_dispatch:
+
+# a newer push to the same ref cancels the run in flight (while main is amended, each push replaces it)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: "1"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+
+defaults:
+  run:
+    working-directory: netocc-generator
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025, ubuntu-24.04, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet build NetOcc.Generator.slnx -c Release
+      - run: dotnet test NetOcc.Generator.slnx -c Release --no-build

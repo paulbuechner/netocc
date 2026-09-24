@@ -1,0 +1,358 @@
+# netocc-core: build, test and pack NetOcc on all four RIDs. A push to main whose CHANGELOG.md has a release without its tag
+# yet (the merge of the release PR, see release.yml) also publishes it: nuget.org, then the GitHub release, which tags the
+# commit; a push to next publishes its prereleases so. Keep this file's name: nuget.org's Trusted Publishing policy names it.
+#
+# One-time setup for publishing:
+#   - nuget.org > Trusted Publishing: owner paulbuechner, repository netocc, workflow build.yml, environment release
+#   - repository variable NUGET_USER: the nuget.org profile name that owns the policy
+name: build
+
+# every push to main or next; pull requests that change netocc-core, the demos, the documentation's samples or the README
+# they check. Pushes carry no path filter while main is amended into its initial commit: a force-pushed root commit gives
+# GitHub no diff, and it skips every path-filtered workflow then.
+on:
+  push:
+    branches: [main, next]
+  pull_request:
+    paths: ["netocc-core/**", "netocc-demos/**", "netocc-documentation/samples/**", "README.md", ".github/workflows/build.yml"]
+  workflow_dispatch:
+  # keeps the vcpkg caches: GitHub evicts caches unused for 7 days, and scheduled runs can start late or be dropped,
+  # so twice a week (off the full hour). GitHub disables this after 60 days without activity in the repository.
+  schedule:
+    - cron: "17 4 * * 1,4"
+
+# a newer push to a pull request cancels its run in flight; runs on main and next queue instead (the newest waiting one
+# replaces the others), since one may be publishing a release. Scheduled runs get their own group, so they never hold up a
+# push.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'schedule' && 'schedule' || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: "1"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  PYTHONUTF8: "1"
+
+# run steps work in netocc-core/; the paths of actions (artifacts, caches) are relative to the repository root
+defaults:
+  run:
+    working-directory: netocc-core
+
+jobs:
+  # the version: OCCT's and NetOcc's revision (build.py version). On main, the newest release in CHANGELOG.md is published
+  # unless it has its tag already or is on nuget.org, on next the newest if it's a prerelease (a release there is main's,
+  # merged); everything else packs <OCCT>.<next revision>-ci.<run>
+  version:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      release: ${{ steps.version.outputs.release }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      # the version and release rules this job publishes by
+      - name: build.py's tests
+        run: python test/test_build.py
+      - id: version
+        name: version and release notes
+        shell: bash
+        run: |
+          release=false
+          latest=$(python build.py version --latest)
+          if [[ "$GITHUB_EVENT_NAME" == push && -n "$latest" \
+                && ( "$GITHUB_REF" == refs/heads/main || ( "$GITHUB_REF" == refs/heads/next && "$latest" == *-* ) ) ]] \
+            && ! git ls-remote --exit-code --tags origin "refs/tags/v$latest" > /dev/null; then
+            lower=$(echo "$latest" | tr '[:upper:]' '[:lower:]')
+            if curl -fsSL https://api.nuget.org/v3-flatcontainer/netocc/index.json 2> /dev/null | grep -q "\"$lower\""; then
+              echo "::warning::NetOcc $latest is on nuget.org but has no tag: not publishing it again"
+            else
+              release=true
+            fi
+          fi
+          if [[ "$release" == true ]]; then
+            version="$latest"
+            python build.py changelog --version "$version" --output release-notes.md
+          else
+            version=$(python build.py version --ci "$GITHUB_RUN_NUMBER")
+            python build.py changelog --output release-notes.md || echo "Nothing pending." > release-notes.md
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "release=$release" >> "$GITHUB_OUTPUT"
+          echo "NetOcc $version$([[ "$release" == true ]] && echo ", published by this run")" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: release-notes
+          path: netocc-core/release-notes.md
+
+  natives:
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-2025, triplet: x64-windows, rid: win-x64, arch: x64 }
+          - { os: windows-2025, triplet: x86-windows, rid: win-x86, arch: x86 }
+          # 22.04: glibc 2.35 is the oldest the Linux natives load on
+          - { os: ubuntu-22.04, triplet: x64-linux-dynamic, rid: linux-x64, arch: x64 }
+          - { os: macos-15, triplet: arm64-osx-dynamic, rid: osx-arm64, arch: arm64 }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            6.0.x
+            8.0.x
+            10.0.x
+
+      - name: build tools (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get -o Acquire::Retries=5 update
+          sudo apt-get install -y --no-install-recommends autoconf autoconf-archive automake libtool pkg-config \
+            libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxext-dev libxi-dev
+      - name: build tools (macOS)
+        if: runner.os == 'macOS'
+        env:
+          HOMEBREW_NO_AUTO_UPDATE: "1"
+        run: brew install pkg-config
+      - name: ninja
+        run: python -m pip install --disable-pip-version-check ninja
+
+      # CLR 2 for the net35 tests; build.py test skips them with a warning if this doesn't take
+      - name: .NET Framework 3.5
+        if: runner.os == 'Windows'
+        continue-on-error: true
+        shell: pwsh
+        run: |
+          if ((Get-WindowsOptionalFeature -Online -FeatureName NetFx3).State -ne 'Enabled') {
+            Enable-WindowsOptionalFeature -Online -FeatureName NetFx3 -All -NoRestart
+          }
+
+      - name: OCCT
+        uses: ./.github/actions/occt
+        with:
+          triplet: ${{ matrix.triplet }}
+          save-cache: true
+      - uses: ./.github/actions/swig
+
+      - name: SWIG and native shim
+        shell: bash
+        run: |
+          python build.py generate
+          python build.py native --triplet ${{ matrix.triplet }}
+
+      # x86: the .NET Framework targets (net48, net35 on CLR 2); the runners have no x86 .NET 6/8/10
+      - name: test
+        shell: bash
+        run: |
+          if [ "${{ matrix.arch }}" = "x86" ]; then
+            python build.py test --arch x86 --framework net48
+            python build.py test --arch x86 --framework net35
+          else
+            python build.py test --arch ${{ matrix.arch }}
+          fi
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.rid }}
+          path: netocc-core/artifacts/runtimes/${{ matrix.rid }}
+          if-no-files-found: error
+
+  # OCCT's documentation comments as NetOcc's XML documentation (build.py docs), which pack ships: the same for every
+  # platform, so made once, beside the natives. On Windows, where libclang parses OCCT's headers with the Windows SDK's C
+  # headers; on Linux it lacks its own stddef.h.
+  documentation:
+    needs: version
+    # x64-windows's vcpkg cache is the win-x64 natives' (same image); a cold one builds OCCT here too
+    runs-on: windows-2025
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - name: OCCT
+        uses: ./.github/actions/occt
+        with:
+          triplet: x64-windows
+      - uses: ./.github/actions/swig
+
+      # SWIG's C# for the net10.0 assembly, whose members netocc-gen docs documents
+      - name: SWIG and documentation
+        shell: bash
+        run: |
+          python build.py generate
+          python build.py docs --triplet x64-windows
+      - uses: actions/upload-artifact@v7
+        with:
+          name: documentation
+          path: netocc-core/artifacts/docs
+          if-no-files-found: error
+
+  pack:
+    needs: [version, natives, documentation]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/download-artifact@v8
+        with:
+          name: win-x64
+          path: netocc-core/artifacts/runtimes/win-x64
+      - uses: actions/download-artifact@v8
+        with:
+          name: win-x86
+          path: netocc-core/artifacts/runtimes/win-x86
+      - uses: actions/download-artifact@v8
+        with:
+          name: linux-x64
+          path: netocc-core/artifacts/runtimes/linux-x64
+      - uses: actions/download-artifact@v8
+        with:
+          name: osx-arm64
+          path: netocc-core/artifacts/runtimes/osx-arm64
+      - uses: actions/download-artifact@v8
+        with:
+          name: documentation
+          path: netocc-core/artifacts/docs
+      - uses: ./.github/actions/swig
+
+      - name: pack
+        shell: bash
+        run: |
+          python build.py generate
+          python build.py pack --version "${{ needs.version.outputs.version }}"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: packages
+          path: netocc-core/artifacts/packages
+          if-no-files-found: error
+
+  package-tests:
+    needs: [version, pack]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-2025, arch: x64 }
+          - { os: ubuntu-24.04, arch: x64 }
+          - { os: macos-15, arch: arm64 }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: netocc-core/artifacts/packages
+      - name: test the packages
+        shell: bash
+        run: python build.py test-package --arch ${{ matrix.arch }}
+
+  # netocc-demos on the packed NetOcc: both viewers build (WPF needs Windows), the viewer library's tests run
+  demos:
+    needs: [pack]
+    runs-on: windows-2025
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: netocc-demos
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: netocc-core/artifacts/packages
+      # dotnet test builds only the test projects and what they reference: build the viewers first
+      - name: build and test the demos
+        run: |
+          dotnet build NetOcc.Demos.slnx -c Release
+          dotnet test NetOcc.Demos.slnx -c Release --no-build
+      # the documentation's examples: the site includes their regions, running them checks what the articles say
+      - name: run the documentation's samples
+        working-directory: netocc-documentation/samples
+        run: dotnet test -c Release
+
+  publish:
+    if: needs.version.outputs.release == 'true'
+    needs: [version, package-tests, demos]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    environment: release
+    permissions:
+      contents: write   # the GitHub release
+      id-token: write   # nuget.org Trusted Publishing
+    # no checkout: the downloads land in the workspace itself
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - uses: actions/download-artifact@v8
+        with:
+          name: packages
+          path: artifacts/packages
+      - uses: actions/download-artifact@v8
+        with:
+          name: release-notes
+          path: .
+      # the temporary API key lives for an hour: log in right before the push
+      - id: login
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: ${{ vars.NUGET_USER }}
+      # the runtime packages first: NetOcc depends on them, so no restore finds NetOcc without them. A run that fails here
+      # can be rerun (--skip-duplicate skips what's there); a new push publishes too while NetOcc itself isn't there.
+      # dotnet nuget push takes the .snupkg next to a package along.
+      - name: push to nuget.org
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
+        run: |
+          for package in artifacts/packages/NetOcc.runtime.*.nupkg artifacts/packages/NetOcc.[0-9]*.nupkg; do
+            dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
+          done
+      # the release tags the commit this run built, v<version>
+      - name: GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          prerelease=""
+          if [[ "$VERSION" == *-* ]]; then prerelease="--prerelease"; fi
+          gh release create "v$VERSION" artifacts/packages/*.nupkg --repo "$GITHUB_REPOSITORY" --target "$GITHUB_SHA" \
+            --title "NetOcc $VERSION" --notes-file release-notes.md $prerelease

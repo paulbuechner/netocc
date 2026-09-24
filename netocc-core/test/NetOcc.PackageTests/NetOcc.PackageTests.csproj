@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The packed NetOcc, consumed like an app would: restored from artifacts/packages (nuget.config here) in the version
+    build.py pack wrote to NetOcc.version.props. Run by build.py test-package; not part of NetOcc.slnx, because it
+    only restores after a pack.
+  -->
+  <Import Project="..\..\artifacts\packages\NetOcc.version.props" Condition="Exists('..\..\artifacts\packages\NetOcc.version.props')" />
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net48</TargetFrameworks>
+    <!-- test on the installed runtimes: the arch option of dotnet test sets a RID -->
+    <SelfContained>false</SelfContained>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>NetOcc.PackageTests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetOcc" Version="$(NetOccPackageVersion)" />
+    <PackageReference Include="NUnit" Version="4.6.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <!-- NuGet's .NET Framework reference assemblies, as in NetOcc.csproj -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" />
+  </ItemGroup>
+
+  <!-- before restore reads the package references (each project, a solution restore too), and before a build -->
+  <Target Name="NetOccRequirePackage" BeforeTargets="CollectPackageReferences;Build">
+    <Error Condition="'$(NetOccPackageVersion)' == ''" Text="No packed NetOcc: run 'python build.py pack' first." />
+  </Target>
+
+</Project>

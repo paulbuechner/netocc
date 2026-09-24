@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <!-- dev/CI tool only; the generated wrapper targets .NET Framework 3.5 to .NET 10 -->
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>netocc-gen</AssemblyName>
+    <RootNamespace>NetOcc.Generator</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!-- the same output on every machine: no culture formats a number or compares a string (ICU cultures write a minus
+         as U+2212, which C++ doesn't read) -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <!-- libclang's inclusion callbacks are unmanaged function pointers -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- a tool for maintaining netocc-core, not published -->
+    <IsPackable>false</IsPackable>
+    <Authors>Paul Büchner</Authors>
+    <Copyright>Copyright (c) 2026 Paul Büchner</Copyright>
+    <Description>netocc-gen: reads OCCT's headers with libclang and writes NetOcc's SWIG interface files, value-type structs, class index and IntelliSense documentation.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ClangSharp" Version="21.1.8.4" />
+    <!-- reads the hand-written partials of netocc-core's value-type structs, whose members aren't generated -->
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.9.0" />
+    <PackageReference Include="YamlDotNet" Version="18.1.0" />
+  </ItemGroup>
+
+  <!-- libclang's meta packages pick natives via runtime.json, which needs a RID; referencing the
+       runtime packages directly keeps the tool RID-agnostic (deps.json resolves them per platform) -->
+  <ItemGroup>
+    <PackageReference Include="libclang.runtime.win-x64" Version="21.1.8" />
+    <PackageReference Include="libClangSharp.runtime.win-x64" Version="21.1.8.2" />
+    <PackageReference Include="libclang.runtime.linux-x64" Version="21.1.8" />
+    <PackageReference Include="libClangSharp.runtime.linux-x64" Version="21.1.8.2" />
+    <PackageReference Include="libclang.runtime.osx-arm64" Version="21.1.8" />
+    <PackageReference Include="libClangSharp.runtime.osx-arm64" Version="21.1.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="NetOcc.Generator.Tests" />
+  </ItemGroup>
+
+</Project>

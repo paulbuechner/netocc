@@ -1,0 +1,19 @@
+# .NET build output and local state
+bin/
+obj/
+*.user
+TestResults/
+
+# IDEs
+.vs/
+.idea/
+.vscode/
+
+__pycache__/
+
+# format.py's temporary project and solution
+/.format/
+/NetOcc.Format.slnx
+
+# logs of build.py, docker runs and scratch work
+/netocc-*/log/

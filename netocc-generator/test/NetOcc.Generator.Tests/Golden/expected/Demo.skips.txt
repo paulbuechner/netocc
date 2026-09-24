@@ -1,0 +1,6 @@
+Demo_Shape::operator==: C# proxies have no operators
+Demo_Curve::State: parameter theFlags: Demo_Curve_Flags& of an enum on unsigned short, and the ref slot is an int
+Demo_Line::Unit: declared, but neither defined in the headers nor exported by the OCCT libraries
+Demo_Node::Demo_Node: the class declares only placement forms of operator new
+Demo_Selector::Demo_Selector: its inline definition sets the vtable, which names Demo_Selector::Reject; the OCCT libraries don't export that
+Demo_Selector::Reject: declared, but neither defined in the headers nor exported by the OCCT libraries

@@ -1,0 +1,23 @@
+# SWIG from conda-forge (build.py tools), for build.yml's jobs that run build.py generate
+name: SWIG
+description: SWIG and micromamba (build.py tools), cached by their versions
+
+runs:
+  using: composite
+  steps:
+    - id: versions
+      name: SWIG version
+      shell: bash
+      working-directory: netocc-core
+      run: echo "versions=$(python -c 'import build; print(f"{build.SWIG_VERSION}-{build.MICROMAMBA_VERSION}")')" >> "$GITHUB_OUTPUT"
+
+    # by their versions: build.py tools reinstalls what doesn't match
+    - uses: actions/cache@v6
+      with:
+        path: netocc-core/.tools
+        key: tools-${{ runner.os }}-${{ runner.arch }}-${{ steps.versions.outputs.versions }}
+
+    - name: SWIG
+      shell: bash
+      working-directory: netocc-core
+      run: python build.py tools

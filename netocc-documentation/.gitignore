@@ -1,0 +1,5 @@
+# docfx output
+_site/
+
+# written by classes.py from netocc-core's classes.json
+classes/

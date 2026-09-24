@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The viewer both demos share: an OCCT view in a native window, STEP documents, a sample model.</Description>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>NetOcc.Viewer</RootNamespace>
+    <!-- the source-generated P/Invoke (LibraryImport) and the window procedure's function pointer -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetOcc" Version="$(NetOccPackageVersion)" />
+  </ItemGroup>
+
+</Project>

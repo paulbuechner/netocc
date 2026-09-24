@@ -1,0 +1,38 @@
+# OCCT's C++ style (its .clang-format, https://github.com/Open-Cascade-SAS/OCCT/blob/master/.clang-format), for the
+# hand-written C++ next to it: netocc-core/src/Native. Generated headers keep netocc-gen's layout. The C# follows it as far
+# as C# has it: .editorconfig, python format.py.
+BasedOnStyle: Microsoft
+
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowAllArgumentsOnNextLine: false
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: Consecutive
+AlignConsecutiveDeclarations: Consecutive
+AlignTrailingComments: true
+AllowShortFunctionsOnASingleLine: Inline
+AlwaysBreakTemplateDeclarations: Yes
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBinaryOperators: NonAssignment
+BreakBeforeTernaryOperators: true
+ColumnLimit: 100
+ContinuationIndentWidth: 2
+IndentCaseLabels: true
+IndentPPDirectives: BeforeHash
+IndentWidth: 2
+IndentWrappedFunctionNames: true
+PackConstructorInitializers: Never
+PointerAlignment: Left
+ReferenceAlignment: Left
+SeparateDefinitionBlocks: Always
+SortIncludes: false
+UseTab: Never
+
+# OCCT's macros
+StatementMacros:
+  - Standard_FALLTHROUGH
+  - OCC_CATCH_SIGNALS
+  - DEFINE_STANDARD_RTTIEXT
+  - Standard_DEPRECATED
+TypenameMacros:
+  - Handle

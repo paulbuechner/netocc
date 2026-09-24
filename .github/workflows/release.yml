@@ -1,0 +1,67 @@
+# The release PR, like changesets' "Version Packages": whenever changelog entries (netocc-core/changes/) reach main, this
+# writes the next release into CHANGELOG.md (build.py release: <OCCT version>.<next revision>) and opens or updates the
+# pull request "Release NetOcc <version>" into main. On next, like changesets' pre mode, the release is the next
+# prerelease (<version>-next.1, -next.2, ...), its pull request into next. Merging it makes build.yml publish that version;
+# a release after merging next into main (without new entries: run this by hand on main) lists the prereleases' notes too.
+# Needs Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests".
+name: release PR
+
+on:
+  push:
+    branches: [main, next]
+    paths: ["netocc-core/changes/**"]
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: "a prerelease label: next (numbered: next.1, next.2) or a numbered one, e.g. preview.1; empty: a release, next on next"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: release-pr-${{ github.ref_name }}
+
+env:
+  PYTHONUTF8: "1"
+
+jobs:
+  release-pr:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: netocc-core
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      # a push releases what's pending, if anything; a manual run fails when there's nothing to release, and may release
+      # the revision of a prerelease without new entries
+      - id: release
+        name: write the release into CHANGELOG.md
+        env:
+          PRERELEASE: ${{ inputs.prerelease || (github.ref_name == 'next' && 'next' || '') }}
+          IF_PENDING: ${{ github.event_name == 'push' && 'yes' || '' }}
+        run: |
+          version=$(python build.py release ${IF_PENDING:+--if-pending} ${PRERELEASE:+--prerelease "$PRERELEASE"})
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          if [[ -n "$version" ]]; then python build.py changelog --version "$version" --output ../release-notes.md; fi
+          # the pull request's files: changes/ only while git has entries there, which the release deleted. Without entries
+          # the folder isn't in git at all (a release of [Unreleased] as it is), and git add fails on a path it doesn't know.
+          paths=netocc-core/CHANGELOG.md
+          if [[ -n "$(git ls-files changes)" ]]; then paths+=",netocc-core/changes"; fi
+          echo "paths=$paths" >> "$GITHUB_OUTPUT"
+      - if: steps.release.outputs.version != ''
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        with:
+          branch: release/${{ github.ref_name }}
+          delete-branch: true
+          sign-commits: true
+          commit-message: "chore(release): NetOcc ${{ steps.release.outputs.version }}"
+          title: "Release NetOcc ${{ steps.release.outputs.version }}"
+          body-path: release-notes.md
+          add-paths: ${{ steps.release.outputs.paths }}

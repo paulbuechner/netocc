@@ -1,0 +1,192 @@
+{
+  "Standard": [
+    {
+      "name": "Standard_Failure",
+      "kind": "class",
+      "cpp": "Standard_Failure"
+    },
+    {
+      "name": "Standard_Transient",
+      "kind": "class",
+      "cpp": "Standard_Transient"
+    },
+    {
+      "name": "Standard_UUID",
+      "kind": "struct",
+      "cpp": "Standard_UUID"
+    }
+  ],
+  "Demo": [
+    {
+      "name": "Demo",
+      "kind": "namespace",
+      "cpp": "Demo"
+    },
+    {
+      "name": "Demo_Algo",
+      "kind": "class",
+      "cpp": "Demo_Algo"
+    },
+    {
+      "name": "Demo_Buffer",
+      "kind": "class",
+      "cpp": "Demo_Buffer"
+    },
+    {
+      "name": "Demo_Curve",
+      "kind": "class",
+      "cpp": "Demo_Curve"
+    },
+    {
+      "name": "Demo_Curve_Continuity",
+      "kind": "enum",
+      "cpp": "Demo_Curve::Continuity",
+      "header": "Demo_Curve.hxx"
+    },
+    {
+      "name": "Demo_Curve_Flags",
+      "kind": "enum",
+      "cpp": "Demo_Curve::Flags",
+      "header": "Demo_Curve.hxx"
+    },
+    {
+      "name": "Demo_Curve_ResD1",
+      "kind": "struct",
+      "cpp": "Demo_Curve::ResD1"
+    },
+    {
+      "name": "Demo_DataMapOfIntegerSequenceOfShape",
+      "kind": "class",
+      "cpp": "NCollection_DataMap",
+      "instance": true
+    },
+    {
+      "name": "Demo_Editor",
+      "kind": "class",
+      "cpp": "Demo_Editor"
+    },
+    {
+      "name": "Demo_Error",
+      "kind": "class",
+      "cpp": "Demo_Error"
+    },
+    {
+      "name": "Demo_FaceId",
+      "kind": "struct",
+      "cpp": "Demo_TypedId",
+      "instance": true
+    },
+    {
+      "name": "Demo_FaceIterator",
+      "kind": "class",
+      "cpp": "Demo_IdIterator",
+      "instance": true
+    },
+    {
+      "name": "Demo_Faces",
+      "kind": "class",
+      "cpp": "Demo_Faces"
+    },
+    {
+      "name": "Demo_Guard_Demo_Shape",
+      "kind": "class",
+      "cpp": "Demo_Guard",
+      "instance": true
+    },
+    {
+      "name": "Demo_Guard_Demo_Vec",
+      "kind": "class",
+      "cpp": "Demo_Guard",
+      "instance": true
+    },
+    {
+      "name": "Demo_HSequenceOfShape",
+      "kind": "class",
+      "cpp": "NCollection_HSequence",
+      "instance": true
+    },
+    {
+      "name": "Demo_Holder",
+      "kind": "class",
+      "cpp": "Demo_Holder"
+    },
+    {
+      "name": "Demo_Kind",
+      "kind": "enum",
+      "cpp": "Demo_Kind",
+      "header": "Demo_Kind.hxx"
+    },
+    {
+      "name": "Demo_Line",
+      "kind": "class",
+      "cpp": "Demo_Line"
+    },
+    {
+      "name": "Demo_Node",
+      "kind": "class",
+      "cpp": "Demo_Node"
+    },
+    {
+      "name": "Demo_Old",
+      "kind": "class",
+      "cpp": "Demo_Old"
+    },
+    {
+      "name": "Demo_Options",
+      "kind": "class",
+      "cpp": "Demo_Options"
+    },
+    {
+      "name": "Demo_Result",
+      "kind": "struct",
+      "cpp": "Demo::Result"
+    },
+    {
+      "name": "Demo_Selector",
+      "kind": "class",
+      "cpp": "Demo_Selector"
+    },
+    {
+      "name": "Demo_SequenceOfShape",
+      "kind": "class",
+      "cpp": "NCollection_Sequence",
+      "instance": true
+    },
+    {
+      "name": "Demo_Shape",
+      "kind": "class",
+      "cpp": "Demo_Shape"
+    },
+    {
+      "name": "Demo_Status",
+      "kind": "enum",
+      "cpp": "Demo::Status",
+      "header": "Demo.hxx"
+    },
+    {
+      "name": "Demo_TypedId_3",
+      "kind": "struct",
+      "cpp": "Demo_TypedId",
+      "instance": true
+    },
+    {
+      "name": "Demo_Vec",
+      "kind": "class",
+      "cpp": "Demo_Vec"
+    },
+    {
+      "name": "NCollection_Sequence_double",
+      "kind": "class",
+      "cpp": "NCollection_Sequence",
+      "instance": true
+    }
+  ],
+  "TColDemo": [
+    {
+      "name": "TColDemo_Array1OfVec",
+      "kind": "class",
+      "cpp": "NCollection_Array1",
+      "instance": true
+    }
+  ]
+}
