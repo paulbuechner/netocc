@@ -1,0 +1,11 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf
+
+# written by netocc-gen and skips.py: collapsed in GitHub diffs, left out of its language statistics
+netocc-core/src/SWIG_files/wrapper/*.i linguist-generated
+netocc-core/src/SWIG_files/headers/*.hxx linguist-generated
+netocc-core/src/SWIG_files/*.json linguist-generated
+netocc-core/src/NetOcc/**/*.g.cs linguist-generated
+netocc-documentation/articles/skipped.md linguist-generated

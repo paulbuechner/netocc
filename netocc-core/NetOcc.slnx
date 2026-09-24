@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NetOcc/NetOcc.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/NetOcc.Tests/NetOcc.Tests.csproj" />
+  </Folder>
+</Solution>

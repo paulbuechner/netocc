@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NetOcc.Viewer/NetOcc.Viewer.csproj" />
+    <Project Path="src/NetOcc.Viewer.Avalonia/NetOcc.Viewer.Avalonia.csproj" />
+    <Project Path="src/NetOcc.Viewer.Wpf/NetOcc.Viewer.Wpf.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/NetOcc.Viewer.Tests/NetOcc.Viewer.Tests.csproj" />
+  </Folder>
+</Solution>

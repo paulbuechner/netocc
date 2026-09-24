@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "netocc-core",
+  "version-string": "0.0.0",
+  "description": "OCCT for the NetOcc SWIG wrapper",
+  "dependencies": [
+    {
+      "name": "opencascade",
+      "features": ["rapidjson"]
+    }
+  ],
+  "overrides": [
+    { "name": "opencascade", "version": "8.0.1" }
+  ]
+}

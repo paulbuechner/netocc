@@ -1,0 +1,9 @@
+# tools (micromamba and its SWIG environment)
+.tools/
+
+# vcpkg: installed trees, build trees, downloads, binary cache, registry cache
+.vcpkg/
+
+# build outputs: generated SWIG sources, CMake build dirs, native artifacts
+build/
+artifacts/

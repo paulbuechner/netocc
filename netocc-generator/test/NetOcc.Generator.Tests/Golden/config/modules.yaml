@@ -1,0 +1,15 @@
+# Golden fixture: generate config for the fake packages, one setting of each kind.
+generate:
+  - Standard
+  - Demo
+alias_packages:
+  TColDemo: DemoModule
+
+packages:
+  Standard:
+    classes: [Standard_Transient, Standard_Failure, Standard_UUID]
+    exclude_methods: [Standard_Transient::IncrementRefCounter]
+  Demo:
+    value_types: [Demo_Vec]
+    exclude_classes: [Demo_Allocator]
+    exclude_namespaces: [Demo::detail]

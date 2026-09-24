@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The WPF viewer: OcctViewer in an HwndHost.</Description>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>NetOcc.Viewer.Wpf</RootNamespace>
+    <AssemblyName>NetOcc.Viewer.Wpf</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetOcc.Viewer\NetOcc.Viewer.csproj" />
+  </ItemGroup>
+
+</Project>

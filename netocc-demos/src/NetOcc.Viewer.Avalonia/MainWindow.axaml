@@ -1,0 +1,22 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:NetOcc.Viewer.Avalonia"
+        x:Class="NetOcc.Viewer.Avalonia.MainWindow"
+        Title="NetOcc Viewer (Avalonia)" Width="1100" Height="750">
+  <DockPanel>
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem Header="_Open STEP..." Click="Open_Click" />
+        <MenuItem Header="Open _sample" Click="OpenSample_Click" />
+        <Separator />
+        <MenuItem Header="E_xit" Click="Exit_Click" />
+      </MenuItem>
+      <MenuItem Header="_View">
+        <MenuItem Header="_Fit all" Click="FitAll_Click" />
+      </MenuItem>
+    </Menu>
+    <TextBlock x:Name="Status" DockPanel.Dock="Bottom" Margin="8,4"
+               Text="Open a STEP file. Left button: rotate, middle: pan, right or wheel: zoom." />
+    <local:ViewerHost x:Name="Host" />
+  </DockPanel>
+</Window>

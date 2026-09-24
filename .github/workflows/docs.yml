@@ -1,0 +1,69 @@
+# netocc-documentation: builds the DocFX site on every change; pushes to main publish it to GitHub Pages.
+#
+# One-time setup: repository Settings > Pages > Build and deployment > Source: GitHub Actions.
+name: docs
+
+# every push to main (no path filter: see build.yml); pull requests that change the site or the class index's inputs,
+# which netocc-gen writes into netocc-core
+on:
+  push:
+    branches: [main, next]
+  pull_request:
+    paths:
+      - "netocc-documentation/**"
+      - "netocc-core/src/SWIG_files/modules.json"
+      - "netocc-core/src/SWIG_files/classes.json"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+# one deployment at a time: a newer run waits instead of cancelling one in flight
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  DOTNET_NOLOGO: "1"
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: netocc-documentation
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: 10.0.x
+      - name: class index
+        run: python classes.py
+      - name: site
+        run: |
+          dotnet tool restore
+          dotnet docfx docfx.json --warningsAsErrors
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: netocc-documentation/_site
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      pages: write      # the deployment
+      id-token: write   # its OIDC token
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5

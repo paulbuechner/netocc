@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      .NET Framework targets compile against their reference assemblies and run on the installed 4.8.x CLR;
+      net35 runs on CLR 2 (see below)
+    -->
+    <TargetFrameworks>net10.0;net8.0;net6.0;net48;net472;net462;net35</TargetFrameworks>
+    <!-- .NET 6 is out of support (NETSDK1138), but consumers still need it -->
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <!-- test on the installed runtimes: the arch option of dotnet test sets a RID, which before net8.0 implied self-contained (NETSDK1201) -->
+    <SelfContained>false</SelfContained>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>NetOcc.Tests</RootNamespace>
+    <NetOccArtifacts>$(MSBuildThisFileDirectory)..\..\artifacts\runtimes</NetOccArtifacts>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit.Analyzers" Version="4.15.0" PrivateAssets="all" />
+    <!-- NuGet's .NET Framework reference assemblies, as in NetOcc.csproj -->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" />
+  </ItemGroup>
+
+  <!--
+    net35 on CLR 2: NUnit 4 needs 4.6.2 and VSTest can't host CLR 2, so this target is an exe on NUnit 3 (its last
+    .NET 3.5 release) that runs itself through NUnitLite (Net35.cs). build.py test starts it.
+  -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net35'">
+    <OutputType>Exe</OutputType>
+    <IsTestProject>false</IsTestProject>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net35'">
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnitLite" Version="3.14.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net35'">
+    <PackageReference Include="NUnit" Version="4.6.1" />
+  </ItemGroup>
+
+  <!-- VSTest 18 and NUnit3TestAdapter 6 ship net462 + net8.0 only; net6.0 stays on their last releases with a netcoreapp3.1 build -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="5.2.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' != 'net6.0' and '$(TargetFramework)' != 'net35'">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
+  </ItemGroup>
+
+  <!--
+    NetOccTarget (net45, net452): the .NET Framework targets test that library build instead of the nearest one.
+    SetTargetFramework skips the SDK's negotiation, which also keeps the RID away from libraries: remove it here, so
+    the tests load the AnyCPU build that ships.
+  -->
+  <ItemGroup Condition="'$(NetOccTarget)' != '' and '$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <ProjectReference Include="..\..\src\NetOcc\NetOcc.csproj" SetTargetFramework="TargetFramework=$(NetOccTarget)" GlobalPropertiesToRemove="RuntimeIdentifier;SelfContained" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(NetOccTarget)' == '' or '$(TargetFrameworkIdentifier)' != '.NETFramework'">
+    <ProjectReference Include="..\..\src\NetOcc\NetOcc.csproj" />
+  </ItemGroup>
+
+  <!-- AnyCPU layout: natives per architecture in x64\ and x86\ (NetOcc's loader picks by process bitness) -->
+  <ItemGroup>
+    <None Include="$(NetOccArtifacts)\win-x64\native\*" Link="x64\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(NetOccArtifacts)\win-x86\native\*" Link="x86\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(NetOccArtifacts)\linux-x64\native\*" Link="runtimes\linux-x64\native\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="$(NetOccArtifacts)\osx-arm64\native\*" Link="runtimes\osx-arm64\native\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+</Project>

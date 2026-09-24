@@ -1,0 +1,114 @@
+# netocc-gen generate: which packages to generate and how. Hand-edited.
+# What the generator can't derive (lifetime typemaps, value-type thunks, %extend) is hand-written in netocc-core's
+# src/SWIG_files/extras/<Pkg>.i; a generated module includes its companion after the enums, before the classes.
+# Packages not listed stay hand-written in netocc-core (src/SWIG_files/wrapper); their .i files tell the generator
+# which types exist.
+
+# OCCT modules, toolkits or packages (see toolkits.yaml); packages may use each other in any order
+generate:
+  - FoundationClasses
+  - ModelingData
+  - ModelingAlgorithms
+  # Visualization without VTK (TKIVtk), OpenGL ES (TKOpenGles) and Direct3D (TKD3DHost)
+  - TKService
+  - TKV3d
+  - TKOpenGl
+  - TKMeshVS
+  - ApplicationFramework
+  - DataExchange
+
+# the platforms' window and event packages (one platform's headers each; a native window comes from Aspect_Window's
+# companion), and resource packages without headers
+exclude_packages: [Xw, WNT, Cocoa, Wasm, Shaders, Textures]
+
+# OCCT 8's deprecated typedefs (src/Deprecated/NCollectionAliases) name the collection classes, each in the package it
+# is named after. These packages OCCT 8 dropped get modules for their collections (OCC.Core.TColgp.TColgp_Array1OfPnt),
+# in the OCCT module they belonged to, whose native library they join.
+alias_packages:
+  TColgp: FoundationClasses
+  TColGeom: ModelingData
+  TColGeom2d: ModelingData
+
+packages:
+  # the reference count belongs to the proxies
+  Standard:
+    exclude_methods:
+      - Standard_Transient::Delete
+      - Standard_Transient::IncrementRefCounter
+      - Standard_Transient::DecrementRefCounter
+  # value types: C# structs with the C++ layout (src/NetOcc/<Pkg>/<Type>.g.cs, generated; managed members hand-written
+  # in <Type>.cs). Every gp class is one, except gp itself: a static class (gp.Origin(), gp.Resolution()).
+  gp:
+    classes: [gp]
+    value_types:
+      - gp_XY
+      - gp_XYZ
+      - gp_Pnt
+      - gp_Pnt2d
+      - gp_Vec
+      - gp_Vec2d
+      - gp_Dir
+      - gp_Dir2d
+      - gp_Ax1
+      - gp_Ax2
+      - gp_Ax2d
+      - gp_Ax22d
+      - gp_Ax3
+      - gp_Mat
+      - gp_Mat2d
+      - gp_Trsf
+      - gp_Trsf2d
+      - gp_GTrsf
+      - gp_GTrsf2d
+      - gp_Quaternion
+      - gp_QuaternionNLerp
+      - gp_QuaternionSLerp
+      - gp_Lin
+      - gp_Lin2d
+      - gp_Circ
+      - gp_Circ2d
+      - gp_Elips
+      - gp_Elips2d
+      - gp_Hypr
+      - gp_Hypr2d
+      - gp_Parab
+      - gp_Parab2d
+      - gp_Pln
+      - gp_Cylinder
+      - gp_Cone
+      - gp_Sphere
+      - gp_Torus
+  Bnd:
+    value_types: [Bnd_Box, Bnd_Box2d]
+  Quantity:
+    value_types: [Quantity_Color, Quantity_ColorRGBA]
+  Poly:
+    value_types: [Poly_Triangle]
+  # declared only on Windows without FreeImage (a WIC palette)
+  Image:
+    exclude_methods: [Image_AlienPixMap::GetPalette]
+  # the driver a viewer creates; the renderer's classes (contexts, shaders, frame buffers) declare per platform
+  OpenGl:
+    classes: [OpenGl_GraphicDriver, OpenGl_Caps]
+  # preludes: headers that use a type without including it. Packages that use these headers get the preludes too.
+  # XCAFDoc_AssemblyIterator.hxx: TDF_Label
+  XCAFDoc:
+    prelude: [TDF_Label.hxx]
+  # ChFiKPart_ComputeData_ChPl*.hxx: ChFiDS_ChamfMode
+  ChFiKPart:
+    prelude: [ChFiDS_ChamfMode.hxx]
+  # Contap_Line.hxx, Contap_Point.hxx: Adaptor2d_Curve2d
+  Contap:
+    prelude: [Adaptor2d_Curve2d.hxx]
+  # IntWalk_PWalking.hxx: IntSurf_LineOn2S
+  IntWalk:
+    prelude: [IntSurf_LineOn2S.hxx]
+  # StdStorage.hxx: occ::handle
+  StdStorage:
+    prelude: [Standard_Handle.hxx]
+  # StepToTopoDS_*.hxx: StepData_Factors
+  StepToTopoDS:
+    prelude: [StepData_Factors.hxx]
+  # the STEP reader's bison parser and flex scanner (step.tab.hxx): implementation, and its members don't all link
+  StepFile:
+    exclude_namespaces: [step]
