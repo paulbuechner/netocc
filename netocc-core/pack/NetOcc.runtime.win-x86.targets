@@ -1,0 +1,11 @@
+<Project>
+
+  <!--
+    .NET Framework apps ignore runtimes\<rid>\native: copy the win-x86 natives into x86\ next to the app, where
+    NetOcc's loader looks in a 32-bit process. .NET (Core) apps get them from runtimes\ and skip this.
+  -->
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\*" Link="x86\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,5 @@
+# Golden fixture: the toolkit map netocc-gen bootstrap would write for the fake source tree under occt/.
+occt: 8.0.1
+modules:
+  DemoModule:
+    TKDemo: [Standard, NCollection, Demo]

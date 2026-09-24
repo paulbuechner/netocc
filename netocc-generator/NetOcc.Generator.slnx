@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NetOcc.Generator/NetOcc.Generator.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/NetOcc.Generator.Tests/NetOcc.Generator.Tests.csproj" />
+  </Folder>
+</Solution>

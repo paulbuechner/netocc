@@ -1,0 +1,54 @@
+# OCCT for a vcpkg triplet (build.py occt) from vcpkg's binary cache, for build.yml's natives and documentation jobs. A cold
+# cache builds OCCT, which takes hours.
+name: OCCT
+description: vcpkg at the registry baseline, its binary cache and OCCT for a triplet (build.py occt)
+
+inputs:
+  triplet:
+    description: the vcpkg triplet
+    required: true
+  save-cache:
+    description: "true: save the binary cache when the install changed it (the natives, one job per triplet)"
+    default: "false"
+
+runs:
+  using: composite
+  steps:
+    # at the registry baseline of vcpkg-configuration.json: the tool's scripts match the ports
+    - name: vcpkg
+      shell: bash
+      working-directory: netocc-core
+      env:
+        VCPKG_ROOT: ${{ github.workspace }}/.vcpkg-tool
+      run: |
+        commit=$(jq -r '."default-registry".baseline' vcpkg-configuration.json)
+        git init --quiet "$VCPKG_ROOT"
+        git -C "$VCPKG_ROOT" fetch --quiet --depth 1 https://github.com/microsoft/vcpkg.git "$commit"
+        git -C "$VCPKG_ROOT" checkout --quiet FETCH_HEAD
+        if [ "$RUNNER_OS" = "Windows" ]; then "$VCPKG_ROOT/bootstrap-vcpkg.bat" -disableMetrics; else "$VCPKG_ROOT/bootstrap-vcpkg.sh" -disableMetrics; fi
+
+    # vcpkg's binary cache, saved under a new key whenever the archives changed; a restore takes the newest. The ABIs
+    # also cover the runner image (compiler, CMake), so vcpkg can rebuild without a change here: --prune-archives then
+    # drops the stale archives. Saved right after OCCT, so a failing test later doesn't throw hours of OCCT away.
+    - id: cache
+      uses: actions/cache/restore@v6
+      with:
+        path: netocc-core/.vcpkg/archives
+        key: vcpkg-${{ inputs.triplet }}-${{ hashFiles('netocc-core/vcpkg.json', 'netocc-core/vcpkg-configuration.json', format('netocc-core/vcpkg/triplets/{0}.cmake', inputs.triplet)) }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: |
+          vcpkg-${{ inputs.triplet }}-${{ hashFiles('netocc-core/vcpkg.json', 'netocc-core/vcpkg-configuration.json', format('netocc-core/vcpkg/triplets/{0}.cmake', inputs.triplet)) }}-
+          vcpkg-${{ inputs.triplet }}-
+
+    - id: occt
+      name: OCCT
+      shell: bash
+      working-directory: netocc-core
+      env:
+        VCPKG_ROOT: ${{ github.workspace }}/.vcpkg-tool
+      run: python build.py occt --triplet ${{ inputs.triplet }} ${{ inputs.save-cache == 'true' && '--prune-archives' || '' }}
+
+    - if: inputs.save-cache == 'true' && steps.occt.outputs.archives-changed == 'true'
+      uses: actions/cache/save@v6
+      with:
+        path: netocc-core/.vcpkg/archives
+        key: ${{ steps.cache.outputs.cache-primary-key }}

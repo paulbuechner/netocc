@@ -1,0 +1,101 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      net35 (CLR 2), net45, net452, net462: .NET Framework, one build per supported floor; no netstandard facades
+      net6.0, net8.0, net10.0: modern .NET (NativeLibrary resolver)
+      netstandard2.0: libraries that reference NetOcc, other runtimes
+    -->
+    <TargetFrameworks>netstandard2.0;net35;net45;net452;net462;net6.0;net8.0;net10.0</TargetFrameworks>
+    <!-- .NET 6 is out of support (NETSDK1138), but consumers still need it -->
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <AssemblyName>NetOcc</AssemblyName>
+    <RootNamespace>OCC.Core</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- SWIG proxies hide base members (static DownCast, Shape()) and have no doc comments (OCCT's come at pack time,
+         build.py docs); OCCT's lower-case class names (gp, math) stay; the generated code uses the classes OCCT deprecates,
+         which are [Obsolete] for callers -->
+    <NoWarn>$(NoWarn);CS0108;CS0114;CS1591;CS8981;CS0612;CS0618</NoWarn>
+    <!-- the hand-written members' documentation, which build.py docs merges OCCT's into -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NetOccGeneratedCs>$(MSBuildThisFileDirectory)..\..\build\generated\cs</NetOccGeneratedCs>
+  </PropertyGroup>
+
+  <!-- SWIG output (python build.py generate); not committed -->
+  <ItemGroup>
+    <Compile Include="$(NetOccGeneratedCs)\**\*.cs" Link="Generated\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="NetOcc.Tests" />
+  </ItemGroup>
+
+  <!-- NuGet (python build.py pack): this assembly; the natives live in NetOcc.runtime.<rid> (pack/) -->
+  <PropertyGroup>
+    <Version Condition="'$(Version)' == ''">0.0.0-dev</Version>
+    <Authors>Paul Büchner</Authors>
+    <Copyright>Copyright (c) 2026 Paul Büchner</Copyright>
+    <Description>C# bindings for Open CASCADE Technology (OCCT) 8.0.1, with OCCT's names, one namespace per OCCT package: geometry, modeling, meshing, shape healing, STEP, IGES, STL and glTF files, OCAF and XCAF documents, and 3D views, with OCCT's documentation in IntelliSense. For .NET Framework 3.5+, .NET 6+ and netstandard2.0, on Windows (x64, x86), Linux (x64) and macOS (arm64).</Description>
+    <PackageTags>occt;opencascade;cad;brep;geometry;modeling;mesh;step;iges;stl;gltf;ocaf;xcaf;3d;visualization</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <!-- with OCCT's documentation: NetOcc.xml is the doc comments of OCCT's headers, under OCCT's license (see NOTICE) -->
+    <PackageLicenseExpression Condition="'$(NetOccDocumentation)' != ''">MIT AND LGPL-2.1-only WITH OCCT-exception-1.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://paulbuechner.github.io/netocc/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/paulbuechner/netocc</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <!-- Source Link (in the SDK) with the SWIG-generated sources embedded, symbols as .snupkg -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageReleaseNotes Condition="'$(NetOccReleaseNotesFile)' != ''">$([System.IO.File]::ReadAllText('$(NetOccReleaseNotesFile)'))</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <!--
+    README.md here is the package's, for its users (nuget.org); netocc-core's README is for building NetOcc. Include, not
+    Update: pack runs in the outer build of the target frameworks, which has no default items (NU5039)
+  -->
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="..\..\NOTICE" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+  <!-- with OCCT's documentation, OCCT's license (build.py docs puts it next to the XML) -->
+  <ItemGroup Condition="'$(NetOccDocumentation)' != ''">
+    <None Include="$([System.IO.Path]::GetDirectoryName('$(NetOccDocumentation)'))\OCCT-LICENSE.txt" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+  <!--
+    build.py pack sets NetOccRuntimeRids (an environment variable, win-x64;win-x86;...): one dependency per RID, same
+    version, restored from artifacts/packages
+  -->
+  <ItemGroup Condition="'$(NetOccRuntimeRids)' != ''">
+    <NetOccRuntimeRid Include="$(NetOccRuntimeRids)" />
+    <PackageReference Include="@(NetOccRuntimeRid->'NetOcc.runtime.%(Identity)')" Version="$(Version)" PrivateAssets="none" />
+  </ItemGroup>
+
+  <!--
+    the .NET Framework targets compile against NuGet's reference assemblies, the same on every machine (the SDK adds them
+    only where a targeting pack is missing): no targeting pack needed, also on Linux/macOS
+  -->
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <!--
+    build.py pack with OCCT's documentation (build.py docs writes it): in place of the compiler's file in each framework's
+    output, which NuGet packs next to the assembly. It holds OCCT's text (LGPL-2.1, see NOTICE), so it's never committed.
+  -->
+  <Target Name="NetOccDocumentation" AfterTargets="CopyFilesToOutputDirectory" Condition="'$(NetOccDocumentation)' != ''">
+    <Error Condition="!Exists('$(NetOccDocumentation)')" Text="$(NetOccDocumentation) is missing: run 'python build.py docs' first." />
+    <Copy SourceFiles="$(NetOccDocumentation)" DestinationFiles="$(OutDir)$(TargetName).xml" />
+  </Target>
+
+  <Target Name="NetOccCheckGenerated" BeforeTargets="CoreCompile">
+    <Error Condition="!Exists('$(NetOccGeneratedCs)')" Text="SWIG output missing: run 'python build.py generate' first." />
+  </Target>
+
+</Project>

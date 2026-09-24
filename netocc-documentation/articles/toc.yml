@@ -1,0 +1,52 @@
+- name: Introduction
+  href: introduction.md
+- name: Getting started
+  href: getting-started.md
+- name: Guide
+  items:
+  - name: Geometry
+    href: geometry.md
+  - name: Topology
+    href: topology.md
+  - name: Modeling
+    href: modeling.md
+  - name: Analysis and repair
+    href: analysis.md
+  - name: Meshing
+    href: meshing.md
+  - name: Files
+    href: data-exchange.md
+  - name: Assemblies
+    href: xcaf.md
+  - name: Documents
+    href: ocaf.md
+  - name: 3D views
+    href: visualization.md
+- name: Concepts
+  items:
+  - name: From C++ to C#
+    href: mapping.md
+  - name: Object lifetimes
+    href: lifetimes.md
+  - name: Errors
+    href: errors.md
+  - name: How NetOcc works
+    href: architecture.md
+- name: Reference
+  items:
+  - name: Platforms
+    href: platforms.md
+  - name: Building from source
+    href: building.md
+  - name: Troubleshooting
+    href: troubleshooting.md
+- name: Development
+  items:
+  - name: Design decisions
+    href: design.md
+  - name: Pitfalls
+    href: pitfalls.md
+  - name: Licensing
+    href: licensing.md
+  - name: Skipped members
+    href: skipped.md

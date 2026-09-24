@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The documentation's examples: the articles include their regions ([!code-csharp[](...#region)]), and running them as
+    tests checks they do what the articles say. On the packed NetOcc, like an app: netocc-core's build.py pack writes the
+    version to NetOcc.version.props, nuget.config reads the packages next to it.
+  -->
+  <Import Project="..\..\netocc-core\artifacts\packages\NetOcc.version.props" Condition="Exists('..\..\netocc-core\artifacts\packages\NetOcc.version.props')" />
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>NetOcc.Samples</RootNamespace>
+    <!-- Readme.cs is a whole Program.cs, with its Main: no entry point from the test SDK besides it -->
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <!-- the examples show what OCCT deprecates only where they say so -->
+    <WarningsAsErrors>$(WarningsAsErrors);CS0618</WarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetOcc" Version="$(NetOccPackageVersion)" />
+    <PackageReference Include="NUnit" Version="4.6.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+  </ItemGroup>
+
+  <!-- Readmes.cs: the READMEs' examples must stay the tested samples -->
+  <ItemGroup>
+    <None Include="..\..\README.md" Link="Readmes\Repository.md" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="Readme.cs" Link="Readmes\Readme.cs" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="..\..\netocc-core\src\NetOcc\README.md" Link="Readmes\Package.md" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="GettingStarted.cs" Link="Readmes\GettingStarted.cs" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+  <!-- before restore reads the package references (each project, a solution restore too), and before a build -->
+  <Target Name="NetOccRequirePackage" BeforeTargets="CollectPackageReferences;Build">
+    <Error Condition="'$(NetOccPackageVersion)' == ''" Text="No packed NetOcc: run 'python build.py pack' in netocc-core first (--rids win-x64,win-x86 with only the Windows natives)." />
+  </Target>
+
+</Project>

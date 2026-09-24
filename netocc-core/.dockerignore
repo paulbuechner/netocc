@@ -1,0 +1,11 @@
+# Host-side state and outputs never go into the image (the Windows .vcpkg alone is many GB)
+.vcpkg/
+.tools/
+build/
+artifacts/
+**/bin/
+**/obj/
+__pycache__/
+*.log
+log/
+.git/

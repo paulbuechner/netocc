@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "build": {
+    "content": [
+      {
+        "files": [
+          "index.md",
+          "toc.yml",
+          "articles/**/*.md",
+          "articles/**/toc.yml",
+          "classes/**/*.md",
+          "classes/**/toc.yml"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern"
+    ],
+    "globalMetadata": {
+      "_appTitle": "NetOcc",
+      "_appName": "NetOcc",
+      "_appFooter": "NetOcc is MIT licensed. Open CASCADE Technology is LGPL-2.1 with the Open CASCADE exception.",
+      "_enableSearch": true,
+      "_disableContribution": true
+    }
+  }
+}
