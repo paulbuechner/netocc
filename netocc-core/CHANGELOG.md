@@ -4,7 +4,7 @@ Notable changes to the NetOcc packages (`NetOcc`, `NetOcc.runtime.<rid>`), in th
 
 Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), until the release PR writes them here (`python build.py release`). Each release's section becomes its GitHub release notes and the packages' release notes.
 
-## [Unreleased]
+## [8.0.1.1-next.1] - 2026-09-27
 
 ### Added
 
@@ -59,4 +59,4 @@ Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), 
 - One AnyCPU assembly for .NET Framework 3.5 to 4.8, .NET 6, 8 and 10, and netstandard2.0.
 - Natives for win-x64, win-x86, linux-x64 and osx-arm64, one package each (`NetOcc.runtime.<rid>`).
 
-[Unreleased]: https://github.com/paulbuechner/netocc/commits/main
+[8.0.1.1-next.1]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.1
