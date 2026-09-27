@@ -18,7 +18,7 @@ Why NetOcc is built the way it is. How the parts fit: [How NetOcc works](archite
 | OCCT | vcpkg manifest, built from source with OCCT's precondition checks on, binary-cached | the same OCCT on every platform, and checks that throw instead of crashing |
 | SWIG | 4.5, from conda-forge into `netocc-core/.tools` | PyPI's wheel lagged behind; no conda install needed |
 | Native libraries | one per OCCT module (`NetOcc<Module>`) and `NetOccRuntime`, no dots in the names | a Windows DLL exports at most 65,535 functions (the wrappers have about 71,000); `LoadLibrary` takes a dot for the extension |
-| Packages | `NetOcc` (managed) and one `NetOcc.runtime.<rid>` per platform, no split by OCCT module | one reference for users; the natives restore per platform |
+| Packages | `NetOcc` (managed) and one `NetOcc.runtime.<rid>` per platform, no split by OCCT module | one reference for users; each package stays well under nuget.org's 250 MB limit, which all of them together nearly reach (8.0.1.1-next.1: about 207 MB), and holds one platform's natives and notices. `NetOcc` depends on all four, so an app without a RuntimeIdentifier runs anywhere; `dotnet publish -r <rid>` copies one platform's natives |
 | Versions | `<OCCT version>.<revision>`, e.g. `8.0.1.2` | a version names the OCCT it wraps |
 | Tests | NUnit 4 (`Assert.That`, Arrange/Act/Assert), over xUnit v3, TUnit and MSTest | runs on every framework NetOcc targets but net35, which runs NUnitLite on CLR 2 |
 | License | MIT for everything NetOcc writes; OCCT stays LGPL-2.1 with its exception | see [Licensing](licensing.md) |
