@@ -43,6 +43,18 @@ Walk the tree from the free shapes, following references and composing locations
 
 Colors come in three kinds: `XCAFDoc_ColorGen` (the whole shape), `XCAFDoc_ColorSurf` (faces), `XCAFDoc_ColorCurv` (edges). Readers put a STEP file's colors where the file had them; ask for more than one kind. Faces can have their own colors: `XCAFDoc_ShapeTool.GetSubShapes` lists the labels of colored sub-shapes.
 
+## A document of your own
+
+`XCAFApp_Application` is one per process. An application of your own keeps its documents apart: define the XDE formats on it, and set a new document's XDE labels up.
+
+[!code-csharp[](../samples/Xcaf.cs#own-application)]
+
+## Editing parts
+
+An assembly's shape is the compound of its components, which OCCT doesn't rebuild when a part changes. `UpdateAssemblies` rebuilds them after an edit, visiting every assembly and component of the document; after one part changed, rebuild only the assemblies above it:
+
+[!code-csharp[](../samples/Xcaf.cs#update-assembly)]
+
 ## Showing a document
 
 `XCAFPrs_AISObject` shows a label with its colors, see [3D views](visualization.md#documents).
