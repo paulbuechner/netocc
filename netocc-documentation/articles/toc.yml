@@ -30,6 +30,8 @@
     href: lifetimes.md
   - name: Errors
     href: errors.md
+  - name: Subclassing OCCT classes
+    href: subclassing.md
   - name: How NetOcc works
     href: architecture.md
 - name: Reference

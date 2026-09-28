@@ -75,6 +75,10 @@ sequenceDiagram
     end
 ```
 
+## C# subclasses
+
+A C# subclass of an OCCT class ([Subclassing OCCT classes](subclassing.md)) is reached from C++, which the garbage collector doesn't see. NetOcc keeps such an object alive while OCCT holds a reference to it: from the moment it's passed to OCCT until a collection finds its proxy's reference the only one left. Disposing it while OCCT holds it releases it once OCCT lets go, and OCCT handing it back gives the same C# instance.
+
 ## OCAF documents
 
 - Labels, attributes and `TNaming_Builder` keep their document's data alive, so a proxy never points into a freed tree.

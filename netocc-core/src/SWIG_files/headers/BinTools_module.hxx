@@ -6,6 +6,7 @@
 #include <Geom2d_Curve.hxx>
 #include <Geom_Curve.hxx>
 #include <Geom_Surface.hxx>
+#include <Message_ProgressRange.hxx>
 #include <TopAbs_Orientation.hxx>
 #include <TopAbs_ShapeEnum.hxx>
 #include <TopLoc_Location.hxx>

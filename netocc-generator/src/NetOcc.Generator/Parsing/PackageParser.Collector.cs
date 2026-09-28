@@ -410,7 +410,10 @@ internal sealed partial class PackageParser
                       && !c.IsDeleted
                       && !c.IsImplicit()
                       && !c.IsCopyOrMoveConstructor)
-          .Select(c => Method(c, exported) with { Name = "" })
+          .Select(c => Method(c, exported) with
+          {
+            Name = "", IsProtected = c.Access == CX_CXXAccessSpecifier.CX_CXXProtected
+          })
       ];
       foreach (var decl in r.Decls)
       {
@@ -433,7 +436,10 @@ internal sealed partial class PackageParser
 
         var isPublic = access == CX_CXXAccessSpecifier.CX_CXXPublic;
         var bucket = !isPublic ? hidden : method.IsOverloadedOperator ? operators : methods;
-        bucket.Add(Method(method, classExported, track: isPublic));
+        bucket.Add(Method(method, classExported, track: isPublic) with
+        {
+          IsProtected = access == CX_CXXAccessSpecifier.CX_CXXProtected
+        });
       }
 
       List<string> ancestors = [];
@@ -644,7 +650,7 @@ internal sealed partial class PackageParser
 
       return new MethodModel(method.Name, Convert(method.ReturnType), Parameters(method, track),
                              method.IsStatic, method.IsConst, method.IsVirtual, method.IsDeprecated,
-                             unlinked is null, unlinked);
+                             unlinked is null, unlinked, IsPure: method.IsPure);
     }
 
     // a class template instance a public signature uses, through pointers, references and handles:

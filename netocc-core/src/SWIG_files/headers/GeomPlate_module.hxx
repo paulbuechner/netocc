@@ -21,6 +21,7 @@
 #include <Geom_Surface.hxx>
 #include <Geom_nested.hxx>
 #include <Law_Function.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_HArray1.hxx>
 #include <NCollection_Sequence.hxx>
 #include <Plate_Plate.hxx>

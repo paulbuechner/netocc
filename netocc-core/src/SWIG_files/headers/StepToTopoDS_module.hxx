@@ -7,6 +7,7 @@
 #include <Geom2d_Curve.hxx>
 #include <Geom_Curve.hxx>
 #include <Geom_Surface.hxx>
+#include <Message_ProgressRange.hxx>
 #include <StepGeom_Axis2Placement3d.hxx>
 #include <StepGeom_CartesianPoint.hxx>
 #include <StepGeom_CartesianTransformationOperator3d.hxx>

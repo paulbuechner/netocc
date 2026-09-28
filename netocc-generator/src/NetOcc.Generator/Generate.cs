@@ -288,7 +288,8 @@ internal static class Generate
       .ToDictionary(g => g.Key, g => g.First());
     var writer = new InterfaceWriter(registry, new SignatureMapper(registry),
                                      workspace.Source.Version, p => config.For(p).Prelude,
-                                     HandWrittenOf, classes.GetValueOrDefault);
+                                     HandWrittenOf, classes.GetValueOrDefault,
+                                     Directors(models, config));
 
     bool HasExtras(PackageModel model) =>
       File.Exists(Path.Combine(paths.SwigFiles, "extras", $"{model.Name}.i"));
@@ -466,6 +467,34 @@ internal static class Generate
 
   // what a generated package provides, registered before any module is written so packages can use
   // each other
+  /// <summary>
+  /// Every package's <c>directors</c>: classes of the package C# may subclass, transients (OCCT
+  /// holds them by reference count) or classes their proxy deletes (the application owns them). A
+  /// class that isn't one fails the run, whose modules would otherwise lack it.
+  /// </summary>
+  private static List<string> Directors(IReadOnlyList<PackageModel> models, GeneratorConfig config)
+  {
+    List<string> directors = [];
+    foreach (var model in models)
+    {
+      foreach (var name in config.For(model.Name).Directors)
+      {
+        var c = model.Classes.FirstOrDefault(c => c.Name == name)
+                ?? throw new InvalidOperationException(
+                  $"{model.Name}: director {name} is not a class of the package");
+        if (!c.Traits.IsTransient && !c.Traits.HasPublicDestructor)
+        {
+          throw new InvalidOperationException(
+            $"{model.Name}: director {name} is neither a transient nor deletable by its proxy");
+        }
+
+        directors.Add(name);
+      }
+    }
+
+    return directors;
+  }
+
   private static void Register(TypeRegistry registry, PackageModel model, PackageConfig config)
   {
     // a nested or namespace type is known by its flat name, which the package's nested header

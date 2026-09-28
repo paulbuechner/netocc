@@ -22,8 +22,11 @@
 %import "GeomEval.i"
 %import "Geom2d.i"
 %import "Geom2dEval.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message;)
 
 %occt_valueclass(GeomTools)
 %occt_valueclass(GeomTools_Curve2dSet)
@@ -56,8 +59,8 @@ public:
   opencascade::handle<Geom2d_Curve> Curve2d(int I) const;
   int Index(const opencascade::handle<Geom2d_Curve>& C) const;
   void Dump(std::ostream& OS) const;
-  void Write(std::ostream& OS) const;
-  void Read(std::istream& IS);
+  void Write(std::ostream& OS, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
+  void Read(std::istream& IS, const Message_ProgressRange& theProgress = Message_ProgressRange());
   static void PrintCurve2d(const opencascade::handle<Geom2d_Curve>& C, std::ostream& OS, bool compact = false);
   static opencascade::handle<Geom2d_Curve> ReadCurve2d(std::istream& IS);
 };
@@ -70,8 +73,8 @@ public:
   opencascade::handle<Geom_Curve> Curve(int I) const;
   int Index(const opencascade::handle<Geom_Curve>& C) const;
   void Dump(std::ostream& OS) const;
-  void Write(std::ostream& OS) const;
-  void Read(std::istream& IS);
+  void Write(std::ostream& OS, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
+  void Read(std::istream& IS, const Message_ProgressRange& theProgress = Message_ProgressRange());
   static void PrintCurve(const opencascade::handle<Geom_Curve>& C, std::ostream& OS, bool compact = false);
   static opencascade::handle<Geom_Curve> ReadCurve(std::istream& IS);
 };
@@ -84,8 +87,8 @@ public:
   opencascade::handle<Geom_Surface> Surface(int I) const;
   int Index(const opencascade::handle<Geom_Surface>& S) const;
   void Dump(std::ostream& OS) const;
-  void Write(std::ostream& OS) const;
-  void Read(std::istream& IS);
+  void Write(std::ostream& OS, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
+  void Read(std::istream& IS, const Message_ProgressRange& theProgress = Message_ProgressRange());
   static void PrintSurface(const opencascade::handle<Geom_Surface>& S, std::ostream& OS, bool compact = false);
   static opencascade::handle<Geom_Surface> ReadSurface(std::istream& IS);
 };

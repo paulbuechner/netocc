@@ -15,10 +15,10 @@
 %import "TCollection.i"
 %import "TColStd.i"
 %import "NCollection.i"
-%import "Resource.i"
 %import "Quantity.i"
 %import "OSD.i"
 %import "Message.i"
+%import "Resource.i"
 %import "CDM.i"
 %import "LDOM.i"
 %import "Storage.i"
@@ -83,7 +83,7 @@
 %import "XSControl.i"
 %import "DE.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Resource; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.XSControl; using OCC.Core.DE;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.Resource; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.XSControl; using OCC.Core.DE;)
 
 %occt_valueclass(Transfer_TransferDispatch)
 %nodefaultctor Transfer_TransferDispatch;
@@ -195,7 +195,7 @@ class Transfer_ActorOfProcessForTransient : public Standard_Transient {
 public:
   Transfer_ActorOfProcessForTransient();
   bool Recognize(const opencascade::handle<Standard_Transient>& start);
-  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_ProcessForTransient>& TP);
+  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_ProcessForTransient>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
   opencascade::handle<Transfer_SimpleBinderOfTransient> TransientResult(const opencascade::handle<Standard_Transient>& res) const;
   opencascade::handle<Transfer_Binder> NullResult() const;
   void SetLast(bool mode = true);
@@ -210,9 +210,9 @@ public:
 class Transfer_ActorOfTransientProcess : public Transfer_ActorOfProcessForTransient {
 public:
   Transfer_ActorOfTransientProcess();
-  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_ProcessForTransient>& TP);
-  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP);
-  opencascade::handle<Standard_Transient> TransferTransient(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP);
+  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_ProcessForTransient>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Standard_Transient> TransferTransient(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SetShapeFixParameters(const NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& theParameters);
   void SetShapeFixParameters(const DE_ShapeFixParameters& theParameters, const NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& theAdditionalParameters = NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>());
   const NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& GetShapeFixParameters() const;
@@ -230,7 +230,7 @@ public:
   Transfer_ActorDispatch(const opencascade::handle<Interface_InterfaceModel>& amodel);
   void AddActor(const opencascade::handle<Transfer_ActorOfTransientProcess>& actor);
   Transfer_TransferDispatch& TransferDispatch();
-  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP);
+  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
   const opencascade::handle<Standard_Type>& DynamicType() const;
@@ -273,7 +273,7 @@ class Transfer_ActorOfProcessForFinder : public Standard_Transient {
 public:
   Transfer_ActorOfProcessForFinder();
   bool Recognize(const opencascade::handle<Transfer_Finder>& start);
-  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_ProcessForFinder>& TP);
+  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_ProcessForFinder>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
   opencascade::handle<Transfer_SimpleBinderOfTransient> TransientResult(const opencascade::handle<Standard_Transient>& res) const;
   opencascade::handle<Transfer_Binder> NullResult() const;
   void SetLast(bool mode = true);
@@ -289,9 +289,9 @@ class Transfer_ActorOfFinderProcess : public Transfer_ActorOfProcessForFinder {
 public:
   Transfer_ActorOfFinderProcess();
   int& ModeTrans();
-  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_ProcessForFinder>& TP);
-  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_FinderProcess>& TP);
-  opencascade::handle<Standard_Transient> TransferTransient(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_FinderProcess>& TP);
+  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_ProcessForFinder>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_FinderProcess>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Standard_Transient> TransferTransient(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_FinderProcess>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SetShapeFixParameters(const NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& theParameters);
   void SetShapeFixParameters(const DE_ShapeFixParameters& theParameters, const NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& theAdditionalParameters = NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>());
   const NCollection_DataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& GetShapeFixParameters() const;
@@ -394,8 +394,8 @@ public:
   int NestingLevel() const;
   void ResetNestingLevel();
   bool Recognize(const opencascade::handle<Transfer_Finder>& start) const;
-  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Transfer_Finder>& start);
-  bool Transfer(const opencascade::handle<Transfer_Finder>& start);
+  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Transfer_Finder>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Transfer(const opencascade::handle<Transfer_Finder>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SetErrorHandle(bool err);
   bool ErrorHandle() const;
   void StartTrace(const opencascade::handle<Transfer_Binder>& binder, const opencascade::handle<Transfer_Finder>& start, int level, int mode) const;
@@ -548,8 +548,8 @@ public:
   int NestingLevel() const;
   void ResetNestingLevel();
   bool Recognize(const opencascade::handle<Standard_Transient>& start) const;
-  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Standard_Transient>& start);
-  bool Transfer(const opencascade::handle<Standard_Transient>& start);
+  opencascade::handle<Transfer_Binder> Transferring(const opencascade::handle<Standard_Transient>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Transfer(const opencascade::handle<Standard_Transient>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SetErrorHandle(bool err);
   bool ErrorHandle() const;
   void StartTrace(const opencascade::handle<Transfer_Binder>& binder, const opencascade::handle<Standard_Transient>& start, int level, int mode) const;
@@ -650,10 +650,10 @@ public:
   Transfer_TransferOutput(const opencascade::handle<Transfer_TransientProcess>& proc, const opencascade::handle<Interface_InterfaceModel>& amodel);
   opencascade::handle<Interface_InterfaceModel> Model() const;
   opencascade::handle<Transfer_TransientProcess> TransientProcess() const;
-  void Transfer(const opencascade::handle<Standard_Transient>& obj);
-  void TransferRoots(const opencascade::handle<Interface_Protocol>& protocol);
-  void TransferRoots(const Interface_Graph& G);
-  void TransferRoots();
+  void Transfer(const opencascade::handle<Standard_Transient>& obj, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void TransferRoots(const opencascade::handle<Interface_Protocol>& protocol, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void TransferRoots(const Interface_Graph& G, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void TransferRoots(const Message_ProgressRange& theProgress = Message_ProgressRange());
   Interface_EntityIterator ListForStatus(bool normal, bool roots = true) const;
   opencascade::handle<Interface_InterfaceModel> ModelForStatus(const opencascade::handle<Interface_Protocol>& protocol, bool normal, bool roots = true) const;
 };

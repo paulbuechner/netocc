@@ -18,13 +18,16 @@
 %import "TColStd.i"
 %import "gp.i"
 %import "TColgp.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "PLib.i"
 %import "AdvApprox.i"
 %import "Geom.i"
 %import "GeomEval.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.math; using OCC.Core.PLib; using OCC.Core.AdvApprox; using OCC.Core.Geom; using OCC.Core.GeomEval;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.PLib; using OCC.Core.AdvApprox; using OCC.Core.Geom; using OCC.Core.GeomEval;)
 
 %occt_valueclass(AdvApp2Var_Context)
 %nodefaultctor AdvApp2Var_EvaluatorFunc2Var;

@@ -86,4 +86,11 @@ internal sealed class PackageConfig
   /// hand-written partial may add managed members): %occt_valuetype and layout guards, no proxy.
   /// </summary>
   public List<string> ValueTypes { get; set; } = [];
+
+  /// <summary>
+  /// Transient classes C# may subclass (SWIG directors): OCCT calls a C# override of their virtual
+  /// members, inherited and protected ones too, and their constructors are wrapped, protected ones
+  /// and those of an abstract class too.
+  /// </summary>
+  public List<string> Directors { get; set; } = [];
 }

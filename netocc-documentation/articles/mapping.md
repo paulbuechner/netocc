@@ -52,8 +52,9 @@ Plain data (OCCT 8's evaluation results) is a struct with public fields: `curve.
 | `T*` of a class | the proxy, `null` for `nullptr` |
 | `void*`, function pointers, pointers OCCT keeps | `IntPtr` |
 | `int (&)[3]` | an array of exactly three |
-| `Message_ProgressRange` at the end, defaulted | left out |
+| `Message_ProgressRange` at the end, defaulted | an overload without it too, like any default |
 | default arguments | overloads |
+| a virtual member of a [class C# subclasses](subclassing.md) | `virtual` (protected ones `protected virtual`); OCCT calls the override |
 
 [!code-csharp[](../samples/Mapping.cs#ref-parameters)]
 

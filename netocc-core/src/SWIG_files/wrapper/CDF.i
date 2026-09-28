@@ -104,12 +104,12 @@ public:
   void Open(const opencascade::handle<CDM_Document>& aDocument);
   CDM_CanCloseStatus CanClose(const opencascade::handle<CDM_Document>& aDocument);
   void Close(const opencascade::handle<CDM_Document>& aDocument);
-  opencascade::handle<CDM_Document> Retrieve(const TCollection_ExtendedString& aFolder, const TCollection_ExtendedString& aName, bool UseStorageConfiguration = true, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>());
-  opencascade::handle<CDM_Document> Retrieve(const TCollection_ExtendedString& aFolder, const TCollection_ExtendedString& aName, const TCollection_ExtendedString& aVersion, bool UseStorageConfiguration = true, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>());
+  opencascade::handle<CDM_Document> Retrieve(const TCollection_ExtendedString& aFolder, const TCollection_ExtendedString& aName, bool UseStorageConfiguration = true, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>(), const Message_ProgressRange& theRange = Message_ProgressRange());
+  opencascade::handle<CDM_Document> Retrieve(const TCollection_ExtendedString& aFolder, const TCollection_ExtendedString& aName, const TCollection_ExtendedString& aVersion, bool UseStorageConfiguration = true, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>(), const Message_ProgressRange& theRange = Message_ProgressRange());
   PCDM_ReaderStatus CanRetrieve(const TCollection_ExtendedString& theFolder, const TCollection_ExtendedString& theName, bool theAppendMode);
   PCDM_ReaderStatus CanRetrieve(const TCollection_ExtendedString& theFolder, const TCollection_ExtendedString& theName, const TCollection_ExtendedString& theVersion, bool theAppendMode);
   PCDM_ReaderStatus GetRetrieveStatus() const;
-  void Read(std::istream& theIStream, opencascade::handle<CDM_Document>& theDocument, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>());
+  void Read(std::istream& theIStream, opencascade::handle<CDM_Document>& theDocument, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>(), const Message_ProgressRange& theRange = Message_ProgressRange());
   opencascade::handle<PCDM_Reader> ReaderFromFormat(const TCollection_ExtendedString& aFormat);
   opencascade::handle<PCDM_StorageDriver> WriterFromFormat(const TCollection_ExtendedString& aFormat);
   bool Format(const TCollection_ExtendedString& aFileName, TCollection_ExtendedString& theFormat);
@@ -185,7 +185,7 @@ public:
   opencascade::handle<TCollection_HExtendedString> Comment() const;
   CDF_StoreSetNameStatus RecheckName();
   bool SetPreviousVersion(const char16_t* aPreviousVersion);
-  void Realize();
+  void Realize(const Message_ProgressRange& theRange = Message_ProgressRange());
   const char16_t* Path() const;
   opencascade::handle<TCollection_HExtendedString> MetaDataPath() const;
   opencascade::handle<TCollection_HExtendedString> Description() const;
@@ -199,7 +199,7 @@ class CDF_StoreList : public Standard_Transient {
 public:
   CDF_StoreList(const opencascade::handle<CDM_Document>& aDocument);
   bool IsConsistent() const;
-  PCDM_StoreStatus Store(opencascade::handle<CDM_MetaData>& aMetaData, TCollection_ExtendedString& aStatusAssociatedText);
+  PCDM_StoreStatus Store(opencascade::handle<CDM_MetaData>& aMetaData, TCollection_ExtendedString& aStatusAssociatedText, const Message_ProgressRange& theRange = Message_ProgressRange());
   void Init();
   bool More() const;
   void Next();

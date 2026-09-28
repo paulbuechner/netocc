@@ -45,6 +45,18 @@
     global::System.IntPtr ptr = $imcall;$excode
     unsafe { return ref *(CSTYPE*)ptr; }
   }
+// director callbacks (Directors.i): a parameter reaches the C# override as a copy, a TYPE& read in and written back
+// after; a result comes back through a thread-local buffer (NativeStruct.Stage), which the C++ side copies
+%typemap(directorin) TYPE, const TYPE&, TYPE& "$input = (void*)const_cast< TYPE* >(&$1);"
+%typemap(csdirectorin) TYPE, const TYPE& "global::OCC.Core.NativeStruct.Read<CSTYPE>($iminput)"
+%typemap(csdirectorin, pre="    CSTYPE temp$iminput = global::OCC.Core.NativeStruct.Read<CSTYPE>($iminput);",
+         post="      global::OCC.Core.NativeStruct.Write($iminput, temp$iminput);") TYPE& "ref temp$iminput"
+%typemap(csdirectorout) TYPE
+  "global::OCC.Core.NativeStruct.Stage(global::OCC.Core.Directors.Call(() => $cscall, $imclassname.netoccDirectorFailed))"
+%typemap(directorout) TYPE %{
+  NetOcc_DirectorCheck();
+  $result = *static_cast< TYPE* >($input);
+%}
 %enddef
 
 %define %occt_valuetype(TYPE)
@@ -64,4 +76,18 @@
     $csclassname ret = (cPtr == global::System.IntPtr.Zero) ? null : new $csclassname(cPtr, true);$excode
     return ret;
   }
+// director callbacks (Directors.i): a parameter reaches the C# override as a copy its proxy owns (a TYPE& borrows, as
+// SWIG's default does); a result is copied from the returned proxy, which Directors.Keep holds until then
+%typemap(directorin) TYPE, const TYPE& "$input = (void*)new TYPE($1);"
+%typemap(csdirectorin) TYPE "new $&csclassname($iminput, true)"
+%typemap(csdirectorin) const TYPE& "new $csclassname($iminput, true)"
+%typemap(csdirectorout) TYPE
+  "$&csclassname.getCPtr(global::OCC.Core.Directors.Keep(global::OCC.Core.Directors.Call(() => $cscall, $imclassname.netoccDirectorFailed))).Handle"
+%typemap(directorout) TYPE %{
+  NetOcc_DirectorCheck();
+  if (!$input) {
+    throw Standard_NullObject("a C# override returned null");
+  }
+  $result = *static_cast< TYPE* >($input);
+%}
 %enddef

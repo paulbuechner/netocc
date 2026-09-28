@@ -186,11 +186,17 @@ internal sealed record ConstructorModel(IReadOnlyList<ParameterModel> Parameters
 
 /// <param name="IsCallable">See <see cref="ConstructorModel"/>.</param>
 /// <param name="Broken">See <see cref="ConstructorModel"/>.</param>
+/// <param name="IsPure">Pure virtual (<c>= 0</c>).</param>
+/// <param name="IsProtected">
+/// Declared protected (<see cref="ClassModel.Hidden"/> holds private members too): a C# subclass
+/// of a director class overrides the virtual ones, and calls the constructors.
+/// </param>
 internal sealed record MethodModel(string Name, CppType Return,
                                    IReadOnlyList<ParameterModel> Parameters, bool IsStatic,
                                    bool IsConst, bool IsVirtual, bool IsDeprecated,
                                    bool IsCallable = true, string? Unlinked = null,
-                                   string? Broken = null);
+                                   string? Broken = null, bool IsPure = false,
+                                   bool IsProtected = false);
 
 /// <summary>A function in a C++ namespace (OCCT 8: <c>TopoDS::Face()</c> and friends).</summary>
 /// <param name="IsCallable">See <see cref="ConstructorModel"/>.</param>

@@ -61,6 +61,14 @@ flowchart LR
 | `Standard_NoSuchObject` | a key a map doesn't have |
 | `StdFail_NotDone` | the result of an algorithm that failed |
 
+## Exceptions in overrides
+
+A C# override OCCT calls ([Subclassing OCCT classes](subclassing.md)) can't unwind through C++. What it throws is caught at the boundary and rethrown in C++ right after the callback, as `NetOcc_ManagedException`: OCCT unwinds as from any `Standard_Failure`, and the `OcctException` of the outer call carries the override's exception as its `InnerException`.
+
+[!code-csharp[](../samples/Subclassing.cs#exception)]
+
+An exception OCCT catches itself goes no further, as in C++.
+
 ## Builders that fail
 
 Builders check their input and record why they failed, without throwing:

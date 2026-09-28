@@ -8,6 +8,7 @@
 #include <Bnd_Box.hxx>
 #include <Extrema_ExtAlgo.hxx>
 #include <Extrema_ExtFlag.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_Array1.hxx>
 #include <NCollection_CellFilter.hxx>
 #include <NCollection_LinearVector.hxx>

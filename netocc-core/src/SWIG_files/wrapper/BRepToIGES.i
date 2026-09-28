@@ -101,7 +101,7 @@ public:
   double GetUnit() const;
   void SetTransferProcess(const opencascade::handle<Transfer_FinderProcess>& TP);
   opencascade::handle<Transfer_FinderProcess> GetTransferProcess() const;
-  opencascade::handle<IGESData_IGESEntity> TransferShape(const TopoDS_Shape& start);
+  opencascade::handle<IGESData_IGESEntity> TransferShape(const TopoDS_Shape& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void AddFail(const TopoDS_Shape& start, const char* amess);
   void AddWarning(const TopoDS_Shape& start, const char* amess);
   void AddFail(const opencascade::handle<Standard_Transient>& start, const char* amess);
@@ -120,19 +120,19 @@ class BRepToIGES_BRShell : public BRepToIGES_BREntity {
 public:
   BRepToIGES_BRShell();
   BRepToIGES_BRShell(const BRepToIGES_BREntity& BR);
-  opencascade::handle<IGESData_IGESEntity> TransferShell(const TopoDS_Shape& start);
-  opencascade::handle<IGESData_IGESEntity> TransferShell(const TopoDS_Shell& start);
-  opencascade::handle<IGESData_IGESEntity> TransferFace(const TopoDS_Face& start);
+  opencascade::handle<IGESData_IGESEntity> TransferShell(const TopoDS_Shape& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESData_IGESEntity> TransferShell(const TopoDS_Shell& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESData_IGESEntity> TransferFace(const TopoDS_Face& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
 };
 
 class BRepToIGES_BRSolid : public BRepToIGES_BREntity {
 public:
   BRepToIGES_BRSolid();
   BRepToIGES_BRSolid(const BRepToIGES_BREntity& BR);
-  opencascade::handle<IGESData_IGESEntity> TransferSolid(const TopoDS_Shape& start);
-  opencascade::handle<IGESData_IGESEntity> TransferSolid(const TopoDS_Solid& start);
-  opencascade::handle<IGESData_IGESEntity> TransferCompSolid(const TopoDS_CompSolid& start);
-  opencascade::handle<IGESData_IGESEntity> TransferCompound(const TopoDS_Compound& start);
+  opencascade::handle<IGESData_IGESEntity> TransferSolid(const TopoDS_Shape& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESData_IGESEntity> TransferSolid(const TopoDS_Solid& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESData_IGESEntity> TransferCompSolid(const TopoDS_CompSolid& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESData_IGESEntity> TransferCompound(const TopoDS_Compound& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
 };
 
 class BRepToIGES_BRWire : public BRepToIGES_BREntity {

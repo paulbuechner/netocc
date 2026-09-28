@@ -198,16 +198,16 @@ public:
 class StepToTopoDS_Builder : public StepToTopoDS_Root {
 public:
   StepToTopoDS_Builder();
-  void Init(const opencascade::handle<StepShape_ManifoldSolidBrep>& theManifoldSolid, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const opencascade::handle<StepShape_BrepWithVoids>& theBRepWithVoids, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const opencascade::handle<StepShape_FacetedBrep>& theFB, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const opencascade::handle<StepShape_FacetedBrepAndBrepWithVoids>& theFBABWV, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const opencascade::handle<StepShape_ShellBasedSurfaceModel>& S, const opencascade::handle<Transfer_TransientProcess>& TP, StepToTopoDS_NMTool& NMTool, const StepData_Factors& theLocalFactors = StepData_Factors());
+  void Init(const opencascade::handle<StepShape_ManifoldSolidBrep>& theManifoldSolid, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const opencascade::handle<StepShape_BrepWithVoids>& theBRepWithVoids, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const opencascade::handle<StepShape_FacetedBrep>& theFB, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const opencascade::handle<StepShape_FacetedBrepAndBrepWithVoids>& theFBABWV, const opencascade::handle<Transfer_TransientProcess>& theTP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const opencascade::handle<StepShape_ShellBasedSurfaceModel>& S, const opencascade::handle<Transfer_TransientProcess>& TP, StepToTopoDS_NMTool& NMTool, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   void Init(const opencascade::handle<StepShape_EdgeBasedWireframeModel>& S, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors());
   void Init(const opencascade::handle<StepShape_FaceBasedSurfaceModel>& S, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const opencascade::handle<StepShape_GeometricSet>& S, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors(), const opencascade::handle<Transfer_ActorOfTransientProcess>& RA = nullptr, bool isManifold = false);
-  void Init(const opencascade::handle<StepVisual_TessellatedSolid>& theTSo, const opencascade::handle<Transfer_TransientProcess>& theTP, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const opencascade::handle<StepVisual_TessellatedShell>& theTSh, const opencascade::handle<Transfer_TransientProcess>& theTP, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors());
+  void Init(const opencascade::handle<StepShape_GeometricSet>& S, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors(), const opencascade::handle<Transfer_ActorOfTransientProcess>& RA = nullptr, bool isManifold = false, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const opencascade::handle<StepVisual_TessellatedSolid>& theTSo, const opencascade::handle<Transfer_TransientProcess>& theTP, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const opencascade::handle<StepVisual_TessellatedShell>& theTSh, const opencascade::handle<Transfer_TransientProcess>& theTP, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   void Init(const opencascade::handle<StepVisual_TessellatedFace>& theTF, const opencascade::handle<Transfer_TransientProcess>& theTP, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors());
   void Init(const opencascade::handle<StepVisual_TessellatedSurfaceSet>& theTSS, const opencascade::handle<Transfer_TransientProcess>& theTP, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors());
   const TopoDS_Shape& Value() const;
@@ -230,7 +230,7 @@ public:
   bool Compute(const opencascade::handle<StepGeom_CartesianTransformationOperator3d>& Operator, const StepData_Factors& theLocalFactors = StepData_Factors());
   const gp_Trsf& Transformation() const;
   bool Transform(TopoDS_Shape& shape) const;
-  TopoDS_Shape TranslateMappedItem(const opencascade::handle<StepRepr_MappedItem>& mapit, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors());
+  TopoDS_Shape TranslateMappedItem(const opencascade::handle<StepRepr_MappedItem>& mapit, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
 };
 
 class StepToTopoDS_NMTool {
@@ -358,8 +358,8 @@ public:
 class StepToTopoDS_TranslateShell : public StepToTopoDS_Root {
 public:
   StepToTopoDS_TranslateShell();
-  void Init(const opencascade::handle<StepShape_ConnectedFaceSet>& CFS, StepToTopoDS_Tool& T, StepToTopoDS_NMTool& NMTool, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const opencascade::handle<StepVisual_TessellatedShell>& theTSh, StepToTopoDS_Tool& theTool, StepToTopoDS_NMTool& theNMTool, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors());
+  void Init(const opencascade::handle<StepShape_ConnectedFaceSet>& CFS, StepToTopoDS_Tool& T, StepToTopoDS_NMTool& NMTool, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const opencascade::handle<StepVisual_TessellatedShell>& theTSh, StepToTopoDS_Tool& theTool, StepToTopoDS_NMTool& theNMTool, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   const TopoDS_Shape& Value() const;
   StepToTopoDS_TranslateShellError Error() const;
 };
@@ -367,7 +367,7 @@ public:
 class StepToTopoDS_TranslateSolid : public StepToTopoDS_Root {
 public:
   StepToTopoDS_TranslateSolid();
-  void Init(const opencascade::handle<StepVisual_TessellatedSolid>& theTSo, const opencascade::handle<Transfer_TransientProcess>& theTP, StepToTopoDS_Tool& theTool, StepToTopoDS_NMTool& theNMTool, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors());
+  void Init(const opencascade::handle<StepVisual_TessellatedSolid>& theTSo, const opencascade::handle<Transfer_TransientProcess>& theTP, StepToTopoDS_Tool& theTool, StepToTopoDS_NMTool& theNMTool, bool theReadTessellatedWhenNoBRepOnly, bool& theHasGeom, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   const TopoDS_Shape& Value() const;
   StepToTopoDS_TranslateSolidError Error() const;
 };

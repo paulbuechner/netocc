@@ -7,6 +7,7 @@
 #include <DE_ConfigurationNode.hxx>
 #include <DE_Provider.hxx>
 #include <DE_nested.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_List.hxx>
 #include <RWMesh_CoordinateSystem.hxx>
 #include <Standard_Type.hxx>

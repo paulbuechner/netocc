@@ -48,6 +48,6 @@ class StlAPI_Writer {
 public:
   StlAPI_Writer();
   bool& ASCIIMode();
-  bool Write(const TopoDS_Shape& theShape, const char* theFileName);
-  bool Write(const TopoDS_Shape& theShape, std::ostream& theStream);
+  bool Write(const TopoDS_Shape& theShape, const char* theFileName, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(const TopoDS_Shape& theShape, std::ostream& theStream, const Message_ProgressRange& theProgress = Message_ProgressRange());
 };

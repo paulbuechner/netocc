@@ -24,6 +24,9 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "AppBlend.i"
@@ -36,9 +39,6 @@
 %import "BlendFunc.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -66,7 +66,7 @@
 %import "TopTools.i"
 %import "ChFiDS.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.AppBlend; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Blend; using OCC.Core.Convert; using OCC.Core.Law; using OCC.Core.BlendFunc; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.ChFiDS;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.AppBlend; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Blend; using OCC.Core.Convert; using OCC.Core.Law; using OCC.Core.BlendFunc; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.ChFiDS;)
 
 %occt_transient(BRepBlend_AppFuncRoot)
 %nodefaultctor BRepBlend_AppFuncRoot;

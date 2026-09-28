@@ -157,6 +157,10 @@
 %apply TYPE& INOUT { TYPE& };
 %typemap(cstype, out="ref CSTYPE") TYPE& "ref CSTYPE"
 %netocc_ref_out(TYPE&, CSTYPE)
+// director callbacks (Directors.i): read in, written back after the C# override
+%typemap(directorin) TYPE& "$input = (void*)&$1;"
+%typemap(csdirectorin, pre="    CSTYPE temp$iminput = global::OCC.Core.NativeStruct.Read<CSTYPE>($iminput);",
+         post="      global::OCC.Core.NativeStruct.Write($iminput, temp$iminput);") TYPE& "ref temp$iminput"
 %enddef
 
 %netocc_ref_number(bool, bool)

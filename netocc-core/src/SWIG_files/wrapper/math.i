@@ -12,11 +12,14 @@
 
 #ifndef SWIGIMPORTED
 %import "Standard.i"
-%import "NCollection.i"
 %import "TCollection.i"
 %import "TColStd.i"
+%import "NCollection.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message;)
 
 %occt_valueclass(math_DoubleTab)
 %nodefaultctor math_DoubleTab;
@@ -475,7 +478,7 @@ public:
 
 class math_Gauss {
 public:
-  math_Gauss(const math_Matrix& A, double MinPivot = 1.0e-20);
+  math_Gauss(const math_Matrix& A, double MinPivot = 1.0e-20, const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool IsDone() const;
   void Solve(const math_VectorBase<double>& B, math_VectorBase<double>& X) const;
   void Solve(math_VectorBase<double>& B) const;

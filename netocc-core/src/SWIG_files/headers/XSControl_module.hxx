@@ -23,6 +23,7 @@
 #include <Interface_HGraph.hxx>
 #include <Interface_InterfaceModel.hxx>
 #include <Interface_Protocol.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <NCollection_HSequence.hxx>
 #include <Standard_Transient.hxx>

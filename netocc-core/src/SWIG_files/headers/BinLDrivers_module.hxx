@@ -7,6 +7,7 @@
 #include <CDM_Application.hxx>
 #include <CDM_Document.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <PCDM_ReaderFilter.hxx>
 #include <PCDM_RetrievalDriver.hxx>
 #include <PCDM_StorageDriver.hxx>

@@ -1,0 +1,1 @@
+A trailing `Message_ProgressRange` parameter is an overload like other defaults, no longer left out: a C# `Message_ProgressIndicator` reports and cancels booleans, meshing and file reading through it.

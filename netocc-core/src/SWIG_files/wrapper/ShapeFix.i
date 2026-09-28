@@ -258,7 +258,7 @@ public:
   TopoDS_Face Face() const;
   TopoDS_Shape Result() const;
   void Add(const TopoDS_Wire& wire);
-  bool Perform();
+  bool Perform(const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool FixOrientation();
   bool FixOrientation(NCollection_DataMap<TopoDS_Shape, NCollection_List<TopoDS_Shape>, TopTools_ShapeMapHasher>& MapWires);
   bool FixAddNaturalBound();
@@ -345,7 +345,7 @@ public:
   ShapeFix_Shape();
   ShapeFix_Shape(const TopoDS_Shape& shape);
   void Init(const TopoDS_Shape& shape);
-  bool Perform();
+  bool Perform(const Message_ProgressRange& theProgress = Message_ProgressRange());
   TopoDS_Shape Shape() const;
   opencascade::handle<ShapeFix_Solid> FixSolidTool() const;
   opencascade::handle<ShapeFix_Shell> FixShellTool() const;
@@ -374,7 +374,7 @@ public:
   ShapeFix_Solid();
   ShapeFix_Solid(const TopoDS_Solid& solid);
   void Init(const TopoDS_Solid& solid);
-  bool Perform();
+  bool Perform(const Message_ProgressRange& theProgress = Message_ProgressRange());
   TopoDS_Solid SolidFromShell(const TopoDS_Shell& shell);
   bool Status(ShapeExtend_Status status) const;
   TopoDS_Shape Solid() const;
@@ -397,7 +397,7 @@ public:
   ShapeFix_Shell();
   ShapeFix_Shell(const TopoDS_Shell& shape);
   void Init(const TopoDS_Shell& shell);
-  bool Perform();
+  bool Perform(const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool FixFaceOrientation(const TopoDS_Shell& shell, bool isAccountMultiConex = true, bool NonManifold = false);
   TopoDS_Shell Shell();
   TopoDS_Shape Shape();
@@ -472,7 +472,7 @@ public:
   int& FixIntersectingEdgesMode();
   int& FixNonAdjacentIntersectingEdgesMode();
   int& FixTailMode();
-  bool Perform();
+  bool Perform(const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool FixReorder(bool theModeBoth = false);
   int FixSmall(bool lockvtx, double precsmall = 0.0);
   bool FixConnected(double prec = -1.0);

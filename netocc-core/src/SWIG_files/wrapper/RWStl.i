@@ -73,19 +73,19 @@
 class RWStl {
 public:
   RWStl();
-  static bool WriteBinary(const opencascade::handle<Poly_Triangulation>& theMesh, const OSD_Path& thePath);
-  static bool WriteBinary(const opencascade::handle<Poly_Triangulation>& theMesh, std::ostream& theStream);
-  static bool WriteAscii(const opencascade::handle<Poly_Triangulation>& theMesh, const OSD_Path& thePath);
-  static bool WriteAscii(const opencascade::handle<Poly_Triangulation>& theMesh, std::ostream& theStream);
-  static opencascade::handle<Poly_Triangulation> ReadFile(const OSD_Path& theFile);
-  static opencascade::handle<Poly_Triangulation> ReadFile(const char* theFile);
-  static opencascade::handle<Poly_Triangulation> ReadFile(const char* theFile, double theMergeAngle);
-  static void ReadFile(const char* theFile, double theMergeAngle, NCollection_Sequence<opencascade::handle<Poly_Triangulation>>& theTriangList);
-  static opencascade::handle<Poly_Triangulation> ReadBinary(const OSD_Path& thePath);
-  static opencascade::handle<Poly_Triangulation> ReadAscii(const OSD_Path& thePath);
-  static opencascade::handle<Poly_Triangulation> ReadBinaryStream(std::istream& theStream, double theMergeAngle = 1.5707963267948966);
-  static opencascade::handle<Poly_Triangulation> ReadAsciiStream(std::istream& theStream, double theMergeAngle = 1.5707963267948966);
-  static opencascade::handle<Poly_Triangulation> ReadStream(std::istream& theStream, double theMergeAngle = 1.5707963267948966);
+  static bool WriteBinary(const opencascade::handle<Poly_Triangulation>& theMesh, const OSD_Path& thePath, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static bool WriteBinary(const opencascade::handle<Poly_Triangulation>& theMesh, std::ostream& theStream, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static bool WriteAscii(const opencascade::handle<Poly_Triangulation>& theMesh, const OSD_Path& thePath, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static bool WriteAscii(const opencascade::handle<Poly_Triangulation>& theMesh, std::ostream& theStream, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadFile(const OSD_Path& theFile, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadFile(const char* theFile, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadFile(const char* theFile, double theMergeAngle, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static void ReadFile(const char* theFile, double theMergeAngle, NCollection_Sequence<opencascade::handle<Poly_Triangulation>>& theTriangList, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadBinary(const OSD_Path& thePath, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadAscii(const OSD_Path& thePath, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadBinaryStream(std::istream& theStream, double theMergeAngle = 1.5707963267948966, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadAsciiStream(std::istream& theStream, double theMergeAngle = 1.5707963267948966, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static opencascade::handle<Poly_Triangulation> ReadStream(std::istream& theStream, double theMergeAngle = 1.5707963267948966, const Message_ProgressRange& theProgress = Message_ProgressRange());
 };
 
 class RWStl_Reader : public Standard_Transient {

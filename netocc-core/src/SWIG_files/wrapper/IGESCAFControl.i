@@ -15,10 +15,10 @@
 %import "TCollection.i"
 %import "TColStd.i"
 %import "NCollection.i"
-%import "Resource.i"
 %import "Quantity.i"
 %import "OSD.i"
 %import "Message.i"
+%import "Resource.i"
 %import "CDM.i"
 %import "LDOM.i"
 %import "Storage.i"
@@ -90,7 +90,7 @@
 %import "IGESToBRep.i"
 %import "IGESControl.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Resource; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.IGESData; using OCC.Core.IGESBasic; using OCC.Core.IGESGeom; using OCC.Core.IGESSolid; using OCC.Core.IGESToBRep; using OCC.Core.IGESControl;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.Resource; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.IGESData; using OCC.Core.IGESBasic; using OCC.Core.IGESGeom; using OCC.Core.IGESSolid; using OCC.Core.IGESToBRep; using OCC.Core.IGESControl;)
 
 %occt_valueclass(IGESCAFControl)
 %occt_valueclass(IGESCAFControl_Reader)
@@ -107,8 +107,8 @@ class IGESCAFControl_Reader : public IGESControl_Reader {
 public:
   IGESCAFControl_Reader();
   IGESCAFControl_Reader(const opencascade::handle<XSControl_WorkSession>& theWS, bool FromScratch = true);
-  bool Transfer(const opencascade::handle<TDocStd_Document>& theDoc);
-  bool Perform(const TCollection_AsciiString& theFileName, const opencascade::handle<TDocStd_Document>& theDoc);
+  bool Transfer(const opencascade::handle<TDocStd_Document>& theDoc, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Perform(const TCollection_AsciiString& theFileName, const opencascade::handle<TDocStd_Document>& theDoc, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SetColorMode(bool theMode);
   bool GetColorMode() const;
   void SetNameMode(bool theMode);
@@ -122,10 +122,10 @@ public:
   IGESCAFControl_Writer();
   IGESCAFControl_Writer(const opencascade::handle<XSControl_WorkSession>& WS, bool scratch = true);
   IGESCAFControl_Writer(const opencascade::handle<XSControl_WorkSession>& theWS, const char* theUnit);
-  bool Transfer(const opencascade::handle<TDocStd_Document>& doc);
-  bool Transfer(const NCollection_Sequence<TDF_Label>& labels);
-  bool Transfer(const TDF_Label& label);
-  bool Perform(const opencascade::handle<TDocStd_Document>& doc, const TCollection_AsciiString& filename);
+  bool Transfer(const opencascade::handle<TDocStd_Document>& doc, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Transfer(const NCollection_Sequence<TDF_Label>& labels, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Transfer(const TDF_Label& label, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Perform(const opencascade::handle<TDocStd_Document>& doc, const TCollection_AsciiString& filename, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SetColorMode(bool colormode);
   bool GetColorMode() const;
   void SetNameMode(bool namemode);

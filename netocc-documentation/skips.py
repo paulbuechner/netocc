@@ -154,10 +154,11 @@ ACCEPTED = {
 GROUPS = {
     "Outside the wrapped modules": [
         ("Renderer internals, one platform's input, FFmpeg",
-         "Visualization is wrapped without OpenGl's renderer classes (contexts, windows, raytracing: they declare per platform; the "
-         "driver is wrapped), WNT (Windows' window and input package: a native window comes from `Aspect_Window.FromNativeHandle`), "
-         "and FFmpeg's types (`AVStream`, `AVRational`: NetOcc's OCCT build has no FFmpeg). These take or return one (in parentheses).",
-         r"\b((?:OpenGl|WNT)_\w+|AV\w+)\b.* (?:of an unwrapped class|is not wrapped)"),
+         "Visualization is wrapped without most of OpenGl's renderer (windows, shaders, resources, clipping, raytracing: they "
+         "declare per platform; the driver, the context, frame buffers and textures are wrapped), WNT (Windows' window and input "
+         "package: a native window comes from `Aspect_Window.FromNativeHandle`), and FFmpeg's types (`AVStream`, `AVRational`: "
+         "NetOcc's OCCT build has no FFmpeg). These take or return one (in parentheses).",
+         r"\b((?:OpenGl|WNT)_\w+|AV\w+)\b.* (?:of an unwrapped class|is not wrapped)|^returns a mutable reference, (OpenGl_\w+)"),
     ],
     "Headers OCCT ships broken": [
         (HEADERS,
@@ -185,6 +186,16 @@ GROUPS = {
          "C# structs get OCCT's const `+`, `-`, `*`, `/` and `^` (and unary `-`); comparisons, calls, increments and the rest "
          "stay out, and so do operators that change the struct.",
          r"^C# structs get the const operators"),
+    ],
+    "Overrides": [
+        ("Without a hook",
+         "A C# subclass of a director class can't override these: SWIG runs no code after a callback without parameters or result, "
+         "where the C++ side must rethrow a C# exception (Directors.i). C# calls them; C++ runs their own implementation.",
+         r"^C# can't override it: SWIG runs no code after a callback"),
+        ("Types a C# override can't receive or return",
+         "A parameter (a stream, a collection, a raw pointer, `size_t`) or result (a reference) the callback doesn't convert (in "
+         "parentheses). C# calls them; a subclass can't override them.",
+         r"^C# can't override it: (?:parameter \w+: |its result: )(.+?) (?:doesn't reach a C# override|can't come back from a C# override)"),
     ],
     "Unlinkable": [
         ("Declared, never defined", "OCCT declares these (most `Standard_EXPORT`) but defines them nowhere.",

@@ -61,8 +61,8 @@ public:
 class XmlMDF {
 public:
   XmlMDF();
-  static void FromTo(const opencascade::handle<TDF_Data>& aSource, LDOM_Element& aTarget, XmlObjMgt_SRelocationTable& aReloc, const opencascade::handle<XmlMDF_ADriverTable>& aDrivers);
-  static bool FromTo(const LDOM_Element& aSource, opencascade::handle<TDF_Data>& aTarget, XmlObjMgt_RRelocationTable& aReloc, const opencascade::handle<XmlMDF_ADriverTable>& aDrivers);
+  static void FromTo(const opencascade::handle<TDF_Data>& aSource, LDOM_Element& aTarget, XmlObjMgt_SRelocationTable& aReloc, const opencascade::handle<XmlMDF_ADriverTable>& aDrivers, const Message_ProgressRange& theRange = Message_ProgressRange());
+  static bool FromTo(const LDOM_Element& aSource, opencascade::handle<TDF_Data>& aTarget, XmlObjMgt_RRelocationTable& aReloc, const opencascade::handle<XmlMDF_ADriverTable>& aDrivers, const Message_ProgressRange& theRange = Message_ProgressRange());
   static void AddDrivers(const opencascade::handle<XmlMDF_ADriverTable>& aDriverTable, const opencascade::handle<Message_Messenger>& theMessageDriver);
 };
 

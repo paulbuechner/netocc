@@ -21,6 +21,7 @@
 #include <GeomFill_Trihedron.hxx>
 #include <Geom_Surface.hxx>
 #include <Law_Function.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_List.hxx>
 #include <TopoDS_Edge.hxx>
 #include <TopoDS_Face.hxx>

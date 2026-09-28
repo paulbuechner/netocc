@@ -87,9 +87,18 @@ packages:
   # declared only on Windows without FreeImage (a WIC palette)
   Image:
     exclude_methods: [Image_AlienPixMap::GetPalette]
-  # the driver a viewer creates; the renderer's classes (contexts, shaders, frame buffers) declare per platform
+  # the driver a viewer creates, and the context and frame buffers a view renders into an application's own OpenGL
+  # surface with; the rest of the renderer (shaders, resources, the window) declares per platform
   OpenGl:
-    classes: [OpenGl_GraphicDriver, OpenGl_Caps]
+    classes: [OpenGl_GraphicDriver, OpenGl_Caps, OpenGl_Context, OpenGl_FrameBuffer, OpenGl_Texture]
+  # C# subclasses (SWIG directors): progress and cancellation, message printers, presentations with their own
+  # selection, owners, a view controller's callbacks
+  Message:
+    directors: [Message_ProgressIndicator, Message_Printer]
+  SelectMgr:
+    directors: [SelectMgr_EntityOwner]
+  AIS:
+    directors: [AIS_InteractiveObject, AIS_ViewController]
   # preludes: headers that use a type without including it. Packages that use these headers get the preludes too.
   # XCAFDoc_AssemblyIterator.hxx: TDF_Label
   XCAFDoc:

@@ -24,13 +24,13 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -67,7 +67,7 @@
 %import "Law.i"
 %import "ChFiDS.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.BRepAlgo; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.Law; using OCC.Core.ChFiDS;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.BRepAlgo; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.Law; using OCC.Core.ChFiDS;)
 
 %occt_valueclass(BRepOffset)
 %occt_valueclass(BRepOffset_Interval)
@@ -147,7 +147,7 @@ class BRepOffset_Analyse {
 public:
   BRepOffset_Analyse();
   BRepOffset_Analyse(const TopoDS_Shape& theS, double theAngle);
-  void Perform(const TopoDS_Shape& theS, double theAngle);
+  void Perform(const TopoDS_Shape& theS, double theAngle, const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsDone() const;
   const NCollection_List<BRepOffset_Interval>& Type(const TopoDS_Edge& theE) const;
   void Edges(const TopoDS_Vertex& theV, ChFiDS_TypeOfConcavity theType, NCollection_List<TopoDS_Shape>& theL) const;
@@ -226,14 +226,14 @@ public:
 class BRepOffset_MakeOffset {
 public:
   BRepOffset_MakeOffset();
-  BRepOffset_MakeOffset(const TopoDS_Shape& S, double Offset, double Tol, BRepOffset_Mode Mode = BRepOffset_Skin, bool Intersection = false, bool SelfInter = false, GeomAbs_JoinType Join = GeomAbs_Arc, bool Thickening = false, bool RemoveIntEdges = false);
+  BRepOffset_MakeOffset(const TopoDS_Shape& S, double Offset, double Tol, BRepOffset_Mode Mode = BRepOffset_Skin, bool Intersection = false, bool SelfInter = false, GeomAbs_JoinType Join = GeomAbs_Arc, bool Thickening = false, bool RemoveIntEdges = false, const Message_ProgressRange& theRange = Message_ProgressRange());
   void Initialize(const TopoDS_Shape& S, double Offset, double Tol, BRepOffset_Mode Mode = BRepOffset_Skin, bool Intersection = false, bool SelfInter = false, GeomAbs_JoinType Join = GeomAbs_Arc, bool Thickening = false, bool RemoveIntEdges = false);
   void Clear();
   void AllowLinearization(bool theIsAllowed);
   void AddFace(const TopoDS_Face& F);
   void SetOffsetOnFace(const TopoDS_Face& F, double Off);
-  void MakeOffsetShape();
-  void MakeThickSolid();
+  void MakeOffsetShape(const Message_ProgressRange& theRange = Message_ProgressRange());
+  void MakeThickSolid(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsDone() const;
   const TopoDS_Shape& Shape() const;
   const TopoDS_Shape& InitShape() const;

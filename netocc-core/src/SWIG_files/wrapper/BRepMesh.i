@@ -24,13 +24,13 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -83,7 +83,7 @@
 %import "AIS.i"
 %import "MeshVS.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.Bnd; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRepExtrema; using OCC.Core.BRepGraphInc; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepGraph; using OCC.Core.IMeshData; using OCC.Core.IMeshTools; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect; using OCC.Core.Prs3d; using OCC.Core.V3d; using OCC.Core.PrsMgr; using OCC.Core.SelectBasics; using OCC.Core.SelectMgr; using OCC.Core.StdSelect; using OCC.Core.Select3D; using OCC.Core.AIS; using OCC.Core.MeshVS;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.Bnd; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRepExtrema; using OCC.Core.BRepGraphInc; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepGraph; using OCC.Core.IMeshData; using OCC.Core.IMeshTools; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect; using OCC.Core.Prs3d; using OCC.Core.V3d; using OCC.Core.PrsMgr; using OCC.Core.SelectBasics; using OCC.Core.SelectMgr; using OCC.Core.StdSelect; using OCC.Core.Select3D; using OCC.Core.AIS; using OCC.Core.MeshVS;)
 
 %occt_valuetype(BRepMesh_Triangle)
 %occt_valueclass(BRepMesh_Vertex)
@@ -287,7 +287,7 @@ public:
 
 class BRepMesh_BaseMeshAlgo : public IMeshTools_MeshAlgo {
 public:
-  void Perform(const opencascade::handle<IMeshData_Face>& theDFace, const IMeshTools_Parameters& theParameters);
+  void Perform(const opencascade::handle<IMeshData_Face>& theDFace, const IMeshTools_Parameters& theParameters, const Message_ProgressRange& theRange = Message_ProgressRange());
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
   const opencascade::handle<Standard_Type>& DynamicType() const;
@@ -509,7 +509,7 @@ public:
   void Init(NCollection_Shared_NCollection_Array1_BRepMesh_Vertex_void& theVertices);
   void InitCirclesTool(int theCellsCountU, int theCellsCountV);
   void RemoveVertex(const BRepMesh_Vertex& theVertex);
-  void AddVertices(NCollection_Shared_NCollection_DynamicArray_int_void& theVerticesIndices);
+  void AddVertices(NCollection_Shared_NCollection_DynamicArray_int_void& theVerticesIndices, const Message_ProgressRange& theRange = Message_ProgressRange());
   bool UseEdge(int theEdge);
   const opencascade::handle<BRepMesh_DataStructureOfDelaun>& Result() const;
   const BRepMesh_Vertex& GetVertex(int theIndex) const;
@@ -617,7 +617,7 @@ public:
   void SetShape(const TopoDS_Shape& theShape);
   const TopoDS_Shape& Shape() const;
   bool IsDone() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
   const opencascade::handle<Standard_Type>& DynamicType() const;
@@ -695,9 +695,9 @@ class BRepMesh_IncrementalMesh : public BRepMesh_DiscretRoot {
 public:
   BRepMesh_IncrementalMesh();
   BRepMesh_IncrementalMesh(const TopoDS_Shape& theShape, double theLinDeflection, bool isRelative = false, double theAngDeflection = 0.5, bool isInParallel = false);
-  BRepMesh_IncrementalMesh(const TopoDS_Shape& theShape, const IMeshTools_Parameters& theParameters);
-  void Perform();
-  void Perform(const opencascade::handle<IMeshTools_Context>& theContext);
+  BRepMesh_IncrementalMesh(const TopoDS_Shape& theShape, const IMeshTools_Parameters& theParameters, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Perform(const opencascade::handle<IMeshTools_Context>& theContext, const Message_ProgressRange& theRange = Message_ProgressRange());
   const IMeshTools_Parameters& Parameters() const;
   IMeshTools_Parameters& ChangeParameters();
   bool IsModified() const;

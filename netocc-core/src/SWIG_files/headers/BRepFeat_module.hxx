@@ -8,6 +8,7 @@
 #include <Geom_Curve.hxx>
 #include <Geom_Plane.hxx>
 #include <LocOpe_Operation.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_List.hxx>
 #include <NCollection_Map.hxx>
 #include <NCollection_Sequence.hxx>

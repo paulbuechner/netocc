@@ -8,6 +8,7 @@
 #include <BinLDrivers_DocumentStorageDriver.hxx>
 #include <BinMDF_ADriverTable.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <Standard_Transient.hxx>
 #include <Standard_Type.hxx>
 #include <TDocStd_Application.hxx>

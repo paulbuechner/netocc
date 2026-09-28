@@ -103,13 +103,13 @@ public:
   void TransferEdgeList();
   int IndexEdge(const TopoDS_Edge& myedge) const;
   int AddEdge(const TopoDS_Edge& myedge, const opencascade::handle<IGESData_IGESEntity>& mycurve3d);
-  opencascade::handle<IGESData_IGESEntity> TransferShape(const TopoDS_Shape& start);
+  opencascade::handle<IGESData_IGESEntity> TransferShape(const TopoDS_Shape& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
   opencascade::handle<IGESData_IGESEntity> TransferEdge(const TopoDS_Edge& myedge);
   opencascade::handle<IGESData_IGESEntity> TransferEdge(const TopoDS_Edge& myedge, const TopoDS_Face& myface, double length);
   opencascade::handle<IGESSolid_Loop> TransferWire(const TopoDS_Wire& mywire, const TopoDS_Face& myface, double length);
   opencascade::handle<IGESSolid_Face> TransferFace(const TopoDS_Face& start);
-  opencascade::handle<IGESSolid_Shell> TransferShell(const TopoDS_Shell& start);
-  opencascade::handle<IGESSolid_ManifoldSolid> TransferSolid(const TopoDS_Solid& start);
-  opencascade::handle<IGESData_IGESEntity> TransferCompSolid(const TopoDS_CompSolid& start);
-  opencascade::handle<IGESData_IGESEntity> TransferCompound(const TopoDS_Compound& start);
+  opencascade::handle<IGESSolid_Shell> TransferShell(const TopoDS_Shell& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESSolid_ManifoldSolid> TransferSolid(const TopoDS_Solid& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESData_IGESEntity> TransferCompSolid(const TopoDS_CompSolid& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<IGESData_IGESEntity> TransferCompound(const TopoDS_Compound& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
 };

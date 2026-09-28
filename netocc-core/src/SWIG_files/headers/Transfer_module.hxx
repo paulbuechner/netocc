@@ -19,6 +19,7 @@
 #include <Interface_Protocol.hxx>
 #include <Message_Messenger.hxx>
 #include <Message_Msg.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <NCollection_HSequence.hxx>
 #include <NCollection_IndexedMap.hxx>

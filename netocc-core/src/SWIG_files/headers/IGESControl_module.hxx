@@ -14,6 +14,7 @@
 #include <IGESToBRep_IGESBoundary.hxx>
 #include <IGESToBRep_ToolContainer.hxx>
 #include <Interface_InterfaceModel.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <Standard_Transient.hxx>
 #include <Standard_Type.hxx>

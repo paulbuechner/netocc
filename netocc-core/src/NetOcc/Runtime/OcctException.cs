@@ -30,6 +30,24 @@ public class OcctException : Exception
     OcctMessage = occtMessage;
   }
 
+  /// <param name="occtType">OCCT exception class, e.g. <c>Standard_ConstructionError</c>.</param>
+  /// <param name="occtMessage">Message as reported by OCCT.</param>
+  /// <param name="innerException">
+  /// What a C# override threw, which OCCT unwound as a <c>NetOcc_ManagedException</c>.
+  /// </param>
+  public OcctException(string occtType, string occtMessage, Exception innerException) : base(
+    string.IsNullOrEmpty(occtMessage) ? occtType : $"{occtType}: {occtMessage}", innerException)
+  {
+    OcctType = occtType;
+    OcctMessage = occtMessage;
+  }
+
+  // what a wrapper caught (Exceptions.i): an exception of a C# override comes back as the inner one
+  internal static OcctException FromNative(string occtType, string occtMessage) =>
+    occtType == Directors.ManagedException && Directors.Take(occtMessage) is { } thrown
+      ? new OcctException(occtType, thrown.Message, thrown)
+      : new OcctException(occtType, occtMessage);
+
 #if NETFRAMEWORK
   protected OcctException(SerializationInfo info, StreamingContext context) : base(info, context)
   {

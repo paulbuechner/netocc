@@ -15,10 +15,10 @@
 %import "TCollection.i"
 %import "TColStd.i"
 %import "NCollection.i"
-%import "Resource.i"
 %import "Quantity.i"
 %import "OSD.i"
 %import "Message.i"
+%import "Resource.i"
 %import "CDM.i"
 %import "LDOM.i"
 %import "Storage.i"
@@ -83,7 +83,7 @@
 %import "XSAlgo.i"
 %import "Transfer.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Resource; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.DE; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.Resource; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.DE; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer;)
 
 %occt_valueclass(XSControl)
 %occt_transient(XSControl_ConnectedShapes)
@@ -143,9 +143,9 @@ public:
   bool IsModeWrite(int modetrans, bool shape = true) const;
   const char* ModeWriteHelp(int modetrans, bool shape = true) const;
   bool RecognizeWriteTransient(const opencascade::handle<Standard_Transient>& obj, int modetrans = 0) const;
-  IFSelect_ReturnStatus TransferWriteTransient(const opencascade::handle<Standard_Transient>& obj, const opencascade::handle<Transfer_FinderProcess>& FP, const opencascade::handle<Interface_InterfaceModel>& model, int modetrans = 0) const;
+  IFSelect_ReturnStatus TransferWriteTransient(const opencascade::handle<Standard_Transient>& obj, const opencascade::handle<Transfer_FinderProcess>& FP, const opencascade::handle<Interface_InterfaceModel>& model, int modetrans = 0, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
   bool RecognizeWriteShape(const TopoDS_Shape& shape, int modetrans = 0) const;
-  IFSelect_ReturnStatus TransferWriteShape(const TopoDS_Shape& shape, const opencascade::handle<Transfer_FinderProcess>& FP, const opencascade::handle<Interface_InterfaceModel>& model, int modetrans = 0) const;
+  IFSelect_ReturnStatus TransferWriteShape(const TopoDS_Shape& shape, const opencascade::handle<Transfer_FinderProcess>& FP, const opencascade::handle<Interface_InterfaceModel>& model, int modetrans = 0, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
   void AddSessionItem(const opencascade::handle<Standard_Transient>& theItem, const char* theName, bool toApply = false);
   opencascade::handle<Standard_Transient> SessionItem(const char* theName) const;
   void Customise(opencascade::handle<XSControl_WorkSession>& WS);
@@ -184,11 +184,11 @@ public:
   opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>> GiveList(const char* first, const opencascade::handle<Standard_Transient>& ent);
   int NbRootsForTransfer();
   opencascade::handle<Standard_Transient> RootForTransfer(int num = 1);
-  bool TransferOneRoot(int num = 1);
-  bool TransferOne(int num);
-  bool TransferEntity(const opencascade::handle<Standard_Transient>& start);
-  int TransferList(const opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>>& list);
-  int TransferRoots();
+  bool TransferOneRoot(int num = 1, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool TransferOne(int num, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool TransferEntity(const opencascade::handle<Standard_Transient>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  int TransferList(const opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>>& list, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  int TransferRoots(const Message_ProgressRange& theProgress = Message_ProgressRange());
   void ClearShapes();
   int NbShapes() const;
   TopoDS_Shape Shape(int num = 1) const;
@@ -275,9 +275,9 @@ public:
   opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>> CheckedList(const opencascade::handle<Standard_Transient>& theEnt, Interface_CheckStatus WithCheck = Interface_CheckAny, bool theResult = true) const;
   bool BeginTransfer();
   bool Recognize(const opencascade::handle<Standard_Transient>& theEnt);
-  int TransferOne(const opencascade::handle<Standard_Transient>& theEnt, bool theRec = true);
-  int TransferList(const opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>>& theList, bool theRec = true);
-  int TransferRoots(const Interface_Graph& theGraph);
+  int TransferOne(const opencascade::handle<Standard_Transient>& theEnt, bool theRec = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  int TransferList(const opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>>& theList, bool theRec = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  int TransferRoots(const Interface_Graph& theGraph, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void TransferClear(const opencascade::handle<Standard_Transient>& theEnt, int theLevel = 0);
   void PrintStats(std::ostream& theStream, int theWhat, int theMode = 0) const;
   Interface_CheckIterator LastCheckList() const;
@@ -302,9 +302,9 @@ public:
   void SetTransferMode(int theMode);
   void PrintStats(int theWhat, int theMode = 0) const;
   bool RecognizeTransient(const opencascade::handle<Standard_Transient>& theObj);
-  IFSelect_ReturnStatus TransferWriteTransient(const opencascade::handle<Interface_InterfaceModel>& theModel, const opencascade::handle<Standard_Transient>& theObj);
+  IFSelect_ReturnStatus TransferWriteTransient(const opencascade::handle<Interface_InterfaceModel>& theModel, const opencascade::handle<Standard_Transient>& theObj, const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool RecognizeShape(const TopoDS_Shape& theShape);
-  IFSelect_ReturnStatus TransferWriteShape(const opencascade::handle<Interface_InterfaceModel>& theModel, const TopoDS_Shape& theShape);
+  IFSelect_ReturnStatus TransferWriteShape(const opencascade::handle<Interface_InterfaceModel>& theModel, const TopoDS_Shape& theShape, const Message_ProgressRange& theProgress = Message_ProgressRange());
   Interface_CheckIterator CheckList() const;
   Interface_CheckIterator ResultCheckList(const opencascade::handle<Interface_InterfaceModel>& theModel) const;
   static const char* get_type_name();
@@ -392,12 +392,12 @@ public:
   opencascade::handle<Transfer_TransientProcess> MapReader() const;
   bool SetMapReader(const opencascade::handle<Transfer_TransientProcess>& theTP);
   opencascade::handle<Standard_Transient> Result(const opencascade::handle<Standard_Transient>& theEnt, int theMode) const;
-  int TransferReadOne(const opencascade::handle<Standard_Transient>& theEnts);
-  int TransferReadRoots();
+  int TransferReadOne(const opencascade::handle<Standard_Transient>& theEnts, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  int TransferReadRoots(const Message_ProgressRange& theProgress = Message_ProgressRange());
   opencascade::handle<Interface_InterfaceModel> NewModel();
   const opencascade::handle<XSControl_TransferWriter>& TransferWriter() const;
   bool SetMapWriter(const opencascade::handle<Transfer_FinderProcess>& theFP);
-  IFSelect_ReturnStatus TransferWriteShape(const TopoDS_Shape& theShape, bool theCompGraph = true);
+  IFSelect_ReturnStatus TransferWriteShape(const TopoDS_Shape& theShape, bool theCompGraph = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
   Interface_CheckIterator TransferWriteCheckList() const;
   const opencascade::handle<XSControl_Vars>& Vars() const;
   void SetVars(const opencascade::handle<XSControl_Vars>& theVars);
@@ -415,7 +415,7 @@ public:
   void SetWS(const opencascade::handle<XSControl_WorkSession>& WS, bool scratch = true);
   opencascade::handle<XSControl_WorkSession> WS() const;
   opencascade::handle<Interface_InterfaceModel> Model(bool newone = false);
-  IFSelect_ReturnStatus TransferShape(const TopoDS_Shape& sh, int mode = 0);
+  IFSelect_ReturnStatus TransferShape(const TopoDS_Shape& sh, int mode = 0, const Message_ProgressRange& theProgress = Message_ProgressRange());
   IFSelect_ReturnStatus WriteFile(const char* filename);
   void PrintStatsTransfer(int what, int mode = 0) const;
 };

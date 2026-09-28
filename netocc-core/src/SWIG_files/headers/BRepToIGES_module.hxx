@@ -6,6 +6,7 @@
 #include <Geom_Surface.hxx>
 #include <IGESData_IGESEntity.hxx>
 #include <IGESData_IGESModel.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <Standard_Transient.hxx>
 #include <TopLoc_Location.hxx>

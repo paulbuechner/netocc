@@ -18,9 +18,12 @@
 %import "TColStd.i"
 %import "gp.i"
 %import "IntRes2d.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.IntRes2d; using OCC.Core.math;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.IntRes2d; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math;)
 
 %occt_valuetype(Interval)
 %occt_valuetype(PeriodicInterval)

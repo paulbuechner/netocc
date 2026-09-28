@@ -8,6 +8,7 @@
 #include <CDM_Document.hxx>
 #include <CDM_MetaData.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <PCDM_Reader.hxx>
 #include <PCDM_ReaderFilter.hxx>

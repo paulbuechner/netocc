@@ -19,6 +19,7 @@
 #include <Demo_Line.hxx>
 #include <Demo_Node.hxx>
 #include <Demo_Old.hxx>
+#include <Demo_Presentable.hxx>
 #include <Demo_Selector.hxx>
 #include <Demo_Shape.hxx>
 #include <Demo_Vec.hxx>

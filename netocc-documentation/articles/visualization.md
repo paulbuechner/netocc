@@ -84,6 +84,10 @@ The context highlights what's under the mouse and selects on click; selection mo
 | `0` | the whole presentation |
 | `AIS_Shape.SelectionMode(TopAbs_VERTEX)`, `EDGE`, `WIRE`, `FACE`, `SOLID` | sub-shapes of that type |
 
+## Rendering into an application's OpenGL surface
+
+`OpenGl_Context`, `OpenGl_FrameBuffer` and `OpenGl_Texture` are there for a view that renders into a framebuffer the application owns (a UI toolkit's OpenGL control) instead of a window of its own: `OpenGl_GraphicDriver.GetSharedContext()`, `OpenGl_Context.SetDefaultFrameBuffer`, `OpenGl_FrameBuffer.InitWrapper`. The toolkit's context must be desktop OpenGL, which OCCT's renderer is.
+
 ## Threads and disposal
 
 Views, the driver and presentations belong to the thread that made them, the UI thread: create, use and dispose them there. Dispose in reverse order of creation (view, viewer, driver), see [Object lifetimes](lifetimes.md#threads).

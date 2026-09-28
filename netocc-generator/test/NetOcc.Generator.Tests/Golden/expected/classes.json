@@ -61,6 +61,11 @@
       "instance": true
     },
     {
+      "name": "Demo_Drawable",
+      "kind": "class",
+      "cpp": "Demo_Drawable"
+    },
+    {
       "name": "Demo_Editor",
       "kind": "class",
       "cpp": "Demo_Editor"
@@ -122,6 +127,11 @@
       "cpp": "Demo_Line"
     },
     {
+      "name": "Demo_Marker",
+      "kind": "class",
+      "cpp": "Demo_Marker"
+    },
+    {
       "name": "Demo_Node",
       "kind": "class",
       "cpp": "Demo_Node"
@@ -135,6 +145,11 @@
       "name": "Demo_Options",
       "kind": "class",
       "cpp": "Demo_Options"
+    },
+    {
+      "name": "Demo_Presentable",
+      "kind": "class",
+      "cpp": "Demo_Presentable"
     },
     {
       "name": "Demo_Result",

@@ -6,6 +6,7 @@
 #include <DE_ConfigurationContext.hxx>
 #include <DE_ConfigurationNode.hxx>
 #include <DE_Provider.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_Buffer.hxx>
 #include <NCollection_List.hxx>
 #include <Standard_Type.hxx>

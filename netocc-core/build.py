@@ -340,6 +340,11 @@ def cmd_generate(_: argparse.Namespace) -> None:
                 unbased.append(module)
     if failed:
         sys.exit(f"SWIG failed for {', '.join(failed)}")
+    in_types = fix_director_in_types(cs_root)
+    lookups = cache_director_lookups(cs_root)
+    unchecked = unchecked_director_callbacks(cxx_dir)
+    if unchecked:
+        sys.exit(f"director callbacks without the check that rethrows a C# exception (Directors.i): {', '.join(unchecked[:5])}")
     if dropped:
         sys.exit(f"SWIG dropped overloads (Warning 516) in {', '.join(dropped)}")
     # a class of the module without its base, or netocc-gen's import order broken
@@ -351,7 +356,71 @@ def cmd_generate(_: argparse.Namespace) -> None:
     if opaque:
         sys.exit(f"SWIG left unmapped types (SWIGTYPE_*) in {len(opaque)} file(s), e.g. {', '.join(opaque[:5])}")
     print(f"SWIG: {len(library_of)} modules in {len(libraries)} libraries -> {GENERATED}; {harmless} imported classes seen "
-          "before their base in the importing module (Warning 401, left out)", flush=True)
+          f"before their base in the importing module (Warning 401, left out); {lookups} director classes, {in_types} parameter types by in",
+          flush=True)
+
+
+# a director's method types (SwigDerivedClassHasMethod), as SWIG writes them from the cstype: it spells ref and out
+# parameters' types as T.MakeByRefType(), but an in one as typeof(in T), which C# doesn't take
+DIRECTOR_IN_TYPE = re.compile(r"typeof\(in ([\w.]+)\)")
+
+
+def fix_director_in_types(cs_root: Path) -> int:
+    """Rewrites SWIG's typeof(in T) in director classes to typeof(T).MakeByRefType(), the type reflection gives an in
+    parameter; the number rewritten."""
+    count = 0
+    for path in cs_root.rglob("*.cs"):
+        text = path.read_text(encoding="utf-8")
+        if "typeof(in " not in text:
+            continue
+        fixed, n = DIRECTOR_IN_TYPE.subn(r"typeof(\1).MakeByRefType()", text)
+        path.write_text(fixed, encoding="utf-8", newline="")
+        count += n
+    return count
+
+
+# SWIG's lookup of a C# override in a director class, which reflects over the object's type on every call of a virtual
+# member: replaced by Directors.Overrides, which caches it per type and member
+DIRECTOR_LOOKUP = re.compile(
+    r"  private bool SwigDerivedClassHasMethod\(string methodName, global::System\.Type\[\] methodTypes\) \{\n"
+    r".*?methodInfo\.DeclaringType\.IsSubclassOf\(typeof\((\w+)\)\).*?\n    return false;\n  \}\n", re.S)
+
+
+def cache_director_lookups(cs_root: Path) -> int:
+    """Replaces SwigDerivedClassHasMethod in the director classes with Directors.Overrides; the classes changed. Fails
+    when a director class keeps SWIG's: another SWIG writes it differently."""
+    count = 0
+    for path in cs_root.rglob("*.cs"):
+        text = path.read_text(encoding="utf-8")
+        if "private bool SwigDerivedClassHasMethod(" not in text:
+            continue
+        fixed, n = DIRECTOR_LOOKUP.subn(
+            lambda m: "  // SWIG's lookup of an override, cached per type and member (Directors.Overrides)\n"
+                      "  private bool SwigDerivedClassHasMethod(string methodName, global::System.Type[] methodTypes) {\n"
+                      f"    return global::OCC.Core.Directors.Overrides(this.GetType(), typeof({m.group(1)}), methodName, methodTypes);\n"
+                      "  }\n", text)
+        if n != 1:
+            sys.exit(f"{path.relative_to(cs_root)}: SWIG's SwigDerivedClassHasMethod not found as expected")
+        path.write_text(fixed, encoding="utf-8", newline="")
+        count += 1
+    return count
+
+
+def unchecked_director_callbacks(cxx_dir: Path) -> list[str]:
+    """The director methods (SwigDirector_*::Name) in which a callback isn't followed by NetOcc_DirectorCheck: SWIG runs
+    it in a result's directorout and a parameter's directorargout, so a typemap of its own on a director's type that
+    lacks it would let a C# exception go unnoticed."""
+    unchecked = []
+    method = re.compile(r"^\w[^\n]*SwigDirector_(\w+)::(\w+)\([^\n]*\{\n(.*?)^\}", re.S | re.M)
+    for path in sorted(cxx_dir.rglob("*_wrap.cxx")):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for match in method.finditer(text):
+            body = match.group(3)
+            for call in re.finditer(r"swig_callback\w+\(", body):
+                # the callback's else block ends at the method's first two-space closing brace after it
+                if "NetOcc_DirectorCheck();" not in body[call.end():].split("\n  }", 1)[0]:
+                    unchecked.append(f"{match.group(1)}::{match.group(2)}")
+    return unchecked
 
 
 # --------------------------------------------------------------------------- native

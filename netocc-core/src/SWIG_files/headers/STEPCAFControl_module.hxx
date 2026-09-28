@@ -7,6 +7,7 @@
 #include <DESTEP_Parameters.hxx>
 #include <DE_ShapeFixParameters.hxx>
 #include <IFSelect_ReturnStatus.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <NCollection_HArray1.hxx>
 #include <NCollection_Sequence.hxx>

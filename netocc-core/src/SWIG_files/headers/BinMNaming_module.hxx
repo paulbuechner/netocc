@@ -10,6 +10,7 @@
 #include <BinTools_LocationSet.hxx>
 #include <BinTools_ShapeSetBase.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_IndexedMap.hxx>
 #include <Standard_Transient.hxx>
 #include <Standard_Type.hxx>

@@ -9,6 +9,7 @@
 #include <IGESSolid_Loop.hxx>
 #include <IGESSolid_ManifoldSolid.hxx>
 #include <IGESSolid_Shell.hxx>
+#include <Message_ProgressRange.hxx>
 #include <TopoDS_CompSolid.hxx>
 #include <TopoDS_Compound.hxx>
 #include <TopoDS_Edge.hxx>

@@ -12,13 +12,16 @@
 
 #ifndef SWIGIMPORTED
 %import "Standard.i"
-%import "NCollection.i"
 %import "TCollection.i"
 %import "TColStd.i"
+%import "NCollection.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "gp.i"
 %import "TColgp.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.gp; using OCC.Core.TColgp;)
 
 %occt_valueclass(Plate_D1)
 %nodefaultctor Plate_D1;
@@ -162,7 +165,7 @@ public:
   void Load(const Plate_SampledCurveConstraint& SCConst);
   void Load(const Plate_GtoCConstraint& GtoCConst);
   void Load(const Plate_FreeGtoCConstraint& FGtoCConst);
-  void SolveTI(int ord = 4, double anisotropie = 1.0);
+  void SolveTI(int ord = 4, double anisotropie = 1.0, const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool IsDone() const;
   void destroy();
   void Init();

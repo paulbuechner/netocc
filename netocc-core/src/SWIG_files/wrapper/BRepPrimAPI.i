@@ -24,13 +24,13 @@
 %import "Geom2dEval.i"
 %import "Adaptor2d.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -68,7 +68,7 @@
 %import "Sweep.i"
 %import "BRepSweep.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepBuilderAPI; using OCC.Core.BRepPrim; using OCC.Core.Sweep; using OCC.Core.BRepSweep;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepBuilderAPI; using OCC.Core.BRepPrim; using OCC.Core.Sweep; using OCC.Core.BRepSweep;)
 
 %occt_valueclass(BRepPrimAPI_MakeBox)
 %nodefaultctor BRepPrimAPI_MakeOneAxis;
@@ -115,7 +115,7 @@ public:
   void Init(const gp_Pnt& thePnt1, const gp_Pnt& thePnt2);
   void Init(const gp_Ax2& theAxes, double theDX, double theDY, double theDZ);
   BRepPrim_Wedge& Wedge();
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const TopoDS_Shell& Shell();
   const TopoDS_Solid& Solid();
   const TopoDS_Face& BottomFace();
@@ -129,7 +129,7 @@ public:
 class BRepPrimAPI_MakeOneAxis : public BRepBuilderAPI_MakeShape {
 public:
   void* OneAxis();
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const TopoDS_Face& Face();
   const TopoDS_Shell& Shell();
   const TopoDS_Solid& Solid();
@@ -173,7 +173,7 @@ public:
   BRepPrimAPI_MakePrism(const TopoDS_Shape& S, const gp_Vec& V, bool Copy = false, bool Canonize = true);
   BRepPrimAPI_MakePrism(const TopoDS_Shape& S, const gp_Dir& D, bool Inf = true, bool Copy = false, bool Canonize = true);
   const BRepSweep_Prism& Prism() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   TopoDS_Shape FirstShape();
   TopoDS_Shape LastShape();
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& S);
@@ -187,7 +187,7 @@ public:
   BRepPrimAPI_MakeRevol(const TopoDS_Shape& S, const gp_Ax1& A, double D, bool Copy = false);
   BRepPrimAPI_MakeRevol(const TopoDS_Shape& S, const gp_Ax1& A, bool Copy = false);
   const BRepSweep_Revol& Revol() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   TopoDS_Shape FirstShape();
   TopoDS_Shape LastShape();
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& S);
@@ -251,7 +251,7 @@ public:
   BRepPrimAPI_MakeWedge(double dx, double dy, double dz, double xmin, double zmin, double xmax, double zmax);
   BRepPrimAPI_MakeWedge(const gp_Ax2& Axes, double dx, double dy, double dz, double xmin, double zmin, double xmax, double zmax);
   BRepPrim_Wedge& Wedge();
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const TopoDS_Shell& Shell();
   const TopoDS_Solid& Solid();
 };

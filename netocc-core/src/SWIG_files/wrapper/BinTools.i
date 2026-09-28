@@ -22,14 +22,14 @@
 %import "GeomEval.i"
 %import "Geom2d.i"
 %import "Geom2dEval.i"
-%import "TopAbs.i"
-%import "TopLoc.i"
 %import "Quantity.i"
 %import "OSD.i"
 %import "Message.i"
+%import "TopAbs.i"
+%import "TopLoc.i"
 %import "TopoDS.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.TopAbs; using OCC.Core.TopLoc; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopoDS;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopAbs; using OCC.Core.TopLoc; using OCC.Core.TopoDS;)
 
 %occt_valueclass(BinTools)
 %occt_valueclass(BinTools_OStream)
@@ -93,12 +93,12 @@ public:
   static void GetInteger(std::istream& IS, int& theValue);
   static void GetBool(std::istream& IS, bool& theValue);
   static void GetExtChar(std::istream& IS, char16_t& theValue);
-  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream);
-  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream, bool theWithTriangles, bool theWithNormals, BinTools_FormatVersion theVersion);
-  static void Read(TopoDS_Shape& theShape, std::istream& theStream);
-  static bool Write(const TopoDS_Shape& theShape, const char* theFile);
-  static bool Write(const TopoDS_Shape& theShape, const char* theFile, bool theWithTriangles, bool theWithNormals, BinTools_FormatVersion theVersion);
-  static bool Read(TopoDS_Shape& theShape, const char* theFile);
+  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream, const Message_ProgressRange& theRange = Message_ProgressRange());
+  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream, bool theWithTriangles, bool theWithNormals, BinTools_FormatVersion theVersion, const Message_ProgressRange& theRange = Message_ProgressRange());
+  static void Read(TopoDS_Shape& theShape, std::istream& theStream, const Message_ProgressRange& theRange = Message_ProgressRange());
+  static bool Write(const TopoDS_Shape& theShape, const char* theFile, const Message_ProgressRange& theRange = Message_ProgressRange());
+  static bool Write(const TopoDS_Shape& theShape, const char* theFile, bool theWithTriangles, bool theWithNormals, BinTools_FormatVersion theVersion, const Message_ProgressRange& theRange = Message_ProgressRange());
+  static bool Read(TopoDS_Shape& theShape, const char* theFile, const Message_ProgressRange& theRange = Message_ProgressRange());
 };
 
 class BinTools_OStream {
@@ -117,8 +117,8 @@ public:
   int Add(const opencascade::handle<Geom2d_Curve>& C);
   opencascade::handle<Geom2d_Curve> Curve2d(int I) const;
   int Index(const opencascade::handle<Geom2d_Curve>& C) const;
-  void Write(std::ostream& OS) const;
-  void Read(std::istream& IS);
+  void Write(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange()) const;
+  void Read(std::istream& IS, const Message_ProgressRange& theRange = Message_ProgressRange());
   static void WriteCurve2d(const opencascade::handle<Geom2d_Curve>& C, BinTools_OStream& OS);
   static void ReadCurve2d(std::istream& IS, opencascade::handle<Geom2d_Curve>& C);
 };
@@ -130,8 +130,8 @@ public:
   int Add(const opencascade::handle<Geom_Curve>& C);
   opencascade::handle<Geom_Curve> Curve(int I) const;
   int Index(const opencascade::handle<Geom_Curve>& C) const;
-  void Write(std::ostream& OS) const;
-  void Read(std::istream& IS);
+  void Write(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange()) const;
+  void Read(std::istream& IS, const Message_ProgressRange& theRange = Message_ProgressRange());
   static void WriteCurve(const opencascade::handle<Geom_Curve>& C, BinTools_OStream& OS);
   static void ReadCurve(std::istream& IS, opencascade::handle<Geom_Curve>& C);
 };
@@ -179,8 +179,8 @@ public:
   void SetFormatNb(int theFormatNb);
   int FormatNb() const;
   void Clear();
-  void Write(std::ostream& arg0);
-  void Read(std::istream& arg0);
+  void Write(std::ostream& arg0, const Message_ProgressRange& arg1 = Message_ProgressRange());
+  void Read(std::istream& arg0, const Message_ProgressRange& arg1 = Message_ProgressRange());
   void Write(const TopoDS_Shape& arg0, std::ostream& arg1);
   void Read(std::istream& arg0, TopoDS_Shape& arg1);
 };
@@ -200,8 +200,8 @@ public:
   int Add(const opencascade::handle<Geom_Surface>& S);
   opencascade::handle<Geom_Surface> Surface(int I) const;
   int Index(const opencascade::handle<Geom_Surface>& S) const;
-  void Write(std::ostream& OS) const;
-  void Read(std::istream& IS);
+  void Write(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange()) const;
+  void Read(std::istream& IS, const Message_ProgressRange& therange = Message_ProgressRange());
   static void WriteSurface(const opencascade::handle<Geom_Surface>& S, BinTools_OStream& OS);
   static void ReadSurface(std::istream& IS, opencascade::handle<Geom_Surface>& S);
 };
@@ -216,11 +216,11 @@ public:
   const BinTools_LocationSet& Locations() const;
   BinTools_LocationSet& ChangeLocations();
   int NbShapes() const;
-  void Write(std::ostream& OS);
-  void Read(std::istream& IS);
+  void Write(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Read(std::istream& IS, const Message_ProgressRange& theRange = Message_ProgressRange());
   void Write(const TopoDS_Shape& S, std::ostream& OS);
-  void WriteGeometry(std::ostream& OS) const;
-  void ReadGeometry(std::istream& IS);
+  void WriteGeometry(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange()) const;
+  void ReadGeometry(std::istream& IS, const Message_ProgressRange& theRange = Message_ProgressRange());
   void ReadFlagsAndSubs(TopoDS_Shape& S, TopAbs_ShapeEnum T, std::istream& IS, int NbShapes);
   void ReadSubs(TopoDS_Shape& S, std::istream& IS, int NbShapes);
   void Read(std::istream& arg0, TopoDS_Shape& arg1);
@@ -228,12 +228,12 @@ public:
   void ReadShape(TopAbs_ShapeEnum T, std::istream& IS, TopoDS_Shape& S);
   void AddShape(const TopoDS_Shape& S);
   void AddShapes(TopoDS_Shape& S1, const TopoDS_Shape& S2);
-  void ReadPolygon3D(std::istream& IS);
-  void WritePolygon3D(std::ostream& OS) const;
-  void ReadTriangulation(std::istream& IS);
-  void WriteTriangulation(std::ostream& OS) const;
-  void ReadPolygonOnTriangulation(std::istream& IS);
-  void WritePolygonOnTriangulation(std::ostream& OS) const;
+  void ReadPolygon3D(std::istream& IS, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void WritePolygon3D(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange()) const;
+  void ReadTriangulation(std::istream& IS, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void WriteTriangulation(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange()) const;
+  void ReadPolygonOnTriangulation(std::istream& IS, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void WritePolygonOnTriangulation(std::ostream& OS, const Message_ProgressRange& theRange = Message_ProgressRange()) const;
 };
 
 class BinTools_ShapeWriter : public BinTools_ShapeSetBase {

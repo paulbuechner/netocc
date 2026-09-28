@@ -51,7 +51,7 @@ class XmlDrivers_DocumentRetrievalDriver : public XmlLDrivers_DocumentRetrievalD
 public:
   XmlDrivers_DocumentRetrievalDriver();
   opencascade::handle<XmlMDF_ADriverTable> AttributeDrivers(const opencascade::handle<Message_Messenger>& theMsgDriver);
-  opencascade::handle<XmlMDF_ADriver> ReadShapeSection(const LDOM_Element& thePDoc, const opencascade::handle<Message_Messenger>& theMsgDriver);
+  opencascade::handle<XmlMDF_ADriver> ReadShapeSection(const LDOM_Element& thePDoc, const opencascade::handle<Message_Messenger>& theMsgDriver, const Message_ProgressRange& theRange = Message_ProgressRange());
   void ShapeSetCleaning(const opencascade::handle<XmlMDF_ADriver>& theDriver);
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
@@ -62,7 +62,7 @@ class XmlDrivers_DocumentStorageDriver : public XmlLDrivers_DocumentStorageDrive
 public:
   XmlDrivers_DocumentStorageDriver(const TCollection_ExtendedString& theCopyright);
   opencascade::handle<XmlMDF_ADriverTable> AttributeDrivers(const opencascade::handle<Message_Messenger>& theMsgDriver);
-  bool WriteShapeSection(LDOM_Element& thePDoc, TDocStd_FormatVersion theStorageFormatVersion);
+  bool WriteShapeSection(LDOM_Element& thePDoc, TDocStd_FormatVersion theStorageFormatVersion, const Message_ProgressRange& theRange = Message_ProgressRange());
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
   const opencascade::handle<Standard_Type>& DynamicType() const;

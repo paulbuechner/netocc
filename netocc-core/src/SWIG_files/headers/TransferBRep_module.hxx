@@ -8,6 +8,7 @@
 #include <Interface_Protocol.hxx>
 #include <Message_Msg.hxx>
 #include <Message_Printer.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_HSequence.hxx>
 #include <Standard_Transient.hxx>
 #include <Standard_Type.hxx>

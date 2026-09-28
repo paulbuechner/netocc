@@ -72,4 +72,4 @@ The mesh formats with materials write XCAF documents:
 
 ## Progress
 
-Methods that take a `Message_ProgressRange` last, with a default, have it left out in C#. Where OCCT requires one, pass `new Message_ProgressRange()`.
+Methods that take a `Message_ProgressRange` last, with a default, have an overload without it. A C# `Message_ProgressIndicator` reports and cancels through the range its `Start()` gives, see [Subclassing OCCT classes](subclassing.md#progress-and-cancellation); where OCCT requires a range and nothing reports, pass `new Message_ProgressRange()`.

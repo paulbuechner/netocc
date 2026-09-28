@@ -93,6 +93,7 @@
 %occt_valueclass(NCollection_UtfIterator_char32_t)
 %nodefaultctor NCollection_UtfIterator_char32_t;
 %feature("valuewrapper") NCollection_UtfIterator_char32_t;
+%occt_valueclass(NCollection_Vec4_bool)
 %nodefaultctor NCollection_SparseArray_int;
 %feature("valuewrapper") NCollection_SparseArray_int;
 %netocc_address(%arg(bool*))
@@ -1371,6 +1372,80 @@ public:
   NetOcc_Address< char* > GetUtf8(char* theBuffer) const;
   NetOcc_Address< char16_t* > GetUtf16(char16_t* theBuffer) const;
   NetOcc_Address< char32_t* > GetUtf32(NetOcc_Address< char32_t* > theBuffer) const;
+};
+
+class NCollection_Vec4_bool {
+public:
+  NCollection_Vec4_bool();
+  NCollection_Vec4_bool(bool theValue);
+  NCollection_Vec4_bool(bool theX, bool theY, bool theZ, bool theW);
+  NCollection_Vec4_bool(const NCollection_Vec2_bool& theVec2);
+  NCollection_Vec4_bool(const NCollection_Vec3_bool& theVec3, bool theW = Element_t(0));
+  static int Length();
+  void SetValues(bool theX, bool theY, bool theZ, bool theW);
+  void SetValues(const NCollection_Vec3_bool& theVec3, bool theW);
+  NCollection_Vec2_bool xy() const;
+  NCollection_Vec2_bool yx() const;
+  NCollection_Vec2_bool xz() const;
+  NCollection_Vec2_bool zx() const;
+  NCollection_Vec2_bool xw() const;
+  NCollection_Vec2_bool wx() const;
+  NCollection_Vec2_bool yz() const;
+  NCollection_Vec2_bool zy() const;
+  NCollection_Vec2_bool yw() const;
+  NCollection_Vec2_bool wy() const;
+  NCollection_Vec2_bool zw() const;
+  NCollection_Vec2_bool wz() const;
+  NCollection_Vec3_bool xyz() const;
+  NCollection_Vec3_bool xzy() const;
+  NCollection_Vec3_bool yxz() const;
+  NCollection_Vec3_bool yzx() const;
+  NCollection_Vec3_bool zyx() const;
+  NCollection_Vec3_bool zxy() const;
+  NCollection_Vec3_bool xyw() const;
+  NCollection_Vec3_bool xwy() const;
+  NCollection_Vec3_bool yxw() const;
+  NCollection_Vec3_bool ywx() const;
+  NCollection_Vec3_bool wyx() const;
+  NCollection_Vec3_bool wxy() const;
+  NCollection_Vec3_bool xzw() const;
+  NCollection_Vec3_bool xwz() const;
+  NCollection_Vec3_bool zxw() const;
+  NCollection_Vec3_bool zwx() const;
+  NCollection_Vec3_bool wzx() const;
+  NCollection_Vec3_bool wxz() const;
+  NCollection_Vec3_bool yzw() const;
+  NCollection_Vec3_bool ywz() const;
+  NCollection_Vec3_bool zyw() const;
+  NCollection_Vec3_bool zwy() const;
+  NCollection_Vec3_bool wzy() const;
+  NCollection_Vec3_bool wyz() const;
+  NCollection_Vec3_bool rgb() const;
+  NCollection_Vec3_bool rbg() const;
+  NCollection_Vec3_bool grb() const;
+  NCollection_Vec3_bool gbr() const;
+  NCollection_Vec3_bool bgr() const;
+  NCollection_Vec3_bool brg() const;
+  bool& x();
+  bool& r();
+  bool& y();
+  bool& g();
+  bool& z();
+  bool& b();
+  bool& w();
+  bool& a();
+  bool IsEqual(const NCollection_Vec4_bool& theOther) const;
+  NetOcc_Address< const bool* > GetData() const;
+  NetOcc_Address< bool* > ChangeData();
+  void Multiply(bool theFactor);
+  NCollection_Vec4_bool Multiplied(bool theFactor) const;
+  NCollection_Vec4_bool cwiseMin(const NCollection_Vec4_bool& theVec) const;
+  NCollection_Vec4_bool cwiseMax(const NCollection_Vec4_bool& theVec) const;
+  NCollection_Vec4_bool cwiseAbs() const;
+  bool maxComp() const;
+  bool minComp() const;
+  bool Dot(const NCollection_Vec4_bool& theOther) const;
+  void DumpJson(std::ostream& theOStream, int theDepth = -1) const;
 };
 
 class NCollection_SparseArray_int : public NCollection_SparseArrayBase {

@@ -89,7 +89,8 @@ All 362 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, 
 - geometry, topology, booleans, fillets, offsets, sweeps, shape healing, meshing, HLR;
 - OCAF and XCAF documents: assemblies, names, colors, undo;
 - STEP, IGES, STL, glTF, OBJ, PLY and VRML files;
-- 3D views in a WPF, Avalonia or any other native window.
+- 3D views in a WPF, Avalonia or any other native window;
+- C# subclasses of the classes OCCT is meant to be derived from: progress indicators, message printers, presentations, a view controller.
 
 ## Documentation
 

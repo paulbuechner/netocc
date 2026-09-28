@@ -13,6 +13,7 @@
 #include <BRepSweep_Prism.hxx>
 #include <BRepSweep_Revol.hxx>
 #include <Geom_Curve.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_List.hxx>
 #include <TopoDS_Face.hxx>
 #include <TopoDS_Shape.hxx>

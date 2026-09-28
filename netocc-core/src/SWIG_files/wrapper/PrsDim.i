@@ -24,13 +24,13 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -76,74 +76,94 @@
 %import "AIS.i"
 %import "DsgPrs.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.BVH; using OCC.Core.Bnd; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.IntPatch; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BOPTools; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.Prs3d; using OCC.Core.V3d; using OCC.Core.PrsMgr; using OCC.Core.SelectBasics; using OCC.Core.SelectMgr; using OCC.Core.StdSelect; using OCC.Core.Select3D; using OCC.Core.AIS; using OCC.Core.DsgPrs;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.BVH; using OCC.Core.Bnd; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.IntPatch; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BOPTools; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.Prs3d; using OCC.Core.V3d; using OCC.Core.PrsMgr; using OCC.Core.SelectBasics; using OCC.Core.SelectMgr; using OCC.Core.StdSelect; using OCC.Core.Select3D; using OCC.Core.AIS; using OCC.Core.DsgPrs;)
 
 %occt_valueclass(PrsDim)
 %occt_transient(PrsDim_DimensionOwner)
+%feature("notabstract") PrsDim_DimensionOwner;
 %nodefaultctor PrsDim_DimensionOwner;
 %feature("valuewrapper") PrsDim_DimensionOwner;
 %occt_transient(PrsDim_Dimension)
 %nodefaultctor PrsDim_Dimension;
 %feature("valuewrapper") PrsDim_Dimension;
 %occt_transient(PrsDim_AngleDimension)
+%feature("notabstract") PrsDim_AngleDimension;
 %nodefaultctor PrsDim_AngleDimension;
 %feature("valuewrapper") PrsDim_AngleDimension;
 %occt_transient(PrsDim_Relation)
 %nodefaultctor PrsDim_Relation;
 %feature("valuewrapper") PrsDim_Relation;
 %occt_transient(PrsDim_Chamf2dDimension)
+%feature("notabstract") PrsDim_Chamf2dDimension;
 %nodefaultctor PrsDim_Chamf2dDimension;
 %feature("valuewrapper") PrsDim_Chamf2dDimension;
 %occt_transient(PrsDim_Chamf3dDimension)
+%feature("notabstract") PrsDim_Chamf3dDimension;
 %nodefaultctor PrsDim_Chamf3dDimension;
 %feature("valuewrapper") PrsDim_Chamf3dDimension;
 %occt_transient(PrsDim_ConcentricRelation)
+%feature("notabstract") PrsDim_ConcentricRelation;
 %nodefaultctor PrsDim_ConcentricRelation;
 %feature("valuewrapper") PrsDim_ConcentricRelation;
 %occt_transient(PrsDim_DiameterDimension)
+%feature("notabstract") PrsDim_DiameterDimension;
 %nodefaultctor PrsDim_DiameterDimension;
 %feature("valuewrapper") PrsDim_DiameterDimension;
 %occt_transient(PrsDim_EllipseRadiusDimension)
 %nodefaultctor PrsDim_EllipseRadiusDimension;
 %feature("valuewrapper") PrsDim_EllipseRadiusDimension;
 %occt_transient(PrsDim_EqualDistanceRelation)
+%feature("notabstract") PrsDim_EqualDistanceRelation;
 %nodefaultctor PrsDim_EqualDistanceRelation;
 %feature("valuewrapper") PrsDim_EqualDistanceRelation;
 %occt_transient(PrsDim_EqualRadiusRelation)
+%feature("notabstract") PrsDim_EqualRadiusRelation;
 %nodefaultctor PrsDim_EqualRadiusRelation;
 %feature("valuewrapper") PrsDim_EqualRadiusRelation;
 %occt_transient(PrsDim_FixRelation)
+%feature("notabstract") PrsDim_FixRelation;
 %nodefaultctor PrsDim_FixRelation;
 %feature("valuewrapper") PrsDim_FixRelation;
 %occt_transient(PrsDim_IdenticRelation)
+%feature("notabstract") PrsDim_IdenticRelation;
 %nodefaultctor PrsDim_IdenticRelation;
 %feature("valuewrapper") PrsDim_IdenticRelation;
 %occt_transient(PrsDim_LengthDimension)
+%feature("notabstract") PrsDim_LengthDimension;
 %occt_transient(PrsDim_MaxRadiusDimension)
+%feature("notabstract") PrsDim_MaxRadiusDimension;
 %nodefaultctor PrsDim_MaxRadiusDimension;
 %feature("valuewrapper") PrsDim_MaxRadiusDimension;
 %occt_transient(PrsDim_MidPointRelation)
+%feature("notabstract") PrsDim_MidPointRelation;
 %nodefaultctor PrsDim_MidPointRelation;
 %feature("valuewrapper") PrsDim_MidPointRelation;
 %occt_transient(PrsDim_MinRadiusDimension)
+%feature("notabstract") PrsDim_MinRadiusDimension;
 %nodefaultctor PrsDim_MinRadiusDimension;
 %feature("valuewrapper") PrsDim_MinRadiusDimension;
 %occt_transient(PrsDim_OffsetDimension)
+%feature("notabstract") PrsDim_OffsetDimension;
 %nodefaultctor PrsDim_OffsetDimension;
 %feature("valuewrapper") PrsDim_OffsetDimension;
 %occt_transient(PrsDim_ParallelRelation)
+%feature("notabstract") PrsDim_ParallelRelation;
 %nodefaultctor PrsDim_ParallelRelation;
 %feature("valuewrapper") PrsDim_ParallelRelation;
 %occt_transient(PrsDim_PerpendicularRelation)
+%feature("notabstract") PrsDim_PerpendicularRelation;
 %nodefaultctor PrsDim_PerpendicularRelation;
 %feature("valuewrapper") PrsDim_PerpendicularRelation;
 %occt_transient(PrsDim_RadiusDimension)
+%feature("notabstract") PrsDim_RadiusDimension;
 %nodefaultctor PrsDim_RadiusDimension;
 %feature("valuewrapper") PrsDim_RadiusDimension;
 %occt_transient(PrsDim_SymmetricRelation)
+%feature("notabstract") PrsDim_SymmetricRelation;
 %nodefaultctor PrsDim_SymmetricRelation;
 %feature("valuewrapper") PrsDim_SymmetricRelation;
 %occt_transient(PrsDim_TangentRelation)
+%feature("notabstract") PrsDim_TangentRelation;
 %nodefaultctor PrsDim_TangentRelation;
 %feature("valuewrapper") PrsDim_TangentRelation;
 

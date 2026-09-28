@@ -15,6 +15,7 @@
 %occt_valuetype(Standard_UUID)
 %occt_valueclass(Standard_Failure)
 %occt_handle(Standard_Transient, Standard_Transient)
+%netocc_directed(Standard_Transient)
 
 %{
 // Layout guards for the C# structs in src/NetOcc/Standard/: a mismatch fails the native build.
