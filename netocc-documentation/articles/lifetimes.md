@@ -81,7 +81,7 @@ A C# subclass of an OCCT class ([Subclassing OCCT classes](subclassing.md)) is r
 
 ## OCAF documents
 
-- Labels, attributes and `TNaming_Builder` keep their document's data alive, so a proxy never points into a freed tree.
+- Labels, attributes, `TNaming_Builder` and what holds attributes (undo deltas, relocation tables, data sets, `TDF_CopyLabel`) keep their document's data alive, so a proxy never points into a freed tree.
 - Close documents through the application (`application.Close(document)`): OCCT keeps a raw pointer to the document that only `Close` clears.
 - Undo needs `document.SetUndoLimit(n)` with `n > 0`; with 0, `OpenCommand` and `AbortCommand` do nothing.
 - `XCAFApp_Application.GetApplication()` is one per process.

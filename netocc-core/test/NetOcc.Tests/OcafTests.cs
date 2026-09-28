@@ -10,6 +10,7 @@ using NUnit.Framework;
 
 //
 using OCC.Core;
+using OCC.Core.TColStd;
 using OCC.Core.TDataStd;
 using OCC.Core.TDF;
 using OCC.Core.TDocStd;
@@ -388,6 +389,179 @@ public class OcafTests
     }
   }
 
+  [Test]
+  public void CommitCommand_RecordsTheLabelsItTouched()
+  {
+    // Arrange
+    _document.SetUndoLimit(10);
+    _document.OpenCommand();
+    TDataStd_Real.Set(_main.FindChild(1), 1.5);
+    TDataStd_Name.Set(_main.FindChild(2), "touched");
+
+    // Act
+    _document.CommitCommand();
+    using var undos = _document.GetUndos();
+    var touched = undos.Last().AttributeDeltas().Select(delta => Ocaf.Entry(delta.Label()));
+
+    // Assert
+    Assert.That(touched.Distinct(), Is.EquivalentTo(new[] { "0:1:1", "0:1:2" }));
+  }
+
+  [Test]
+  public void Undo_RestoresAReferenceListAndAnArray()
+  {
+    // Arrange
+    _document.SetUndoLimit(10);
+    _document.OpenCommand();
+    var references = TDataStd_ReferenceList.Set(_main.FindChild(4));
+    references.Append(_main.FindChild(1));
+    references.Append(_main.FindChild(2));
+    var values = TDataStd_RealArray.Set(_main.FindChild(5), 1, 3);
+    values.ChangeArray(new TColStd_HArray1OfReal(new TColStd_Array1OfReal([1.0, 2.0, 3.0])));
+    _document.CommitCommand();
+    _document.OpenCommand();
+    references.Remove(_main.FindChild(1));
+    references.Append(_main.FindChild(3));
+    values.SetValue(2, 20.0);
+    _document.CommitCommand();
+
+    // Act
+    _document.Undo();
+
+    // Assert
+    using (Assert.EnterMultipleScope())
+    {
+      Assert.That(
+        Ocaf.Find(_main.FindChild(4), TDataStd_ReferenceList.GetID(),
+                  TDataStd_ReferenceList.DownCast)
+          ?.List()
+          .Select(Ocaf.Entry), Is.EqualTo(new[] { "0:1:1", "0:1:2" }));
+      Assert.That(
+        Ocaf.Find(_main.FindChild(5), TDataStd_RealArray.GetID(), TDataStd_RealArray.DownCast)
+          ?.Array()
+          .ToArray(), Is.EqualTo(new[] { 1.0, 2.0, 3.0 }));
+    }
+  }
+
+  [Test]
+  public void Undo_RestoresTheShapeANamedShapeHadBefore()
+  {
+    // Arrange
+    _document.SetUndoLimit(10);
+    var label = _main.FindChild(1);
+    _document.OpenCommand();
+    new TNaming_Builder(label).Generated(Shapes.Box());
+    _document.CommitCommand();
+    _document.OpenCommand();
+    new TNaming_Builder(label).Generated(Shapes.Cylinder());
+    _document.CommitCommand();
+
+    // Act
+    _document.Undo();
+
+    // Assert
+    var named = Ocaf.Find(label, TNaming_NamedShape.GetID(), TNaming_NamedShape.DownCast);
+    Assert.That(Shapes.Volume(named!.Get()), Is.EqualTo(Shapes.BoxVolume).Within(1e-6));
+  }
+
+  [Test]
+  public void CopyLabel_CopiesTheAttributesOfTheSubtree()
+  {
+    // Arrange
+    var source = _main.FindChild(1);
+    TDataStd_Name.Set(source, "source");
+    TDataStd_Real.Set(source.FindChild(1), 2.5);
+    new TNaming_Builder(source.FindChild(2)).Generated(Shapes.Box());
+    var target = _main.FindChild(2);
+    using var copy = new TDF_CopyLabel(source, target);
+
+    // Act
+    copy.Perform();
+
+    // Assert
+    var named = Ocaf.Find(target.FindChild(2, false), TNaming_NamedShape.GetID(),
+                          TNaming_NamedShape.DownCast);
+    using (Assert.EnterMultipleScope())
+    {
+      Assert.That(copy.IsDone(), Is.True);
+      Assert.That(Ocaf.Name(target), Is.EqualTo("source"));
+      Assert.That(
+        Ocaf.Find(target.FindChild(1, false), TDataStd_Real.GetID(), TDataStd_Real.DownCast)?.Get(),
+        Is.EqualTo(2.5));
+      Assert.That(Shapes.Volume(named!.Get()), Is.EqualTo(Shapes.BoxVolume).Within(1e-6));
+    }
+  }
+
+  // The holders below keep attributes of their tree, a NamedShape among them: released after the
+  // tree, they would read freed memory.
+  [Test]
+  public void CopyLabel_ThatPerformed_OutlivesItsClosedDocument()
+  {
+    // Arrange
+    var document = DocumentWithABox();
+    var copy = PerformedCopy(document);
+    CloseAndCollect(document);
+
+    // Act
+    var done = copy.IsDone();
+    copy.Dispose();
+    Garbage.Collect();
+
+    // Assert
+    Assert.That(done, Is.True);
+  }
+
+  [Test]
+  public void RelocationTable_OfACopy_OutlivesItsClosedDocument()
+  {
+    // Arrange
+    var document = DocumentWithABox();
+    var relocation = RelocationTableOfACopy(document);
+    CloseAndCollect(document);
+
+    // Act
+    var selfRelocate = relocation.SelfRelocate();
+    relocation.Dispose();
+    Garbage.Collect();
+
+    // Assert (TDF_CopyLabel relocates what it doesn't copy to itself)
+    Assert.That(selfRelocate, Is.True);
+  }
+
+  [Test]
+  public void Delta_OfTheUndoStack_OutlivesItsClosedDocument()
+  {
+    // Arrange
+    var document = DocumentWithABox();
+    var delta = LastUndo(document);
+    CloseAndCollect(document);
+
+    // Act
+    var empty = delta.IsEmpty();
+    delta.Dispose();
+    Garbage.Collect();
+
+    // Assert
+    Assert.That(empty, Is.False);
+  }
+
+  [Test]
+  public void DataSet_OfAClosure_OutlivesItsClosedDocument()
+  {
+    // Arrange
+    var document = DocumentWithABox();
+    var dataSet = ClosureOfTheBox(document);
+    CloseAndCollect(document);
+
+    // Act
+    var empty = dataSet.IsEmpty();
+    dataSet.Dispose();
+    Garbage.Collect();
+
+    // Assert
+    Assert.That(empty, Is.False);
+  }
+
   private TDataStd_Integer CommitTwoValues(int first, int second)
   {
     _document.SetUndoLimit(10);
@@ -408,6 +582,59 @@ public class OcafTests
     {
       TDataStd_Name.Set(parent.FindChild(tag), $"child {tag}");
     }
+  }
+
+  // a document with a box at 0:1:1, generated in a committed command
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  private TDocStd_Document DocumentWithABox()
+  {
+    TDocStd_Document? document = null;
+    _application.NewDocument("BinOcaf", ref document);
+    document!.SetUndoLimit(10);
+    document.OpenCommand();
+    new TNaming_Builder(document.Main().FindChild(1)).Generated(Shapes.Box());
+    document.CommitCommand();
+    return document;
+  }
+
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  private static TDF_CopyLabel PerformedCopy(TDocStd_Document document)
+  {
+    var copy = new TDF_CopyLabel(document.Main().FindChild(1), document.Main().FindChild(2));
+    copy.Perform();
+    return copy;
+  }
+
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  private static TDF_RelocationTable RelocationTableOfACopy(TDocStd_Document document)
+  {
+    using var copy = PerformedCopy(document);
+    return copy.RelocationTable();
+  }
+
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  private static TDF_Delta LastUndo(TDocStd_Document document)
+  {
+    using var undos = document.GetUndos();
+    return undos.Last();
+  }
+
+  [MethodImpl(MethodImplOptions.NoInlining)]
+  private static TDF_DataSet ClosureOfTheBox(TDocStd_Document document)
+  {
+    // Closure starts from the labels of the set, which it makes its roots
+    var dataSet = new TDF_DataSet();
+    dataSet.AddLabel(document.Main().FindChild(1));
+    TDF_ClosureTool.Closure(dataSet);
+    return dataSet;
+  }
+
+  // closed, and its proxies collected: only what the test holds is left
+  private void CloseAndCollect(TDocStd_Document document)
+  {
+    _application.Close(document);
+    document.Dispose();
+    Garbage.Collect();
   }
 
   [MethodImpl(MethodImplOptions.NoInlining)]

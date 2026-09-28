@@ -1,0 +1,1 @@
+`TDF_Delta`, `TDF_AttributeDelta`, `TDF_RelocationTable`, `TDF_DataSet` and a performed `TDF_CopyLabel` keep their documents' data alive, as labels and attributes do: releasing one after its document was closed read freed memory and could crash the process.
