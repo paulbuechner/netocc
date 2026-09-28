@@ -11,7 +11,7 @@ MIT wherever NetOcc can, OCCT's terms where it must. This isn't legal advice. Th
 | `NetOcc.dll` | MIT | C# calling the native libraries |
 | `NetOcc.xml`, the IntelliSense documentation | LGPL-2.1 with the OCCT exception | the doc comments of OCCT's headers: shipped with `OCCT-LICENSE.txt`, never committed. The package's license expression then reads `MIT AND LGPL-2.1-only WITH OCCT-exception-1.0` |
 | OCCT's libraries (`TK*`) | LGPL-2.1 with the OCCT exception | shipped as separate, replaceable libraries with their license texts, and the exact source published: OCCT's tag and vcpkg's port patches. One patch changes `Image_AlienPixMap.cxx`, so the shipped OCCT is modified |
-| FreeType, RapidJSON, zlib, libpng, brotli, bzip2 | FTL, MIT, zlib, libpng, MIT, bzip2 | attribution in `NOTICE`; no FreeImage (GPL, FIPL) |
+| FreeType, RapidJSON, zlib, libpng, brotli, bzip2, oneTBB, hwloc | FTL, MIT, zlib, libpng, MIT, bzip2, Apache-2.0, BSD-3-Clause | attribution in `NOTICE`, license texts in `THIRD-PARTY-NOTICES.txt`; no FreeImage (GPL, FIPL) |
 | SWIG | the tool GPL-3.0, its runtime library terms of your choice | the generated output is unrestricted |
 | ClangSharp, libclang | MIT, Apache-2.0 WITH LLVM-exception | the generator's dependencies only |
 | Other OCCT bindings | GPL-3.0, LGPL-3.0 | reference for rules at most: copying their code or exclusion lists would make NetOcc's GPL |

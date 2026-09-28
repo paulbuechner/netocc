@@ -18,8 +18,9 @@ License terms
   Corresponding source: https://github.com/Open-Cascade-SAS/OCCT (tag V8_0_1)
   plus the patches of vcpkg's "opencascade" port at the baseline pinned in
   vcpkg-configuration.json. One of those patches modifies
-  src/Visualization/TKService/Image/Image_AlienPixMap.cxx. Build option:
-  BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF (see vcpkg/triplets).
+  src/Visualization/TKService/Image/Image_AlienPixMap.cxx. Build options:
+  BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF, USE_TBB=ON, USE_MMGR_TYPE=TBB (see vcpkg.json and
+  vcpkg/triplets).
 
 Third-party libraries built by vcpkg and shipped next to OCCT
 ------------------------------------------------------------
@@ -31,3 +32,5 @@ Third-party libraries built by vcpkg and shipped next to OCCT
 - Fontconfig: MIT-style license (linux-x64 only)
 - Expat: MIT (linux-x64 only, used by Fontconfig)
 - RapidJSON: MIT (header-only, used at build time)
+- oneTBB (Threading Building Blocks): Apache License 2.0 (OCCT's allocator and parallel algorithms)
+- hwloc: BSD 3-Clause License (win-x64, win-x86, linux-x64; used by oneTBB)

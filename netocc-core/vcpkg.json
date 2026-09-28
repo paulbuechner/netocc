@@ -6,7 +6,7 @@
   "dependencies": [
     {
       "name": "opencascade",
-      "features": ["rapidjson"]
+      "features": ["rapidjson", "tbb"]
     }
   ],
   "overrides": [

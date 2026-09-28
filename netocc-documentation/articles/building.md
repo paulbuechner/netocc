@@ -50,6 +50,7 @@ Where a port broke or could break, and how to see it:
 | Area | Check |
 |---|---|
 | OCCT's exceptions | `.vcpkg/buildtrees/opencascade/<triplet>-rel/CMakeCache.txt` has `BUILD_RELEASE_DISABLE_EXCEPTIONS` off; otherwise the exception tests crash instead of throwing |
+| OCCT's allocator | The same cache has `USE_MMGR_TYPE` `TBB` and `USE_TBB` on, and the stage holds oneTBB's libraries (`tbb12`, `tbbmalloc`); otherwise meshing runs at the system allocator's pace |
 | Dependency lookup | The TK libraries resolve next to the shim: RUNPATH `$ORIGIN` (`readelf -d`, Linux), `@rpath` names and `LC_RPATH @loader_path` (`otool -L`, `otool -l`, macOS) |
 | Loading | `LD_DEBUG=libs` (Linux) and `DYLD_PRINT_LIBRARIES=1` (macOS) show where each library comes from |
 | Exports | The shims build with hidden visibility: `nm -gU <shim> \| grep -c CSharp_` counts the entry points; an `EntryPointNotFoundException` names a missing one |
