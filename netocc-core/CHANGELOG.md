@@ -4,6 +4,22 @@ Notable changes to the NetOcc packages (`NetOcc`, `NetOcc.runtime.<rid>`), in th
 
 Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), until the release PR writes them here (`python build.py release`). Each release's section becomes its GitHub release notes and the packages' release notes.
 
+## [8.0.1.1-next.2] - 2026-09-28
+
+### Added
+
+- C# subclasses of the classes OCCT is meant to be derived from (SWIG directors): `Message_ProgressIndicator`, `Message_Printer`, `AIS_InteractiveObject`, `SelectMgr_EntityOwner` and `AIS_ViewController`. OCCT calls their overrides, protected members and constructors included; a subclass's object lives while OCCT holds it and comes back as itself, and an exception its override throws unwinds OCCT and is the `InnerException` of the `OcctException` the call throws.
+- `OpenGl_Context`, `OpenGl_FrameBuffer` and `OpenGl_Texture`, and `OpenGl_GraphicDriver.GetSharedContext`: a view renders into an application's own OpenGL surface.
+
+### Changed
+
+- A trailing `Message_ProgressRange` parameter is an overload like other defaults, no longer left out: a C# `Message_ProgressIndicator` reports and cancels booleans, meshing and file reading through it.
+- OCCT allocates through oneTBB's scalable allocator and runs its parallel algorithms on oneTBB, whose libraries the runtime packages now hold (with hwloc on Windows and Linux): BRepMesh took blocks of 1 MB per face from the system allocator, which maps and unmaps each. Meshing is 2 to 3.5 times as fast, 3 to 4 times in parallel.
+
+### Fixed
+
+- `TDF_Delta`, `TDF_AttributeDelta`, `TDF_RelocationTable`, `TDF_DataSet` and a performed `TDF_CopyLabel` keep their documents' data alive, as labels and attributes do: releasing one after its document was closed read freed memory and could crash the process.
+
 ## [8.0.1.1-next.1] - 2026-09-27
 
 ### Added
@@ -59,4 +75,5 @@ Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), 
 - One AnyCPU assembly for .NET Framework 3.5 to 4.8, .NET 6, 8 and 10, and netstandard2.0.
 - Natives for win-x64, win-x86, linux-x64 and osx-arm64, one package each (`NetOcc.runtime.<rid>`).
 
+[8.0.1.1-next.2]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.2
 [8.0.1.1-next.1]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.1

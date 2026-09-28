@@ -1,1 +1,0 @@
-OCCT allocates through oneTBB's scalable allocator and runs its parallel algorithms on oneTBB, whose libraries the runtime packages now hold (with hwloc on Windows and Linux): BRepMesh took blocks of 1 MB per face from the system allocator, which maps and unmaps each. Meshing is 2 to 3.5 times as fast, 3 to 4 times in parallel.
