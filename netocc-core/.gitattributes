@@ -1,0 +1,2 @@
+# vcpkg applies the overlay ports' patches as they lie on disk: no line-ending conversion
+vcpkg/ports/** -text

@@ -5,5 +5,6 @@
     "repository": "https://github.com/microsoft/vcpkg",
     "baseline": "dc1232a6e05dcc49703091e83743e3b4df9b9b7c"
   },
+  "overlay-ports": ["./vcpkg/ports"],
   "overlay-triplets": ["./vcpkg/triplets"]
 }
