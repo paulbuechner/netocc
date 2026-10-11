@@ -39,7 +39,7 @@
 
         <g font-family="'Geist', sans-serif" text-anchor="middle">
           <rect x="120" y="40" width="256" height="48" rx="6" fill="#171717"/>
-          <rect x="120" y="40" width="256" height="48" rx="6" fill="rgba(166,166,166,0.10)" stroke="#8c8c8c"/>
+          <rect x="120" y="40" width="256" height="48" rx="6" fill="rgba(166,166,166,0.18)" stroke="#8c8c8c"/>
           <text x="248" y="60" fill="#e6e6e6" font-size="12" font-weight="600">C# app</text>
           <text x="248" y="75" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">net35 / net45+ / net6.0+, AnyCPU</text>
 
@@ -54,7 +54,7 @@
           <text x="248" y="291" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">SWIG wrappers + value-type thunks</text>
 
           <rect x="120" y="344" width="256" height="48" rx="6" fill="#171717"/>
-          <rect x="120" y="344" width="256" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="120" y="344" width="256" height="48" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="248" y="372" fill="#e6e6e6" font-size="12" font-weight="600">OCCT TK libraries</text>
 
           <rect x="584" y="256" width="176" height="48" rx="6" fill="#171717"/>

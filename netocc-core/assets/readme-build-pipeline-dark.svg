@@ -9,7 +9,7 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Zones, top to bottom: the interface files, SWIG, the compilers. -->
-        <g fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8">
+        <g fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8">
           <rect x="40" y="40" width="720" height="200" rx="8"/>
           <rect x="40" y="256" width="720" height="192" rx="8"/>
           <rect x="40" y="464" width="720" height="232" rx="8"/>
@@ -33,17 +33,17 @@
           <path d="M616,536 H577"/>
           <path d="M288,576 V615"/>
         </g>
-        <rect x="272" y="134" width="84" height="12" rx="2" fill="#1b1b1b"/>
+        <rect x="272" y="134" width="84" height="12" rx="2" fill="#202020"/>
         <text x="276" y="143" fill="#8c8c8c" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.06em">WRITES, IN GIT</text>
 
         <g font-family="'Geist', sans-serif" text-anchor="middle">
           <!-- Interfaces. -->
           <rect x="192" y="72" width="144" height="48" rx="6" fill="#171717"/>
-          <rect x="192" y="72" width="144" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="192" y="72" width="144" height="48" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="264" y="100" fill="#e6e6e6" font-size="12" font-weight="600">netocc-generator</text>
 
           <rect x="152" y="160" width="224" height="64" rx="6" fill="#171717"/>
-          <rect x="152" y="160" width="224" height="64" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="152" y="160" width="224" height="64" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="264" y="188" fill="#e6e6e6" font-size="12" font-weight="600">src/SWIG_files/wrapper/*.i</text>
           <text x="264" y="203" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">headers/*_module.hxx, modules.json</text>
 
@@ -60,18 +60,18 @@
           <text x="392" y="323" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">build.py generate</text>
 
           <rect x="204" y="384" width="168" height="48" rx="6" fill="#171717"/>
-          <rect x="204" y="384" width="168" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="204" y="384" width="168" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="288" y="404" fill="#e6e6e6" font-size="12" font-weight="600">build/generated/cxx</text>
           <text x="288" y="419" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">*_wrap.cxx</text>
 
           <rect x="412" y="384" width="168" height="48" rx="6" fill="#171717"/>
-          <rect x="412" y="384" width="168" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="412" y="384" width="168" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="496" y="404" fill="#e6e6e6" font-size="12" font-weight="600">build/generated/cs</text>
           <text x="496" y="419" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">*.cs proxies</text>
 
           <!-- Compile: native on the left, managed on the right. -->
           <rect x="56" y="496" width="128" height="80" rx="6" fill="#171717"/>
-          <rect x="56" y="496" width="128" height="80" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="56" y="496" width="128" height="80" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="120" y="526" fill="#e6e6e6" font-size="12" font-weight="600">vcpkg manifest</text>
           <text x="120" y="542" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">OCCT 8.0.1</text>
           <text x="120" y="554" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">per triplet</text>
@@ -84,7 +84,7 @@
           <text x="288" y="560" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">build.py native</text>
 
           <rect x="416" y="496" width="160" height="80" rx="6" fill="#171717"/>
-          <rect x="416" y="496" width="160" height="80" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="416" y="496" width="160" height="80" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="496" y="520" fill="#e6e6e6" font-size="12" font-weight="600">NetOcc.dll</text>
           <text x="496" y="536" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">net35, net45, net452</text>
           <text x="496" y="548" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">net462, net6.0, net8.0</text>
@@ -97,19 +97,19 @@
           <text x="680" y="554" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">+ gp_* structs</text>
 
           <rect x="200" y="616" width="176" height="64" rx="6" fill="#171717"/>
-          <rect x="200" y="616" width="176" height="64" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="200" y="616" width="176" height="64" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="288" y="638" fill="#e6e6e6" font-size="12" font-weight="600">artifacts/runtimes</text>
           <text x="288" y="654" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">{rid}/native</text>
           <text x="288" y="666" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">NetOcc + OCCT TK libraries</text>
         </g>
 
         <!-- Legend: the two fills that need decoding. -->
-        <line x1="40" y1="712" x2="760" y2="712" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
+        <line x1="40" y1="712" x2="760" y2="712" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
         <g font-family="'Geist Mono', monospace" font-size="8" fill="#8c8c8c" letter-spacing="0.14em">
           <text x="40" y="740">LEGEND</text>
-          <rect x="120" y="730" width="20" height="12" rx="2" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="120" y="730" width="20" height="12" rx="2" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="148" y="740">GENERATED</text>
-          <rect x="248" y="730" width="20" height="12" rx="2" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="248" y="730" width="20" height="12" rx="2" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="276" y="740">OUTSIDE NETOCC-CORE</text>
         </g>
       </g></svg>
