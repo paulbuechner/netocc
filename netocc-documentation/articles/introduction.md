@@ -6,35 +6,13 @@ NetOcc is [Open CASCADE Technology](https://dev.opencascade.org) 8.0.1's C++ API
 
 Each layer builds on the ones below. The guide follows them bottom-up.
 
-```mermaid
-flowchart BT
-    values["<b>Values</b><br/>gp, math, Bnd"]
-    geometry["<b>Geometry</b><br/>Geom, Geom2d, GeomAPI"]
-    topology["<b>Topology</b><br/>TopoDS, TopExp, BRep"]
-    algorithms["<b>Algorithms</b><br/>BRepPrimAPI, BRepAlgoAPI, BRepFilletAPI,<br/>BRepMesh, ShapeFix, BRepGProp"]
-    exchange["<b>Files</b><br/>STEPControl, IGESControl,<br/>StlAPI, RWGltf"]
-    documents["<b>Documents</b><br/>TDocStd, TDF (OCAF),<br/>XCAFDoc (XCAF)"]
-    views["<b>3D views</b><br/>V3d, AIS, OpenGl"]
-    values --> geometry --> topology --> algorithms
-    algorithms --> exchange
-    algorithms --> documents
-    algorithms --> views
-    documents --> exchange
-```
+<img class="diagram-light" src="../assets/introduction-layers.svg" width="800" height="432" alt="OCCT's layers" loading="lazy">
+<img class="diagram-dark" src="../assets/introduction-layers-dark.svg" width="800" height="432" alt="OCCT's layers" loading="lazy">
 
 ## A typical program
 
-```mermaid
-flowchart LR
-    make["Build<br/>primitives, sweeps"] --> combine["Combine<br/>booleans, fillets"]
-    read["Read<br/>STEP, IGES, BRep"] --> check
-    combine --> check["Check and repair<br/>BRepCheck, ShapeFix"]
-    check --> measure["Measure<br/>volume, distances"]
-    check --> mesh["Mesh<br/>BRepMesh"]
-    check --> write["Write<br/>STEP, IGES, BRep"]
-    mesh --> stl["STL, glTF, OBJ"]
-    mesh --> view["Show<br/>AIS, V3d"]
-```
+<img class="diagram-light" src="../assets/introduction-program.svg" width="800" height="296" alt="A typical program" loading="lazy">
+<img class="diagram-dark" src="../assets/introduction-program-dark.svg" width="800" height="296" alt="A typical program" loading="lazy">
 
 ## Packages by task
 

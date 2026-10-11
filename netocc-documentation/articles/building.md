@@ -19,16 +19,8 @@ Needs Python 3.10+, a vcpkg clone (`VCPKG_ROOT`), CMake with Ninja, the .NET 10 
 | Linux | `autoconf autoconf-archive automake libtool pkg-config libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxext-dev libxi-dev`, or Docker: `docker/linux-x64.Dockerfile` runs every step |
 | macOS | Xcode's command line tools and `brew install cmake ninja pkg-config`. Clone vcpkg: Homebrew's formula lacks its scripts. For the .NET 6 runtime, see [Pitfalls](pitfalls.md#build-and-deployment) |
 
-```mermaid
-flowchart LR
-    tools["tools<br/><i>SWIG</i>"] --> occt["occt<br/><i>OCCT via vcpkg</i>"]
-    occt --> generate["generate<br/><i>SWIG over the .i files</i>"]
-    generate --> native["native<br/><i>NetOcc*.dll</i>"]
-    native --> test["test<br/><i>every framework</i>"]
-    native --> docs["docs<br/><i>NetOcc.xml</i>"]
-    test --> pack["pack<br/><i>.nupkg</i>"]
-    docs --> pack
-```
+<img class="diagram-light" src="../assets/building-steps.svg" width="800" height="224" alt="netocc-core's build steps" loading="lazy">
+<img class="diagram-dark" src="../assets/building-steps-dark.svg" width="800" height="224" alt="netocc-core's build steps" loading="lazy">
 
 ```bash
 cd netocc-core

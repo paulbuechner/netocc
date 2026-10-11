@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · modeling.md</p>
+    <h1>History</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 276" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="modeling-history-title modeling-history-desc">
+        <title id="modeling-history-title">History</title>
+        <desc id="modeling-history-desc">A builder answers three questions about each input sub-shape: Modified(s) gives what it became (split, trimmed, moved), Generated(s) what it gave rise to (a swept edge's face, a fillet's face), and IsDeleted(s) is true if nothing of it is left.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Connectors first: one history query each. -->
+        <line x1="260" y1="66" x2="460" y2="66" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="324" y="48" width="72" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="360" y="57" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">Modified(s)</text>
+        <line x1="260" y1="138" x2="460" y2="138" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="322" y="120" width="76" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="360" y="129" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">Generated(s)</text>
+        <line x1="260" y1="210" x2="460" y2="210" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <rect x="322" y="192" width="76" height="12" rx="2" fill="#f5f5f5"/>
+        <text x="360" y="201" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">IsDeleted(s)</text>
+
+        <!-- The input sub-shape: focal, as tall as the three answers. -->
+        <rect x="84" y="40" width="176" height="196" rx="6" fill="#f5f5f5"/>
+        <rect x="84" y="40" width="176" height="196" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+        <text x="172" y="142" fill="#2d3142" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">An input sub-shape</text>
+
+        <!-- What the builder answers. -->
+        <g font-family="'Geist', sans-serif">
+          <rect x="460" y="40" width="256" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="588" y="64" fill="#2d3142" font-size="12" font-weight="600" text-anchor="middle">What it became</text>
+          <text x="588" y="79" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">split, trimmed, moved</text>
+          <rect x="460" y="112" width="256" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="588" y="136" fill="#2d3142" font-size="12" font-weight="600" text-anchor="middle">What it gave rise to</text>
+          <text x="588" y="151" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">a swept edge's face, a fillet's face</text>
+          <rect x="460" y="184" width="256" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="588" y="214" fill="#2d3142" font-size="12" font-weight="600" text-anchor="middle">True if nothing of it is left</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

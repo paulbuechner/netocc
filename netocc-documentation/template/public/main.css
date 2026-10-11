@@ -1,0 +1,248 @@
+/* A black dark theme instead of Bootstrap's blue-grey one (#212529): neutral greys, the diagrams' dark paper
+   (#171717, diagrams.py) a step above the page. */
+[data-bs-theme=dark] {
+  --bs-body-bg: #0e0e0e;
+  --bs-body-bg-rgb: 14, 14, 14;
+  --bs-body-color: #e2e2e2;
+  --bs-body-color-rgb: 226, 226, 226;
+  --bs-emphasis-color: #ffffff;
+  --bs-emphasis-color-rgb: 255, 255, 255;
+  --bs-secondary-color: rgba(226, 226, 226, .7);
+  --bs-secondary-color-rgb: 226, 226, 226;
+  --bs-tertiary-color: rgba(226, 226, 226, .5);
+  --bs-tertiary-color-rgb: 226, 226, 226;
+  --bs-secondary-bg: #262626;
+  --bs-secondary-bg-rgb: 38, 38, 38;
+  --bs-tertiary-bg: #171717;
+  --bs-tertiary-bg-rgb: 23, 23, 23;
+  --bs-light-bg-subtle: #262626;
+  --bs-dark-bg-subtle: #141414;
+  --bs-secondary-bg-subtle: #141414;
+  --bs-secondary-border-subtle: #333333;
+  --bs-light-border-subtle: #333333;
+  --bs-dark-border-subtle: #262626;
+  --bs-border-color: #2b2b2b;
+  --bs-border-color-translucent: rgba(255, 255, 255, .1);
+}
+
+[data-bs-theme=dark] .hljs {
+  background: #171717;
+}
+
+/* No DocFX logo beside the title. */
+#logo {
+  display: none;
+}
+
+/* Each diagram is in an article twice: assets/<name>.svg and assets/<name>-dark.svg (diagrams.py), an <img> can't see
+   the page's theme. The theme is set in <head> before the first paint, so the right one shows from the start; the
+   other, lazy and hidden, isn't fetched until the theme switches. Both take the article's width, like the code blocks
+   and tables around them, and the margin a paragraph would give them (raw HTML gets no <p>). */
+img.diagram-light,
+img.diagram-dark {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+[data-bs-theme=dark] img.diagram-light,
+html:not([data-bs-theme=dark]) img.diagram-dark {
+  display: none;
+}
+
+/* Code blocks rounded like the diagrams; highlight.js paints the background on the <code> inside the <pre>. It adds
+   .hljs, which brings the padding and the background, only once it runs after the page loads: until then the code
+   sat unpadded and jumped. Every block gets them from the start, highlight.js only the colors. */
+pre,
+pre > code {
+  border-radius: 12px;
+}
+
+pre > code {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+  background: #f5f5f5;
+}
+
+[data-bs-theme=dark] pre > code {
+  background: #171717;
+}
+
+/* main.js opens a diagram in this lightbox: the diagram as large as the viewport allows (vector, so sharp), on a dimmed
+   page that doesn't scroll behind it. */
+img.diagram-light,
+img.diagram-dark {
+  cursor: zoom-in;
+}
+
+dialog.diagram-lightbox {
+  width: 100vw;
+  height: 100vh;
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-out;
+}
+
+dialog.diagram-lightbox::backdrop {
+  background: rgba(0, 0, 0, .8);
+}
+
+dialog.diagram-lightbox img {
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  padding: 3vmin;
+  object-fit: contain;
+}
+
+dialog.diagram-lightbox[open],
+dialog.diagram-lightbox[open]::backdrop {
+  animation: diagram-lightbox-in .15s ease-out;
+}
+
+@keyframes diagram-lightbox-in {
+  from {
+    opacity: 0;
+  }
+}
+
+html:has(dialog.diagram-lightbox[open]) {
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  dialog.diagram-lightbox[open],
+  dialog.diagram-lightbox[open]::backdrop {
+    animation: none;
+  }
+}
+
+/* The start page as wide as an article beside the navigation, at every window width: an article page's main is a flex
+   row of the table of contents (flex .35, at most 360px, gone below 768px), the article (flex 1, 3rem margins, 1rem
+   below 992px, none below 768px) and the affix (230px, gone at 1140px and below). The landing layout has no table of
+   contents or affix, so empty pseudo-elements take their places. */
+body[data-layout=landing] > main::before {
+  content: "";
+  flex: .35;
+  max-width: 360px;
+}
+
+body[data-layout=landing] > main > .content {
+  flex: 1;
+  min-width: 0;
+  margin: 0 3rem;
+}
+
+body[data-layout=landing] > main::after {
+  content: "";
+  flex: none;
+  width: 230px;
+}
+
+@media only screen and (max-width: 1140px) {
+  body[data-layout=landing] > main::after {
+    display: none;
+  }
+}
+
+@media (max-width: 991.98px) {
+  body[data-layout=landing] > main > .content {
+    margin: 0 1rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  body[data-layout=landing] > main::before {
+    display: none;
+  }
+
+  body[data-layout=landing] > main > .content {
+    margin: 0;
+  }
+}
+
+/* Tabs of code, DocFX's tab syntax ("# [Label](#tab/id)", "---") with nothing but a code block in each tab: one card,
+   the tabs in its header beside a code icon, the copy button at the header's right, the code below. DocFX's script
+   makes the tabs Bootstrap nav-tabs and each panel a .card; [data-bs-theme] lifts these rules over the theme's own
+   (.hljs's background among them). Other tab groups keep DocFX's look. */
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) {
+  position: relative;
+  margin-bottom: 1rem;
+  border: 1px solid var(--bs-border-color-translucent);
+  border-radius: 12px;
+  background: #f5f5f5;
+}
+
+[data-bs-theme=dark] .tabGroup:not(:has(> section > :not(pre))) {
+  background: #171717;
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > ul[role=tablist] {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem;
+  margin: 0;
+  padding: .5rem 3rem .5rem .75rem;
+  border-bottom: 1px solid var(--bs-border-color-translucent);
+  list-style: none;
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > ul[role=tablist]::before {
+  content: "\f2c6";
+  margin-right: .5rem;
+  font-family: bootstrap-icons;
+  color: var(--bs-secondary-color);
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > ul > li > a[role=tab] {
+  display: block;
+  margin: 0;
+  padding: .25rem .75rem;
+  border: 1px solid transparent;
+  border-radius: .5rem;
+  background: none;
+  font-family: var(--bs-font-monospace);
+  font-size: .875em;
+  color: var(--bs-secondary-color);
+  text-decoration: none;
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > ul > li > a[role=tab]:hover {
+  color: var(--bs-emphasis-color);
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > ul > li > a[role=tab][aria-selected=true] {
+  border-color: var(--bs-border-color);
+  background: var(--bs-body-bg);
+  color: var(--bs-emphasis-color);
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > section {
+  position: static;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > section > pre {
+  position: static;
+  margin: 0;
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) > section > pre > code {
+  border-radius: 0 0 12px 12px;
+  background: none;
+}
+
+[data-bs-theme] .tabGroup:not(:has(> section > :not(pre))) .code-action {
+  display: block;
+  top: .55rem;
+  right: .5rem;
+}

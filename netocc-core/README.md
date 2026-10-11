@@ -40,30 +40,17 @@ var fused = new BRepAlgoAPI_Fuse(box, cyl).Shape();
 
 Build pipeline:
 
-```mermaid
-flowchart LR
-    gen["netocc-generator"] -->|writes, committed| wrapper["src/SWIG_files/wrapper/*.i<br/>headers/*_module.hxx, modules.json"]
-    common["src/SWIG_files/common/*.i typemap library<br/>src/SWIG_files/extras/*.i companions"] --> swig
-    wrapper --> swig["SWIG 4.5.1 -csharp<br/>build.py generate"]
-    swig --> cxx["build/generated/cxx<br/>*_wrap.cxx"]
-    swig --> cs["build/generated/cs<br/>*.cs proxies"]
-    vcpkg["vcpkg manifest<br/>OCCT 8.0.1 per triplet"] --> native
-    cxx --> native["CMake: NetOcc&lt;Module&gt;, NetOccRuntime<br/>build.py native"]
-    native --> runtimes["artifacts/runtimes/{rid}/native<br/>NetOcc libraries + OCCT TK libs"]
-    cs --> managed["NetOcc.dll<br/>net35, net45, net452, net462<br/>net6.0, net8.0, net10.0 + netstandard2.0"]
-    hand["src/NetOcc<br/>runtime + gp_* structs"] --> managed
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-build-pipeline-dark.svg">
+  <img alt="Build pipeline" src="assets/readme-build-pipeline.svg">
+</picture>
 
 Runtime layers:
 
-```mermaid
-flowchart TB
-    app["C# app: net35 / net45+ / net6.0+, AnyCPU"] --> proxies["NetOcc.dll<br/>OCC.Core.{Package} proxies, gp_* structs"]
-    proxies -->|"P/Invoke: in/ref structs, UTF-8 strings, handles as raw T* (+1 ref)"| shim["NetOcc&lt;Module&gt;<br/>SWIG wrappers + value-type thunks"]
-    shim --> occt["OCCT TK libraries"]
-    shim -.->|"Standard_Failure, std::exception become OcctException"| proxies
-    loader["NativeLibraryLoader<br/>(module initializer)"] -.->|"loads x86/, x64/ or runtimes/{rid}/native"| shim
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-runtime-layers-dark.svg">
+  <img alt="Runtime layers" src="assets/readme-runtime-layers.svg">
+</picture>
 
 ## Build
 

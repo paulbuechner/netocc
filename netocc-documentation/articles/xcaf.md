@@ -6,19 +6,8 @@ XCAF (Extended CAF) documents hold what a STEP file has beyond geometry: product
 
 A table made of a plate and one post placed four times:
 
-```mermaid
-flowchart TD
-    main["0:1 main"] --> shapes["0:1:1 shapes<br/>XCAFDoc_ShapeTool"]
-    main --> colors["0:1:2 colors<br/>XCAFDoc_ColorTool"]
-    main --> layers["0:1:3 layers<br/>XCAFDoc_LayerTool"]
-    shapes --> plate["0:1:1:1 plate<br/><i>a part: a shape</i>"]
-    shapes --> post["0:1:1:2 post<br/><i>a part</i>"]
-    shapes --> table["0:1:1:3 table<br/><i>an assembly</i>"]
-    table --> c1["0:1:1:3:1<br/><i>a component: plate at its place</i>"]
-    table --> c2["0:1:1:3:2 ... 0:1:1:3:5<br/><i>components: post, four places</i>"]
-    c1 -.->|refers to| plate
-    c2 -.->|refers to| post
-```
+<img class="diagram-light" src="../assets/xcaf-labels.svg" width="800" height="500" alt="An XCAF document's label tree" loading="lazy">
+<img class="diagram-dark" src="../assets/xcaf-labels-dark.svg" width="800" height="500" alt="An XCAF document's label tree" loading="lazy">
 
 | Label | `XCAFDoc_ShapeTool` test | Holds |
 |---|---|---|

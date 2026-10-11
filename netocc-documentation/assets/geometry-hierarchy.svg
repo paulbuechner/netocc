@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 776" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="geometry-hierarchy-title geometry-hierarchy-desc" width="800" height="776">
+        <title id="geometry-hierarchy-title">Geom's class hierarchy</title>
+        <desc id="geometry-hierarchy-desc">Geom_Geometry divides into Geom_Curve, with lines, conics, bounded curves and offset curves, and Geom_Surface, with elementary, swept, offset and bounded surfaces, each down to the concrete classes.</desc><defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="776" rx="12"/></clipPath></defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zones first: curves and surfaces. -->
+        <rect x="40" y="120" width="336" height="616" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <rect x="424" y="120" width="336" height="616" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.14em" fill="#5a6580">
+          <rect x="52" y="124" width="48" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="56" y="133">CURVES</text>
+          <rect x="436" y="124" width="60" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="440" y="133">SURFACES</text>
+        </g>
+
+        <!-- Connectors: the root's two branches, then each parent's spine and stubs. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1">
+          <path d="M380,80 V92 Q380,100 372,100 H216 Q208,100 208,108 V152"/>
+          <path d="M420,80 V92 Q420,100 428,100 H584 Q592,100 592,108 V152"/>
+
+          <path d="M72,192 V644 Q72,652 80,652 H88"/>
+          <path d="M72,224 H88"/>
+          <path d="M72,276 H88"/>
+          <path d="M72,444 H88"/>
+          <path d="M104,296 V372 Q104,380 112,380 H120"/>
+          <path d="M104,328 H120"/>
+          <path d="M104,464 V592 Q104,600 112,600 H120"/>
+          <path d="M104,496 H120"/>
+          <path d="M104,548 H120"/>
+
+          <path d="M456,192 V536 Q456,544 464,544 H472"/>
+          <path d="M456,224 H472"/>
+          <path d="M456,416 H472"/>
+          <path d="M456,492 H472"/>
+          <path d="M488,244 V320 Q488,328 496,328 H504"/>
+          <path d="M488,276 H504"/>
+          <path d="M488,564 V692 Q488,700 496,700 H504"/>
+          <path d="M488,596 H504"/>
+          <path d="M488,648 H504"/>
+        </g>
+
+        <!-- Classes with subclasses: white, ink stroke. -->
+        <g fill="#ffffff" stroke="#2d3142">
+          <rect x="340" y="40" width="120" height="40" rx="6"/>
+          <rect x="56" y="152" width="304" height="40" rx="6"/>
+          <rect x="88" y="256" width="272" height="40" rx="6"/>
+          <rect x="88" y="424" width="272" height="40" rx="6"/>
+          <rect x="440" y="152" width="304" height="40" rx="6"/>
+          <rect x="472" y="204" width="272" height="40" rx="6"/>
+          <rect x="472" y="524" width="272" height="40" rx="6"/>
+        </g>
+        <!-- Leaves: white, thin muted stroke. -->
+        <g fill="#ffffff" stroke="#4f5d75" stroke-width="0.8">
+          <rect x="88" y="204" width="272" height="40" rx="6"/>
+          <rect x="120" y="308" width="240" height="40" rx="6"/>
+          <rect x="120" y="360" width="240" height="52" rx="6"/>
+          <rect x="120" y="476" width="240" height="40" rx="6"/>
+          <rect x="120" y="528" width="240" height="40" rx="6"/>
+          <rect x="120" y="580" width="240" height="40" rx="6"/>
+          <rect x="88" y="632" width="272" height="40" rx="6"/>
+          <rect x="504" y="256" width="240" height="40" rx="6"/>
+          <rect x="504" y="308" width="240" height="76" rx="6"/>
+          <rect x="472" y="396" width="272" height="64" rx="6"/>
+          <rect x="472" y="472" width="272" height="40" rx="6"/>
+          <rect x="504" y="576" width="240" height="40" rx="6"/>
+          <rect x="504" y="628" width="240" height="40" rx="6"/>
+          <rect x="504" y="680" width="240" height="40" rx="6"/>
+        </g>
+
+        <!-- Names, then the classes a box groups with it. -->
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142">
+          <text x="400" y="64" text-anchor="middle">Geom_Geometry</text>
+
+          <text x="68" y="176">Geom_Curve</text>
+          <text x="100" y="228">Geom_Line</text>
+          <text x="100" y="280">Geom_Conic</text>
+          <text x="132" y="332">Geom_Circle</text>
+          <text x="132" y="384">Geom_Ellipse</text>
+          <text x="100" y="448">Geom_BoundedCurve</text>
+          <text x="132" y="500">Geom_BSplineCurve</text>
+          <text x="132" y="552">Geom_BezierCurve</text>
+          <text x="132" y="604">Geom_TrimmedCurve</text>
+          <text x="100" y="656">Geom_OffsetCurve</text>
+
+          <text x="452" y="176">Geom_Surface</text>
+          <text x="484" y="228">Geom_ElementarySurface</text>
+          <text x="516" y="280">Geom_Plane</text>
+          <text x="516" y="332">Geom_CylindricalSurface</text>
+          <text x="484" y="420">Geom_SweptSurface</text>
+          <text x="484" y="496">Geom_OffsetSurface</text>
+          <text x="484" y="548">Geom_BoundedSurface</text>
+          <text x="516" y="600">Geom_BSplineSurface</text>
+          <text x="516" y="652">Geom_BezierSurface</text>
+          <text x="516" y="704">Geom_RectangularTrimmedSurface</text>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="9" fill="#4f5d75">
+          <text x="132" y="398">Geom_Hyperbola · Geom_Parabola</text>
+          <text x="516" y="346">Geom_ConicalSurface</text>
+          <text x="516" y="358">Geom_SphericalSurface</text>
+          <text x="516" y="370">Geom_ToroidalSurface</text>
+          <text x="484" y="434">Geom_SurfaceOfLinearExtrusion</text>
+          <text x="484" y="446">Geom_SurfaceOfRevolution</text>
+        </g>
+      </g></svg>

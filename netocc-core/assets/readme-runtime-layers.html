@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Runtime layers</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · netocc-core/README.md</p>
+    <h1>Runtime layers</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 432" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="readme-runtime-layers-title readme-runtime-layers-desc">
+        <title id="readme-runtime-layers-title">Runtime layers</title>
+        <desc id="readme-runtime-layers-desc">A C# app calls NetOcc.dll's proxies, which P/Invoke the NetOcc&lt;Module&gt; native libraries that NativeLibraryLoader loads; those call OCCT's TK libraries and turn OCCT's exceptions into OcctException.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Connectors first: calls go down, exceptions come back up (dashed), the loader is passive (dashed). -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)">
+          <path d="M248,88 V127"/>
+          <path d="M208,176 V255"/>
+          <path d="M248,304 V343"/>
+          <path d="M288,256 V177" stroke-dasharray="5,4"/>
+          <path d="M584,280 H377" stroke-dasharray="5,4"/>
+        </g>
+
+        <!-- Edge labels: a caps label, then the details, identifiers in their case. -->
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" letter-spacing="0.06em">
+          <rect x="48" y="192" width="152" height="48" rx="2" fill="#f5f5f5"/>
+          <text x="196" y="202" text-anchor="end">P/INVOKE</text>
+          <text x="196" y="214" text-anchor="end">in/ref structs</text>
+          <text x="196" y="225" text-anchor="end">UTF-8 strings</text>
+          <text x="196" y="236" text-anchor="end">handles as raw T* (+1 ref)</text>
+
+          <rect x="296" y="192" width="120" height="48" rx="2" fill="#f5f5f5"/>
+          <text x="300" y="202">EXCEPTIONS</text>
+          <text x="300" y="214">Standard_Failure,</text>
+          <text x="300" y="225">std::exception</text>
+          <text x="300" y="236">become OcctException</text>
+
+          <rect x="420" y="288" width="120" height="36" rx="2" fill="#f5f5f5"/>
+          <text x="480" y="298" text-anchor="middle">LOADS</text>
+          <text x="480" y="309" text-anchor="middle">x86/, x64/ or</text>
+          <text x="480" y="320" text-anchor="middle">runtimes/{rid}/native</text>
+        </g>
+
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="120" y="40" width="256" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="120" y="40" width="256" height="48" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580"/>
+          <text x="248" y="60" fill="#2d3142" font-size="12" font-weight="600">C# app</text>
+          <text x="248" y="75" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">net35 / net45+ / net6.0+, AnyCPU</text>
+
+          <rect x="120" y="128" width="256" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="120" y="128" width="256" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="248" y="148" fill="#2d3142" font-size="12" font-weight="600">NetOcc.dll</text>
+          <text x="248" y="163" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">OCC.Core.{Package} proxies, gp_* structs</text>
+
+          <rect x="120" y="256" width="256" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="120" y="256" width="256" height="48" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="248" y="276" fill="#2d3142" font-size="12" font-weight="600">NetOcc&lt;Module&gt;</text>
+          <text x="248" y="291" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">SWIG wrappers + value-type thunks</text>
+
+          <rect x="120" y="344" width="256" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="120" y="344" width="256" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="248" y="372" fill="#2d3142" font-size="12" font-weight="600">OCCT TK libraries</text>
+
+          <rect x="584" y="256" width="176" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="584" y="256" width="176" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="672" y="276" fill="#2d3142" font-size="12" font-weight="600">NativeLibraryLoader</text>
+          <text x="672" y="291" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">(module initializer)</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

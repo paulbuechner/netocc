@@ -2,17 +2,8 @@
 
 OCCT draws with OpenGL into a native window: an HWND on Windows, an X11 window on Linux, an NSView on macOS. The UI framework provides the window, NetOcc's `Aspect_Window.FromNativeHandle` wraps it for the view.
 
-```mermaid
-flowchart TD
-    display[Aspect_DisplayConnection] --> driver["OpenGl_GraphicDriver<br/><i>one per display</i>"]
-    driver --> viewer["V3d_Viewer<br/><i>lights, the shared scene</i>"]
-    viewer --> context["AIS_InteractiveContext<br/><i>display, highlight, select</i>"]
-    viewer --> view["V3d_View<br/><i>camera, one per window</i>"]
-    window["native window<br/>HWND, X11 Window, NSView"] -->|Aspect_Window.FromNativeHandle| view
-    context --> shape["AIS_Shape"]
-    context --> document["XCAFPrs_AISObject"]
-    controller["AIS_ViewController<br/><i>mouse to camera and selection</i>"] -.->|"FlushViewEvents(context, view)"| view
-```
+<img class="diagram-light" src="../assets/visualization-viewer.svg" width="800" height="348" alt="The objects behind a 3D view" loading="lazy">
+<img class="diagram-dark" src="../assets/visualization-viewer-dark.svg" width="800" height="348" alt="The objects behind a 3D view" loading="lazy">
 
 ## The viewer
 
@@ -57,17 +48,8 @@ The view triangulates shapes when it shows them, with a deflection relative to t
 
 `AIS_ViewController` turns input into rotation (left button), panning (middle), zoom (right button, wheel) and selection (click). Positions are the window's pixels. Buttons and modifier keys are OCCT bit masks OCCT declares in anonymous enums, so C# repeats them: buttons left `1 << 13`, middle `1 << 14`, right `1 << 15`; keys shift `1 << 8`, control `1 << 9`, alt `1 << 10`.
 
-```mermaid
-sequenceDiagram
-    participant UI as window procedure
-    participant C as AIS_ViewController
-    participant V as V3d_View
-    UI->>C: UpdateMousePosition(point, buttons, keys)
-    C-->>UI: true: something changed
-    UI->>C: FlushViewEvents(context, view)
-    C->>V: rotate, pan, zoom the camera
-    C->>V: redraw
-```
+<img class="diagram-light" src="../assets/visualization-input.svg" width="800" height="364" alt="Mouse input" loading="lazy">
+<img class="diagram-dark" src="../assets/visualization-input-dark.svg" width="800" height="364" alt="Mouse input" loading="lazy">
 
 [!code-csharp[](../samples/Visualization.cs#input)]
 

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>An OCAF document's label tree</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Tree · ocaf.md</p>
+    <h1>An OCAF document's label tree</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 548" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ocaf-labels-title ocaf-labels-desc">
+        <title id="ocaf-labels-title">An OCAF document's label tree</title>
+        <desc id="ocaf-labels-desc">A TDocStd_Application holds a TDocStd_Document, whose root label 0 has the main label 0:1 with children 0:1:1 and 0:1:2; 0:1:1 carries a TDataStd_Name and a TDataStd_Real, 0:1:2 a TDataStd_Name and a TNaming_NamedShape.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zone: the document's labels (top band) and their attributes (bottom band). -->
+        <rect x="40" y="124" width="720" height="356" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.12)"/>
+        <path d="M40,372 H760 V472 A8,8 0 0 1 752,480 H48 A8,8 0 0 1 40,472 Z" fill="rgba(45,49,66,0.03)"/>
+        <line x1="40" y1="372" x2="760" y2="372" stroke="rgba(45,49,66,0.12)"/>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#4f5d75" letter-spacing="0.14em">
+          <text x="56" y="144">LABELS</text>
+          <text x="56" y="392">ATTRIBUTES</text>
+        </g>
+
+        <!-- Connectors first. Parent to child labels: arrows; label to attribute: plain lines. -->
+        <path d="M248,66 H304" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M400,92 V140" fill="none" stroke="#bf4520" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+        <path d="M400,184 V212" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M372,256 V272 A8,8 0 0 1 364,280 H226 A8,8 0 0 0 218,288 V304" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M428,256 V272 A8,8 0 0 0 436,280 H574 A8,8 0 0 1 582,288 V304" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+        <g fill="none" stroke="#4f5d75" stroke-width="1">
+          <path d="M198,348 V356 A8,8 0 0 1 190,364 H142 A8,8 0 0 0 134,372 V416"/>
+          <path d="M238,348 V356 A8,8 0 0 0 246,364 H294 A8,8 0 0 1 302,372 V416"/>
+          <path d="M562,348 V356 A8,8 0 0 1 554,364 H506 A8,8 0 0 0 498,372 V416"/>
+          <path d="M602,348 V356 A8,8 0 0 0 610,364 H658 A8,8 0 0 1 666,372 V416"/>
+        </g>
+
+        <!-- Framework: the application and its document (focal). -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="56" y="40" width="192" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="152" y="62" fill="#2d3142" font-size="12" font-weight="600">TDocStd_Application</text>
+          <text x="152" y="78" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">formats, open documents</text>
+
+          <rect x="304" y="40" width="192" height="52" rx="6" fill="#f5f5f5"/>
+          <rect x="304" y="40" width="192" height="52" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="400" y="62" fill="#2d3142" font-size="12" font-weight="600">TDocStd_Document</text>
+          <text x="400" y="78" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">undo, redo, file</text>
+        </g>
+
+        <!-- Labels, named by their entries. -->
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142" text-anchor="middle">
+          <rect x="320" y="140" width="160" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="166">0 root label</text>
+          <rect x="320" y="212" width="160" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="238">0:1 main label</text>
+          <rect x="158" y="304" width="120" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="218" y="330">0:1:1</text>
+          <rect x="522" y="304" width="120" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="582" y="330">0:1:2</text>
+        </g>
+
+        <!-- Attributes: class, then the value it holds. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="56" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="134" y="434" fill="#2d3142" font-size="12" font-weight="600">TDataStd_Name</text>
+          <text x="134" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">width</text>
+
+          <rect x="224" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="224" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="302" y="434" fill="#2d3142" font-size="12" font-weight="600">TDataStd_Real</text>
+          <text x="302" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">40.0</text>
+
+          <rect x="420" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="420" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="498" y="434" fill="#2d3142" font-size="12" font-weight="600">TDataStd_Name</text>
+          <text x="498" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">part</text>
+
+          <rect x="588" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="588" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="666" y="434" fill="#2d3142" font-size="12" font-weight="600">TNaming_NamedShape</text>
+          <text x="666" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">a box</text>
+        </g>
+
+        <text x="40" y="508" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">A LABEL CARRIES AT MOST ONE ATTRIBUTE PER CLASS (GUID)</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

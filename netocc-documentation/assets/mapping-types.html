@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What a C++ type becomes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · mapping.md</p>
+    <h1>What a C++ type becomes</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mapping-types-title mapping-types-desc">
+        <title id="mapping-types-title">What a C++ type becomes</title>
+        <desc id="mapping-types-desc">Standard_Transient subclasses and all other classes become C# classes, holding one reference or owning the object; fixed-layout values become C# structs with the same memory layout; enums become C# enums; namespace functions become static classes.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zones: the C++ side and the C# side. -->
+        <rect x="40" y="40" width="280" height="372" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="60" y="57" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C++ TYPE</text>
+        <rect x="560" y="40" width="200" height="372" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="580" y="57" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C# TYPE</text>
+
+        <!-- Connectors first, one per row; labels masked above their line. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)">
+          <path d="M300,96 H577"/>
+          <path d="M300,164 H577"/>
+          <path d="M300,232 H577"/>
+          <path d="M300,300 H577"/>
+          <path d="M300,368 H577"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" text-anchor="middle" letter-spacing="0.06em">
+          <rect x="396" y="76" width="88" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="440" y="85">HOLDS ONE REF</text>
+          <rect x="400" y="144" width="80" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="440" y="153">OWNS OBJECT</text>
+          <rect x="400" y="212" width="80" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="440" y="221">SAME LAYOUT</text>
+        </g>
+
+        <!-- C++ kinds, with OCCT examples. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="60" y="72" width="240" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="60" y="72" width="240" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="180" y="92" fill="#2d3142" font-size="12" font-weight="600">Standard_Transient subclass</text>
+          <text x="180" y="107" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">Geom_Circle, AIS_Shape</text>
+
+          <rect x="60" y="140" width="240" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="60" y="140" width="240" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="180" y="160" fill="#2d3142" font-size="12" font-weight="600">any other class</text>
+          <text x="180" y="175" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">TopoDS_Shape, BRepPrimAPI_MakeBox</text>
+
+          <rect x="60" y="208" width="240" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="60" y="208" width="240" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="180" y="228" fill="#2d3142" font-size="12" font-weight="600">fixed-layout value</text>
+          <text x="180" y="243" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">gp_Pnt, Bnd_Box, Quantity_Color</text>
+
+          <rect x="60" y="276" width="240" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="60" y="276" width="240" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="180" y="304" fill="#2d3142" font-size="12" font-weight="600">enum</text>
+
+          <rect x="60" y="344" width="240" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="60" y="344" width="240" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="180" y="364" fill="#2d3142" font-size="12" font-weight="600">namespace functions</text>
+          <text x="180" y="379" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">TopoDS::Face</text>
+        </g>
+
+        <!-- C# results; both kinds of class land in one; the struct is focal. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="580" y="72" width="160" height="116" rx="6" fill="#f5f5f5"/>
+          <rect x="580" y="72" width="160" height="116" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="660" y="134" fill="#2d3142" font-size="12" font-weight="600">C# class</text>
+
+          <rect x="580" y="208" width="160" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="580" y="208" width="160" height="48" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="660" y="236" fill="#2d3142" font-size="12" font-weight="600">C# struct</text>
+
+          <rect x="580" y="276" width="160" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="580" y="276" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="660" y="304" fill="#2d3142" font-size="12" font-weight="600">C# enum</text>
+
+          <rect x="580" y="344" width="160" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="580" y="344" width="160" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="660" y="372" fill="#2d3142" font-size="12" font-weight="600">static class</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

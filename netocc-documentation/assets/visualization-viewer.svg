@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 348" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="visualization-viewer-title visualization-viewer-desc" width="800" height="348">
+        <title id="visualization-viewer-title">The objects behind a 3D view</title>
+        <desc id="visualization-viewer-desc">A display connection feeds an OpenGl_GraphicDriver and its V3d_Viewer; the viewer has an AIS_InteractiveContext, which displays AIS_Shape and XCAFPrs_AISObject presentations, and a V3d_View, which draws into a native window wrapped by Aspect_Window.FromNativeHandle and is driven by AIS_ViewController.</desc>
+        <defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="348" rx="12"/></clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Connectors first. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)">
+          <path d="M240,66 H300"/>
+          <path d="M400,92 V148"/>
+          <path d="M300,174 H240"/>
+          <path d="M500,174 H560"/>
+          <path d="M660,92 V148"/>
+          <path d="M96,200 V256"/>
+          <path d="M184,200 V220 A8,8 0 0 0 192,228 H248 A8,8 0 0 1 256,236 V256"/>
+          <path d="M660,256 V200" stroke-dasharray="5,4"/>
+        </g>
+
+        <!-- Edge labels beside their vertical segments. -->
+        <g fill="#f5f5f5">
+          <rect x="556" y="106" width="96" height="28" rx="2"/>
+          <rect x="560" y="214" width="92" height="28" rx="2"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="9" fill="#2d3142" text-anchor="end">
+          <text x="648" y="117">Aspect_Window.</text>
+          <text x="648" y="129">FromNativeHandle</text>
+          <text x="648" y="225">FlushViewEvents</text>
+          <text x="648" y="237">(context, view)</text>
+        </g>
+
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <!-- Row 1: display connection, driver, native window (external). -->
+          <rect x="40" y="40" width="200" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="140" y="70" fill="#2d3142" font-size="12" font-weight="600">Aspect_DisplayConnection</text>
+
+          <rect x="300" y="40" width="200" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="62" fill="#2d3142" font-size="12" font-weight="600">OpenGl_GraphicDriver</text>
+          <text x="400" y="78" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">one per display</text>
+
+          <rect x="560" y="40" width="200" height="52" rx="6" fill="#f5f5f5"/>
+          <rect x="560" y="40" width="200" height="52" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="660" y="62" fill="#2d3142" font-size="12" font-weight="600">native window</text>
+          <text x="660" y="78" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">HWND, X11 Window, NSView</text>
+
+          <!-- Row 2: context, viewer, view (focal). -->
+          <rect x="40" y="148" width="200" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="140" y="170" fill="#2d3142" font-size="12" font-weight="600">AIS_InteractiveContext</text>
+          <text x="140" y="186" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">display, highlight, select</text>
+
+          <rect x="300" y="148" width="200" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="170" fill="#2d3142" font-size="12" font-weight="600">V3d_Viewer</text>
+          <text x="400" y="186" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">lights, the shared scene</text>
+
+          <rect x="560" y="148" width="200" height="52" rx="6" fill="#f5f5f5"/>
+          <rect x="560" y="148" width="200" height="52" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="660" y="170" fill="#2d3142" font-size="12" font-weight="600">V3d_View</text>
+          <text x="660" y="186" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">camera, one per window</text>
+
+          <!-- Row 3: presentations, controller. -->
+          <rect x="40" y="256" width="112" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="96" y="286" fill="#2d3142" font-size="12" font-weight="600">AIS_Shape</text>
+
+          <rect x="176" y="256" width="160" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="256" y="286" fill="#2d3142" font-size="12" font-weight="600">XCAFPrs_AISObject</text>
+
+          <rect x="560" y="256" width="200" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="660" y="278" fill="#2d3142" font-size="12" font-weight="600">AIS_ViewController</text>
+          <text x="660" y="294" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">mouse to camera and selection</text>
+        </g>
+      </g></svg>

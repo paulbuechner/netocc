@@ -226,7 +226,7 @@ What went wrong while building NetOcc, and why: traps in exposing OCCT to C#, mo
 
 - **Examples as test regions.** `[!code-csharp[](../samples/X.cs#name)]` takes a `#region name` and dedents it; a file outside the docfx content globs is fine. Tests keep the examples honest, and asserts after the region stay out of the page.
 - **Nested toc, flat files.** Sections in `articles/toc.yml` (`items:`) without moving files keep every URL and relative link.
-- **Mermaid.** The modern template renders ```` ```mermaid ```` blocks. `mmdc` (`@mermaid-js/mermaid-cli`) validates them; with `PUPPETEER_SKIP_DOWNLOAD=1` and a puppeteer config whose `executablePath` names a local Chromium (EdgeCore's `msedge.exe` works) nothing is downloaded. Rendered PNGs show what parsing doesn't: dagre routes a tree's edges through sibling boxes when the children's order is unlucky; reorder them. Class diagrams draw empty compartments: trees read better as `flowchart LR` with `---` edges.
+- **Diagrams as images.** The modern template renders ```` ```mermaid ````, but its layout is dagre's: edges through sibling boxes, no hierarchy. The diagrams are SVGs drawn by hand (`assets/`, the `.html` beside each is the source). An SVG shown as `<img>` loads nothing external, so Google Fonts never arrive: `diagrams.py` embeds the subsets of the fonts each one uses, and gives the SVG its viewBox's `width` and `height`. Nor does it see the page's theme: each diagram has a `-dark.svg` twin, and an article shows both, CSS hiding one by `data-bs-theme`. Swapping the `src` from a script flashes the light one: the template's scripts run after the images start loading, while `data-bs-theme` is set in `<head>` before the first paint.
 
 ## Code style
 

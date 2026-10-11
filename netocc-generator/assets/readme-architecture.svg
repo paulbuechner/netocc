@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 704" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="readme-architecture-title readme-architecture-desc" width="800" height="704">
+        <title id="readme-architecture-title">netocc-gen's passes</title>
+        <desc id="readme-architecture-desc">Bootstrap writes config/toolkits.yaml from OCCT's source; Parse reads it with OCCT's headers and DLLs and config/modules.yaml, Map adds the types netocc-core's hand-written .i files provide, and Emit writes netocc-core's wrapper .i files and module headers and the skip logs.</desc>
+        <defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="704" rx="12"/></clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zones, left to right, each starting where its first node sits. -->
+        <g fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8">
+          <rect x="40" y="40" width="200" height="416" rx="8"/>
+          <rect x="316" y="120" width="176" height="416" rx="8"/>
+          <rect x="560" y="364" width="200" height="248" rx="8"/>
+        </g>
+        <g fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">
+          <text x="56" y="57">INPUTS</text>
+          <text x="332" y="137">NETOCC-GEN</text>
+          <text x="576" y="381">OUTPUTS</text>
+        </g>
+
+        <!-- Connectors first. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)">
+          <path d="M140,120 V151"/>
+          <path d="M224,176 H331"/>
+          <path d="M224,248 H331"/>
+          <path d="M224,320 H331"/>
+          <path d="M224,408 H331"/>
+          <path d="M404,344 V375"/>
+          <path d="M404,440 V471"/>
+          <path d="M476,480 H516 Q524,480 524,472 V428 Q524,420 532,420 H575"/>
+          <path d="M476,496 H575"/>
+          <path d="M476,512 H516 Q524,512 524,520 V564 Q524,572 532,572 H575"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" letter-spacing="0.06em">
+          <rect x="148" y="130" width="56" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="152" y="139">BOOTSTRAP</text>
+          <rect x="246" y="388" width="64" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="278" y="397" text-anchor="middle">THEIR TYPES</text>
+        </g>
+
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <!-- Inputs. -->
+          <rect x="56" y="72" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="72" width="168" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="140" y="92" fill="#2d3142" font-size="12" font-weight="600">OCCT 8.0.1 source</text>
+          <text x="140" y="107" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">(vcpkg buildtree)</text>
+
+          <rect x="56" y="152" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="152" width="168" height="48" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="140" y="172" fill="#2d3142" font-size="12" font-weight="600">config/toolkits.yaml</text>
+          <text x="140" y="187" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">generated</text>
+
+          <rect x="56" y="224" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="224" width="168" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="140" y="244" fill="#2d3142" font-size="12" font-weight="600">OCCT headers + DLLs</text>
+          <text x="140" y="259" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">(vcpkg install)</text>
+
+          <rect x="56" y="296" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="296" width="168" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="140" y="324" fill="#2d3142" font-size="12" font-weight="600">config/modules.yaml</text>
+
+          <rect x="56" y="376" width="168" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="376" width="168" height="64" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="140" y="404" fill="#2d3142" font-size="12" font-weight="600">netocc-core</text>
+          <text x="140" y="419" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">hand-written .i</text>
+
+          <!-- The three passes. -->
+          <rect x="332" y="152" width="144" height="192" rx="6" fill="#f5f5f5"/>
+          <rect x="332" y="152" width="144" height="192" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="404" y="244" fill="#2d3142" font-size="12" font-weight="600">Parse</text>
+          <text x="404" y="259" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">ClangSharp/libclang</text>
+
+          <rect x="332" y="376" width="144" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="332" y="376" width="144" height="64" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="404" y="398" fill="#2d3142" font-size="12" font-weight="600">Map</text>
+          <text x="404" y="414" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">TypeRegistry,</text>
+          <text x="404" y="426" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">SignatureMapper</text>
+
+          <rect x="332" y="472" width="144" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="332" y="472" width="144" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="404" y="492" fill="#2d3142" font-size="12" font-weight="600">Emit</text>
+          <text x="404" y="507" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">InterfaceWriter</text>
+
+          <!-- Outputs. -->
+          <rect x="576" y="396" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="396" width="168" height="48" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="660" y="416" fill="#2d3142" font-size="12" font-weight="600">netocc-core</text>
+          <text x="660" y="431" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">src/SWIG_files/wrapper/*.i</text>
+
+          <rect x="576" y="464" width="168" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="464" width="168" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="660" y="486" fill="#2d3142" font-size="12" font-weight="600">netocc-core</text>
+          <text x="660" y="502" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">src/SWIG_files/headers/</text>
+          <text x="660" y="514" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">*_module.hxx</text>
+
+          <rect x="576" y="548" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="548" width="168" height="48" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="660" y="576" fill="#2d3142" font-size="12" font-weight="600">log/skips/*.txt</text>
+        </g>
+
+        <!-- Legend: the two fills that need decoding. -->
+        <line x1="40" y1="636" x2="760" y2="636" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" letter-spacing="0.14em">
+          <text x="40" y="664">LEGEND</text>
+          <rect x="120" y="654" width="20" height="12" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="148" y="664">GENERATED</text>
+          <rect x="248" y="654" width="20" height="12" rx="2" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="276" y="664">FROM OCCT</text>
+        </g>
+      </g></svg>

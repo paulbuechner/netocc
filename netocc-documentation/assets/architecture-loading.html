@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading the natives</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Flowchart · architecture.md</p>
+    <h1>Loading the natives</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 432" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="architecture-loading-title architecture-loading-desc">
+        <title id="architecture-loading-title">Loading the natives</title>
+        <desc id="architecture-loading-desc">On the first P/Invoke into NetOcc* the libraries are looked for in &lt;app&gt;/x64 or x86 on .NET Framework with AnyCPU, in &lt;app&gt;/runtimes/&lt;rid&gt;/native on .NET, or in &lt;app&gt; when self-contained in a single folder; once loaded, OCCT's TK* libraries resolve from the same folder.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Connectors, before the shapes. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2">
+          <path d="M400,88 V118" marker-end="url(#arrow)"/>
+          <path d="M344,152 H168 Q160,152 160,160 V222" marker-end="url(#arrow)"/>
+          <path d="M400,184 V222" marker-end="url(#arrow)"/>
+          <path d="M456,152 H632 Q640,152 640,160 V222" marker-end="url(#arrow)"/>
+          <path d="M160,280 V352 Q160,360 168,360 H238" marker-end="url(#arrow)"/>
+          <path d="M400,280 V326" marker-end="url(#arrow)"/>
+          <path d="M640,280 V352 Q640,360 632,360 H562" marker-end="url(#arrow)"/>
+        </g>
+
+        <!-- Branch labels: which runtime looks where. -->
+        <g fill="#f5f5f5">
+          <rect x="212" y="132" width="80" height="12" rx="2"/>
+          <rect x="408" y="196" width="32" height="12" rx="2"/>
+          <rect x="508" y="132" width="80" height="12" rx="2"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" letter-spacing="0.06em">
+          <text x="252" y="141" text-anchor="middle">.NET FRAMEWORK</text>
+          <text x="412" y="205">.NET</text>
+          <text x="548" y="141" text-anchor="middle">SELF-CONTAINED</text>
+        </g>
+
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142" text-anchor="middle">
+          <!-- Start. -->
+          <rect x="288" y="40" width="224" height="48" rx="20" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="68">first P/Invoke into NetOcc*</text>
+
+          <!-- The probe: focal. -->
+          <polygon points="400,120 456,152 400,184 344,152" fill="#f1e7e4" stroke="#bf4520"/>
+          <text x="400" y="156">look in</text>
+
+          <!-- The three folders. -->
+          <rect x="72" y="224" width="176" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="160" y="248">&lt;app&gt;/x64 or x86</text>
+          <rect x="296" y="224" width="208" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="256">&lt;app&gt;/runtimes/&lt;rid&gt;/native</text>
+          <rect x="552" y="224" width="176" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="640" y="248">&lt;app&gt;</text>
+
+          <!-- End. -->
+          <rect x="240" y="328" width="320" height="64" rx="20" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="352">load</text>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="9" fill="#4f5d75" text-anchor="middle">
+          <text x="160" y="264">AnyCPU</text>
+          <text x="640" y="264">single folder</text>
+          <text x="400" y="368">OCCT's TK* libraries resolve</text>
+          <text x="400" y="381">from the same folder</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="errors-exceptions-title errors-exceptions-desc" width="800" height="480">
+        <title id="errors-exceptions-title">A C++ exception becomes an OcctException</title>
+        <desc id="errors-exceptions-desc">new gp_Dir(0, 0, 0) goes from your code through the C# proxy and a P/Invoke into the native wrapper and OCCT; OCCT throws Standard_ConstructionError, the wrapper passes its type and message to the proxy through a callback, and the proxy throws an OcctException.</desc>
+        <defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="480" rx="12"/></clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a6a6a6"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#f08a59"/></marker>
+        </defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#171717"/>
+
+        <!-- Lifelines: your code 124, C# proxy 308, native wrapper 492, OCCT 676. -->
+        <g stroke="rgba(230,230,230,0.22)" stroke-width="1" stroke-dasharray="3,3">
+          <line x1="124" y1="96" x2="124" y2="408"/>
+          <line x1="308" y1="96" x2="308" y2="408"/>
+          <line x1="492" y1="96" x2="492" y2="408"/>
+          <line x1="676" y1="96" x2="676" y2="408"/>
+        </g>
+
+        <!-- Activation bars. -->
+        <g>
+          <rect x="304" y="136" width="8" height="256" fill="#171717"/>
+          <rect x="488" y="184" width="8" height="160" fill="#171717"/>
+          <rect x="672" y="232" width="8" height="64" fill="#171717"/>
+        </g>
+        <g fill="rgba(230,230,230,0.06)" stroke="#a6a6a6" stroke-width="0.8">
+          <rect x="304" y="136" width="8" height="256"/>
+          <rect x="488" y="184" width="8" height="160"/>
+          <rect x="672" y="232" width="8" height="64"/>
+        </g>
+
+        <!-- Calls solid, throws dashed back. -->
+        <line x1="124" y1="144" x2="304" y2="144" stroke="#a6a6a6" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="312" y1="192" x2="488" y2="192" stroke="#a6a6a6" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="496" y1="240" x2="672" y2="240" stroke="#a6a6a6" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="672" y1="288" x2="496" y2="288" stroke="#a6a6a6" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+        <line x1="488" y1="336" x2="312" y2="336" stroke="#a6a6a6" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+        <line x1="304" y1="384" x2="124" y2="384" stroke="#f08a59" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+
+        <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.06em" text-anchor="middle">
+          <rect x="168" y="112" width="96" height="24" rx="2" fill="#171717"/>
+          <text x="216" y="121" fill="#8c8c8c">NEW</text>
+          <text x="216" y="132" fill="#a6a6a6" font-size="9" letter-spacing="0">gp_Dir(0, 0, 0)</text>
+
+          <rect x="372" y="172" width="56" height="12" rx="2" fill="#171717"/>
+          <text x="400" y="181" fill="#8c8c8c">P/INVOKE</text>
+
+          <rect x="536" y="208" width="96" height="24" rx="2" fill="#171717"/>
+          <text x="584" y="217" fill="#8c8c8c">CALL</text>
+          <text x="584" y="228" fill="#a6a6a6" font-size="9" letter-spacing="0">gp_Dir(0, 0, 0)</text>
+
+          <rect x="504" y="256" width="160" height="24" rx="2" fill="#171717"/>
+          <text x="584" y="265" fill="#8c8c8c">THROW</text>
+          <text x="584" y="276" fill="#a6a6a6" font-size="9" letter-spacing="0">Standard_ConstructionError</text>
+
+          <rect x="356" y="304" width="88" height="24" rx="2" fill="#171717"/>
+          <text x="400" y="313" fill="#8c8c8c">TYPE + MESSAGE</text>
+          <text x="400" y="324" fill="#8c8c8c">VIA A CALLBACK</text>
+
+          <rect x="172" y="352" width="88" height="24" rx="2" fill="#171717"/>
+          <text x="216" y="361" fill="#f08a59">THROW</text>
+          <text x="216" y="372" fill="#f08a59" font-size="9" letter-spacing="0">OcctException</text>
+        </g>
+
+        <!-- Actors; the wrapper, where the exception is caught, is focal. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="48" y="40" width="152" height="56" rx="6" fill="rgba(166,166,166,0.10)" stroke="#8c8c8c"/>
+          <text x="124" y="64" fill="#e6e6e6" font-size="12" font-weight="600">your code</text>
+          <text x="124" y="80" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">application · C#</text>
+
+          <rect x="232" y="40" width="152" height="56" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
+          <text x="308" y="64" fill="#e6e6e6" font-size="12" font-weight="600">C# proxy</text>
+          <text x="308" y="80" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">NetOcc · C#</text>
+
+          <rect x="416" y="40" width="152" height="56" rx="6" fill="#171717"/>
+          <rect x="416" y="40" width="152" height="56" rx="6" fill="rgba(240,138,89,0.13)" stroke="#f08a59"/>
+          <text x="492" y="64" fill="#e6e6e6" font-size="12" font-weight="600">native wrapper</text>
+          <text x="492" y="80" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">NetOcc · C++</text>
+
+          <rect x="600" y="40" width="152" height="56" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <text x="676" y="64" fill="#e6e6e6" font-size="12" font-weight="600">OCCT</text>
+          <text x="676" y="80" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">library · C++</text>
+        </g>
+
+        <text x="48" y="440" fill="#8c8c8c" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C++ EXCEPTIONS NEVER CROSS INTO .NET ON THEIR OWN</text>
+      </g></svg>

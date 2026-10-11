@@ -15,14 +15,8 @@ One AnyCPU package for .NET Framework 3.5 and 4.5+, .NET 6, 8 and 10, with the n
 
 A block with a hole, rounded, measured, and written as STEP and STL:
 
-```mermaid
-flowchart LR
-    box[MakeBox] --> cut[Cut]
-    cylinder[MakeCylinder] --> cut
-    cut --> fillet[MakeFillet] --> volume[VolumeProperties]
-    fillet --> step[STEP file]
-    fillet --> mesh[IncrementalMesh] --> stl[STL file]
-```
+<img class="diagram-light" src="../assets/getting-started-first-part.svg" width="800" height="296" alt="A first part" loading="lazy">
+<img class="diagram-dark" src="../assets/getting-started-first-part-dark.svg" width="800" height="296" alt="A first part" loading="lazy">
 
 Namespaces are OCCT's packages:
 

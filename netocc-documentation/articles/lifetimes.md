@@ -2,21 +2,8 @@
 
 A proxy owns its native object, or for a transient one reference on it, and releases it in `Dispose` or its finalizer. The garbage collector sees only the small proxy, not the native memory behind it: dispose large or scarce objects when you're done with them.
 
-```mermaid
-flowchart LR
-    subgraph managed [".NET heap"]
-        p1["Geom_Circle proxy"]
-        p2["another proxy<br/>of the same circle"]
-        p3["BRepMesh_IncrementalMesh proxy"]
-    end
-    subgraph native ["native heap"]
-        t["Geom_Circle<br/>reference count 2"]
-        m["BRepMesh_IncrementalMesh"]
-    end
-    p1 -->|one reference| t
-    p2 -->|one reference| t
-    p3 -->|owns| m
-```
+<img class="diagram-light" src="../assets/lifetimes-heaps.svg" width="800" height="348" alt="Proxies and their native objects" loading="lazy">
+<img class="diagram-dark" src="../assets/lifetimes-heaps-dark.svg" width="800" height="348" alt="Proxies and their native objects" loading="lazy">
 
 [!code-csharp[](../samples/Lifetimes.cs#dispose)]
 
@@ -33,12 +20,8 @@ C++ code keeps raw references the garbage collector doesn't see: an algorithm re
 
 [!code-csharp[](../samples/Lifetimes.cs#borrowed)]
 
-```mermaid
-flowchart LR
-    first["first<br/>(a proxy into the map)"] -->|keeps alive| map["edges<br/>(TopTools_IndexedMapOfShape)"]
-    map -->|owns| element["the native element"]
-    first -.->|points into| element
-```
+<img class="diagram-light" src="../assets/lifetimes-borrowed.svg" width="800" height="196" alt="What stays alive with what" loading="lazy">
+<img class="diagram-dark" src="../assets/lifetimes-borrowed-dark.svg" width="800" height="196" alt="What stays alive with what" loading="lazy">
 
 | The native object refers to | Kept alive by |
 |---|---|
@@ -58,22 +41,8 @@ A guard locks an item until it's disposed. One dropped without `Dispose` is safe
 
 ## Finalization
 
-```mermaid
-sequenceDiagram
-    participant App as your code
-    participant P as proxy
-    participant GC as garbage collector
-    participant N as native object
-    App->>P: new
-    P->>N: create
-    alt disposed
-        App->>P: Dispose()
-        P->>N: delete (or release the reference)
-    else dropped
-        GC->>P: finalizer, on the finalizer thread
-        P->>N: delete (or release the reference)
-    end
-```
+<img class="diagram-light" src="../assets/lifetimes-finalization.svg" width="800" height="552" alt="Finalization" loading="lazy">
+<img class="diagram-dark" src="../assets/lifetimes-finalization-dark.svg" width="800" height="552" alt="Finalization" loading="lazy">
 
 ## C# subclasses
 

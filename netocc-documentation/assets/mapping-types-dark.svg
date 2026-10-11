@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 452" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mapping-types-title mapping-types-desc" width="800" height="452">
+        <title id="mapping-types-title">What a C++ type becomes</title>
+        <desc id="mapping-types-desc">Standard_Transient subclasses and all other classes become C# classes, holding one reference or owning the object; fixed-layout values become C# structs with the same memory layout; enums become C# enums; namespace functions become static classes.</desc>
+        <defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="452" rx="12"/></clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#a6a6a6"/></marker>
+        </defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#171717"/>
+
+        <!-- Zones: the C++ side and the C# side. -->
+        <rect x="40" y="40" width="280" height="372" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
+        <text x="60" y="57" fill="#8c8c8c" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C++ TYPE</text>
+        <rect x="560" y="40" width="200" height="372" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
+        <text x="580" y="57" fill="#8c8c8c" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C# TYPE</text>
+
+        <!-- Connectors first, one per row; labels masked above their line. -->
+        <g fill="none" stroke="#a6a6a6" stroke-width="1.2" marker-end="url(#arrow)">
+          <path d="M300,96 H577"/>
+          <path d="M300,164 H577"/>
+          <path d="M300,232 H577"/>
+          <path d="M300,300 H577"/>
+          <path d="M300,368 H577"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#8c8c8c" text-anchor="middle" letter-spacing="0.06em">
+          <rect x="396" y="76" width="88" height="12" rx="2" fill="#171717"/>
+          <text x="440" y="85">HOLDS ONE REF</text>
+          <rect x="400" y="144" width="80" height="12" rx="2" fill="#171717"/>
+          <text x="440" y="153">OWNS OBJECT</text>
+          <rect x="400" y="212" width="80" height="12" rx="2" fill="#171717"/>
+          <text x="440" y="221">SAME LAYOUT</text>
+        </g>
+
+        <!-- C++ kinds, with OCCT examples. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="60" y="72" width="240" height="48" rx="6" fill="#171717"/>
+          <rect x="60" y="72" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <text x="180" y="92" fill="#e6e6e6" font-size="12" font-weight="600">Standard_Transient subclass</text>
+          <text x="180" y="107" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">Geom_Circle, AIS_Shape</text>
+
+          <rect x="60" y="140" width="240" height="48" rx="6" fill="#171717"/>
+          <rect x="60" y="140" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <text x="180" y="160" fill="#e6e6e6" font-size="12" font-weight="600">any other class</text>
+          <text x="180" y="175" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">TopoDS_Shape, BRepPrimAPI_MakeBox</text>
+
+          <rect x="60" y="208" width="240" height="48" rx="6" fill="#171717"/>
+          <rect x="60" y="208" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <text x="180" y="228" fill="#e6e6e6" font-size="12" font-weight="600">fixed-layout value</text>
+          <text x="180" y="243" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">gp_Pnt, Bnd_Box, Quantity_Color</text>
+
+          <rect x="60" y="276" width="240" height="48" rx="6" fill="#171717"/>
+          <rect x="60" y="276" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <text x="180" y="304" fill="#e6e6e6" font-size="12" font-weight="600">enum</text>
+
+          <rect x="60" y="344" width="240" height="48" rx="6" fill="#171717"/>
+          <rect x="60" y="344" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <text x="180" y="364" fill="#e6e6e6" font-size="12" font-weight="600">namespace functions</text>
+          <text x="180" y="379" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">TopoDS::Face</text>
+        </g>
+
+        <!-- C# results; both kinds of class land in one; the struct is focal. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="580" y="72" width="160" height="116" rx="6" fill="#171717"/>
+          <rect x="580" y="72" width="160" height="116" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
+          <text x="660" y="134" fill="#e6e6e6" font-size="12" font-weight="600">C# class</text>
+
+          <rect x="580" y="208" width="160" height="48" rx="6" fill="#171717"/>
+          <rect x="580" y="208" width="160" height="48" rx="6" fill="rgba(240,138,89,0.13)" stroke="#f08a59"/>
+          <text x="660" y="236" fill="#e6e6e6" font-size="12" font-weight="600">C# struct</text>
+
+          <rect x="580" y="276" width="160" height="48" rx="6" fill="#171717"/>
+          <rect x="580" y="276" width="160" height="48" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
+          <text x="660" y="304" fill="#e6e6e6" font-size="12" font-weight="600">C# enum</text>
+
+          <rect x="580" y="344" width="160" height="48" rx="6" fill="#171717"/>
+          <rect x="580" y="344" width="160" height="48" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
+          <text x="660" y="372" fill="#e6e6e6" font-size="12" font-weight="600">static class</text>
+        </g>
+      </g></svg>

@@ -17,20 +17,8 @@ STEP and IGES keep exact geometry. STL, glTF, OBJ and PLY hold triangles: [mesh]
 
 The STEP and IGES readers work in two steps: `ReadFile` loads the file's entities into a model, `TransferRoots` translates them into shapes.
 
-```mermaid
-sequenceDiagram
-    participant App as your code
-    participant Reader as STEPControl_Reader
-    participant Model as model of entities
-    App->>Reader: ReadFile(path)
-    Reader->>Model: parse
-    Reader-->>App: IFSelect_RetDone
-    App->>Reader: TransferRoots()
-    Reader->>Model: translate each root entity
-    Reader-->>App: number of shapes
-    App->>Reader: OneShape()
-    Reader-->>App: TopoDS_Shape (a compound for several)
-```
+<img class="diagram-light" src="../assets/data-exchange-reader.svg" width="800" height="548" alt="How a STEP reader works" loading="lazy">
+<img class="diagram-dark" src="../assets/data-exchange-reader-dark.svg" width="800" height="548" alt="How a STEP reader works" loading="lazy">
 
 ## STEP
 

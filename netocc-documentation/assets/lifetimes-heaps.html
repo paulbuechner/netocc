@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proxies and their native objects</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · lifetimes.md</p>
+    <h1>Proxies and their native objects</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 348" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="lifetimes-heaps-title lifetimes-heaps-desc">
+        <title id="lifetimes-heaps-title">Proxies and their native objects</title>
+        <desc id="lifetimes-heaps-desc">Two Geom_Circle proxies on the .NET heap each hold one reference on the same native Geom_Circle, whose reference count is 2; a BRepMesh_IncrementalMesh proxy owns its native mesher.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zones: the two heaps. -->
+        <rect x="40" y="40" width="288" height="240" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="56" y="53" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">.NET HEAP</text>
+        <rect x="472" y="40" width="288" height="240" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <text x="488" y="53" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">NATIVE HEAP</text>
+
+        <!-- Connectors, before the boxes. -->
+        <path d="M304,96 H496" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M304,168 H496" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M304,240 H496" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.06em" text-anchor="middle" fill="#5a6580">
+          <rect x="356" y="76" width="88" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="400" y="85">ONE REFERENCE</text>
+          <rect x="356" y="148" width="88" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="400" y="157">ONE REFERENCE</text>
+          <rect x="380" y="220" width="40" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="400" y="229">OWNS</text>
+        </g>
+
+        <!-- Proxies. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="64" y="72" width="240" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="184" y="100" fill="#2d3142" font-size="12" font-weight="600">Geom_Circle proxy</text>
+
+          <rect x="64" y="144" width="240" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="184" y="165" fill="#2d3142" font-size="12" font-weight="600">another proxy</text>
+          <text x="184" y="180" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">of the same circle</text>
+
+          <rect x="64" y="216" width="240" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="184" y="244" fill="#2d3142" font-size="12" font-weight="600">BRepMesh_IncrementalMesh proxy</text>
+        </g>
+
+        <!-- Native objects; the shared, reference-counted circle is focal. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="496" y="72" width="240" height="120" rx="6" fill="#f5f5f5"/>
+          <rect x="496" y="72" width="240" height="120" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="616" y="129" fill="#2d3142" font-size="12" font-weight="600">Geom_Circle</text>
+          <text x="616" y="145" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">reference count 2</text>
+
+          <rect x="496" y="216" width="240" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="616" y="244" fill="#2d3142" font-size="12" font-weight="600">BRepMesh_IncrementalMesh</text>
+        </g>
+
+        <text x="40" y="308" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">THE GARBAGE COLLECTOR SEES ONLY THE PROXIES</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

@@ -10,11 +10,36 @@ _layout: landing
 dotnet add package NetOcc
 ```
 
-[!code-csharp[](samples/GettingStarted.cs#first-part)]
+## The API
+
+OCCT's C++ API, call for call. Three small programs, each complete:
+
+# [Modeling](#tab/modeling)
+
+[!code-csharp[](samples/Programs/Bracket.cs#program)]
+
+# [Measuring](#tab/measuring)
+
+[!code-csharp[](samples/Programs/Measure.cs#program)]
+
+# [Data exchange](#tab/exchange)
+
+[!code-csharp[](samples/Programs/Exchange.cs#program)]
+
+---
+
+How C++ signatures look in C#: [From C++ to C#](articles/mapping.md).
+
+## How it's built
+
+<img class="diagram-light" src="assets/index-modules.svg" width="800" height="560" alt="NetOcc at a glance" loading="lazy">
+<img class="diagram-dark" src="assets/index-modules-dark.svg" width="800" height="560" alt="NetOcc at a glance" loading="lazy">
+
+`NetOcc.dll` holds the C# side, for every target framework; it calls one native library per OCCT module, SWIG's wrappers generated from OCCT's headers, which call OCCT. The natives come in one package per platform, `NetOcc.runtime.<rid>`, which `NetOcc` depends on. More in [How NetOcc works](articles/architecture.md).
 
 ## Covered
 
-All 362 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, ApplicationFramework and DataExchange modules, and of Visualization's TKService, TKV3d, TKOpenGl (the driver) and TKMeshVS: geometry, topology, booleans, fillets, offsets, sweeps, shape healing, meshing, HLR, OCAF and XCAF documents, STEP, IGES, STL, glTF, OBJ, PLY and VRML, and 3D views.
+All 365 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, ApplicationFramework and DataExchange modules, and of Visualization's TKService, TKV3d, TKOpenGl (the driver) and TKMeshVS: geometry, topology, booleans, fillets, offsets, sweeps, shape healing, meshing, HLR, OCAF and XCAF documents, STEP, IGES, STL, glTF, OBJ, PLY and VRML, and 3D views.
 
 ## Where to go
 

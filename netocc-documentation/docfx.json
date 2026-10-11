@@ -13,10 +13,18 @@
         ]
       }
     ],
+    "resource": [
+      {
+        "files": [
+          "assets/*.svg"
+        ]
+      }
+    ],
     "output": "_site",
     "template": [
       "default",
-      "modern"
+      "modern",
+      "template"
     ],
     "globalMetadata": {
       "_appTitle": "NetOcc",

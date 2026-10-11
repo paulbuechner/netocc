@@ -2,16 +2,8 @@
 
 Every modeling algorithm is a builder: input in the constructor (or through `Add` and `Set...`), `Build()`, the result from `Shape()`.
 
-```mermaid
-stateDiagram-v2
-    direction LR
-    [*] --> Configured: new Builder(input)
-    Configured --> Configured: Add(...), Set...(...)
-    Configured --> Done: Build() succeeds
-    Configured --> Failed: Build() fails
-    Done --> [*]: Shape(), Modified(), Generated()
-    Failed --> [*]: IsDone() false, Error() says why
-```
+<img class="diagram-light" src="../assets/modeling-builder.svg" width="800" height="324" alt="Builder states" loading="lazy">
+<img class="diagram-dark" src="../assets/modeling-builder-dark.svg" width="800" height="324" alt="Builder states" loading="lazy">
 
 `Shape()` builds first if needed; on a failed builder it throws `StdFail_NotDone`. Check `IsDone()` where failure is possible, see [Errors](errors.md#builders-that-fail).
 
@@ -63,12 +55,8 @@ With many tools, one operation is faster and more robust than a chain of them. T
 
 Builders tell what became of each input sub-shape, to follow a face through a sequence of operations:
 
-```mermaid
-flowchart LR
-    input["an input sub-shape"] -->|"Modified(s)"| modified["what it became:<br/>split, trimmed, moved"]
-    input -->|"Generated(s)"| generated["what it gave rise to:<br/>a swept edge's face, a fillet's face"]
-    input -->|"IsDeleted(s)"| deleted["true if nothing of it is left"]
-```
+<img class="diagram-light" src="../assets/modeling-history.svg" width="800" height="276" alt="History" loading="lazy">
+<img class="diagram-dark" src="../assets/modeling-history-dark.svg" width="800" height="276" alt="History" loading="lazy">
 
 [!code-csharp[](../samples/Modeling.cs#history)]
 

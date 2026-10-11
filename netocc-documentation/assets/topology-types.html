@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The shape types</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Tree · topology.md</p>
+    <h1>The shape types</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 568" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="topology-types-title topology-types-desc">
+        <title id="topology-types-title">The shape types</title>
+        <desc id="topology-types-desc">The eight TopoDS shape types from compound to vertex, each made of the one below: compound, compsolid, solid, shell, face, wire, edge, vertex.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Connectors first: each type is made of the one below. -->
+        <line x1="120" y1="80" x2="120" y2="104" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="168" y1="144" x2="168" y2="168" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="216" y1="208" x2="216" y2="232" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="264" y1="272" x2="264" y2="296" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="312" y1="336" x2="312" y2="360" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="360" y1="400" x2="360" y2="424" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="408" y1="464" x2="408" y2="488" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+        <!-- The eight types, stepped in by containment. -->
+        <g font-family="'Geist', sans-serif">
+          <rect x="48" y="40" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="64" y="64" fill="#2d3142" font-size="12" font-weight="600">TopoDS_Compound</text>
+          <text x="196" y="63" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">any shapes, grouped</text>
+          <rect x="96" y="104" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="112" y="128" fill="#2d3142" font-size="12" font-weight="600">TopoDS_CompSolid</text>
+          <text x="244" y="127" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">solids sharing faces</text>
+          <rect x="144" y="168" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="160" y="192" fill="#2d3142" font-size="12" font-weight="600">TopoDS_Solid</text>
+          <text x="292" y="191" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">a volume bounded by shells</text>
+          <rect x="192" y="232" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="208" y="256" fill="#2d3142" font-size="12" font-weight="600">TopoDS_Shell</text>
+          <text x="340" y="255" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">faces joined at edges</text>
+          <rect x="240" y="296" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="256" y="320" fill="#2d3142" font-size="12" font-weight="600">TopoDS_Face</text>
+          <text x="388" y="319" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">part of a surface, bounded by wires</text>
+          <rect x="288" y="360" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="304" y="384" fill="#2d3142" font-size="12" font-weight="600">TopoDS_Wire</text>
+          <text x="436" y="383" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">edges joined at vertices</text>
+          <rect x="336" y="424" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="352" y="448" fill="#2d3142" font-size="12" font-weight="600">TopoDS_Edge</text>
+          <text x="484" y="447" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">part of a curve</text>
+          <rect x="384" y="488" width="368" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="512" fill="#2d3142" font-size="12" font-weight="600">TopoDS_Vertex</text>
+          <text x="532" y="511" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">a point</text>
+        </g>
+
+        <text x="48" y="512" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">EACH TYPE IS MADE OF THE ONE BELOW IT</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>
