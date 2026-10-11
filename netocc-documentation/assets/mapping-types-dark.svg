@@ -9,9 +9,9 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Zones: the C++ side and the C# side. -->
-        <rect x="40" y="40" width="280" height="372" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
+        <rect x="40" y="40" width="280" height="372" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
         <text x="60" y="57" fill="#8c8c8c" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C++ TYPE</text>
-        <rect x="560" y="40" width="200" height="372" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
+        <rect x="560" y="40" width="200" height="372" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
         <text x="580" y="57" fill="#8c8c8c" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C# TYPE</text>
 
         <!-- Connectors first, one per row; labels masked above their line. -->
@@ -34,26 +34,26 @@
         <!-- C++ kinds, with OCCT examples. -->
         <g font-family="'Geist', sans-serif" text-anchor="middle">
           <rect x="60" y="72" width="240" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="72" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="60" y="72" width="240" height="48" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="180" y="92" fill="#e6e6e6" font-size="12" font-weight="600">Standard_Transient subclass</text>
           <text x="180" y="107" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">Geom_Circle, AIS_Shape</text>
 
           <rect x="60" y="140" width="240" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="140" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="60" y="140" width="240" height="48" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="180" y="160" fill="#e6e6e6" font-size="12" font-weight="600">any other class</text>
           <text x="180" y="175" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">TopoDS_Shape, BRepPrimAPI_MakeBox</text>
 
           <rect x="60" y="208" width="240" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="208" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="60" y="208" width="240" height="48" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="180" y="228" fill="#e6e6e6" font-size="12" font-weight="600">fixed-layout value</text>
           <text x="180" y="243" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">gp_Pnt, Bnd_Box, Quantity_Color</text>
 
           <rect x="60" y="276" width="240" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="276" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="60" y="276" width="240" height="48" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="180" y="304" fill="#e6e6e6" font-size="12" font-weight="600">enum</text>
 
           <rect x="60" y="344" width="240" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="344" width="240" height="48" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="60" y="344" width="240" height="48" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="180" y="364" fill="#e6e6e6" font-size="12" font-weight="600">namespace functions</text>
           <text x="180" y="379" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">TopoDS::Face</text>
         </g>

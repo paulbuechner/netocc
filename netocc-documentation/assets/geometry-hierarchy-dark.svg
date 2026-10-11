@@ -6,8 +6,8 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Zones first: curves and surfaces. -->
-        <rect x="40" y="120" width="336" height="616" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
-        <rect x="424" y="120" width="336" height="616" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
+        <rect x="40" y="120" width="336" height="616" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
+        <rect x="424" y="120" width="336" height="616" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
         <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.14em" fill="#8c8c8c">
           <rect x="52" y="124" width="48" height="12" rx="2" fill="#171717"/>
           <text x="56" y="133">CURVES</text>

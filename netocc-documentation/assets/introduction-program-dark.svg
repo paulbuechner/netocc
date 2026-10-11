@@ -53,7 +53,7 @@
           <text x="504" y="240" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">STEP, IGES, BRep</text>
 
           <!-- The mesh's two uses: files (store treatment) and the view. -->
-          <rect x="628" y="80" width="128" height="56" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="628" y="80" width="128" height="56" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="692" y="112" fill="#e6e6e6" font-size="12" font-weight="600">STL, glTF, OBJ</text>
 
           <rect x="628" y="160" width="128" height="56" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>

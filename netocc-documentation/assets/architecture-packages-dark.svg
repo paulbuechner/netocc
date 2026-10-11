@@ -23,7 +23,7 @@
 
         <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#e6e6e6" text-anchor="middle">
           <!-- The app: input. -->
-          <rect x="320" y="40" width="160" height="48" rx="6" fill="#272727" stroke="#8c8c8c"/>
+          <rect x="320" y="40" width="160" height="48" rx="6" fill="#373737" stroke="#8c8c8c"/>
           <text x="400" y="68">your app</text>
 
           <!-- NetOcc: focal, the one package an app references. -->
@@ -45,7 +45,7 @@
           <text x="676" y="272">osx-arm64</text>
 
           <!-- What each runtime package holds. -->
-          <rect x="44" y="320" width="712" height="56" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="44" y="320" width="712" height="56" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="400" y="344">runtimes/&lt;rid&gt;/native/</text>
         </g>
         <g font-family="'Geist Mono', monospace" font-size="9" fill="#a6a6a6" text-anchor="middle">
@@ -53,6 +53,6 @@
           <text x="400" y="171">NetOcc.xml</text>
           <text x="400" y="360">NetOcc* and TK* libraries, OCCT's dependencies</text>
         </g>
-        <rect x="52" y="328" width="32" height="12" rx="2" fill="none" stroke="rgba(166,166,166,0.40)" stroke-width="0.8"/>
+        <rect x="52" y="328" width="32" height="12" rx="2" fill="none" stroke="rgba(166,166,166,0.48)" stroke-width="0.8"/>
         <text x="68" y="337" fill="#a6a6a6" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">EACH</text>
       </g></svg>

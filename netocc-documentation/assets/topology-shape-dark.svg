@@ -31,8 +31,8 @@
 
         <!-- TopoDS_TShape: shared between shapes. -->
         <rect x="500" y="80" width="260" height="120" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
-        <line x1="500" y1="124" x2="760" y2="124" stroke="rgba(230,230,230,0.12)"/>
-        <rect x="512" y="96" width="48" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.40)" stroke-width="0.8"/>
+        <line x1="500" y1="124" x2="760" y2="124" stroke="rgba(230,230,230,0.20)"/>
+        <rect x="512" y="96" width="48" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.48)" stroke-width="0.8"/>
         <text x="536" y="105" fill="#a6a6a6" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">SHARED</text>
         <text x="630" y="106" fill="#e6e6e6" font-size="12" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">TopoDS_TShape</text>
         <g font-size="9" font-family="'Geist Mono', monospace" fill="#a6a6a6">

@@ -29,13 +29,13 @@
 
         <g font-family="'Geist', sans-serif" text-anchor="middle">
           <!-- Starts and end: ovals. -->
-          <rect x="132" y="40" width="128" height="48" rx="20" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="132" y="40" width="128" height="48" rx="20" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="196" y="68" fill="#e6e6e6" font-size="12" font-weight="600">loose faces</text>
 
-          <rect x="408" y="40" width="168" height="48" rx="20" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="408" y="40" width="168" height="48" rx="20" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="492" y="68" fill="#e6e6e6" font-size="12" font-weight="600">shape from a file</text>
 
-          <rect x="444" y="448" width="96" height="48" rx="20" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="444" y="448" width="96" height="48" rx="20" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="492" y="476" fill="#e6e6e6" font-size="12" font-weight="600">use it</text>
 
           <!-- The check. -->

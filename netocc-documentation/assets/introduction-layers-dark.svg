@@ -30,8 +30,8 @@
 
         <!-- L1-L4: the stack, bands with hairline dividers; algorithms is focal. -->
         <rect x="120" y="128" width="640" height="256" rx="6" fill="#1f1f1f" stroke="#a6a6a6"/>
-        <line x1="120" y1="256" x2="760" y2="256" stroke="rgba(230,230,230,0.12)"/>
-        <line x1="120" y1="320" x2="760" y2="320" stroke="rgba(230,230,230,0.12)"/>
+        <line x1="120" y1="256" x2="760" y2="256" stroke="rgba(230,230,230,0.20)"/>
+        <line x1="120" y1="320" x2="760" y2="320" stroke="rgba(230,230,230,0.20)"/>
         <path d="M120,192 V134 A6,6 0 0 1 126,128 H754 A6,6 0 0 1 760,134 V192 Z" fill="rgba(240,138,89,0.13)" stroke="#f08a59"/>
 
         <g font-family="'Geist', sans-serif">
@@ -51,15 +51,15 @@
 
         <!-- Index tags in the left gutter, bottom-up. -->
         <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.08em" text-anchor="middle">
-          <rect x="68" y="70" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.40)" stroke-width="0.8"/>
+          <rect x="68" y="70" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.48)" stroke-width="0.8"/>
           <text x="82" y="79" fill="#a6a6a6">L5</text>
           <rect x="68" y="154" width="28" height="12" rx="2" fill="none" stroke="#f08a59" stroke-width="0.8"/>
           <text x="82" y="163" fill="#f08a59">L4</text>
-          <rect x="68" y="218" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.40)" stroke-width="0.8"/>
+          <rect x="68" y="218" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.48)" stroke-width="0.8"/>
           <text x="82" y="227" fill="#a6a6a6">L3</text>
-          <rect x="68" y="282" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.40)" stroke-width="0.8"/>
+          <rect x="68" y="282" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.48)" stroke-width="0.8"/>
           <text x="82" y="291" fill="#a6a6a6">L2</text>
-          <rect x="68" y="346" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.40)" stroke-width="0.8"/>
+          <rect x="68" y="346" width="28" height="12" rx="2" fill="none" stroke="rgba(230,230,230,0.48)" stroke-width="0.8"/>
           <text x="82" y="355" fill="#a6a6a6">L1</text>
         </g>
 

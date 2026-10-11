@@ -9,9 +9,9 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Zones: the three stages. -->
-        <rect x="40" y="40" width="720" height="240" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
-        <rect x="40" y="296" width="720" height="200" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
-        <rect x="40" y="512" width="720" height="240" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8"/>
+        <rect x="40" y="40" width="720" height="240" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
+        <rect x="40" y="296" width="720" height="200" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
+        <rect x="40" y="512" width="720" height="240" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8"/>
         <g font-family="'Geist Mono', monospace" font-size="8" fill="#8c8c8c" letter-spacing="0.14em">
           <text x="56" y="56">GENERATE</text>
           <text x="56" y="312">WRAP</text>
@@ -39,33 +39,33 @@
         </g>
 
         <!-- Arrow label: the headers' doc comments become NetOcc.xml. -->
-        <rect x="558" y="76" width="76" height="12" rx="2" fill="#1b1b1b"/>
+        <rect x="558" y="76" width="76" height="12" rx="2" fill="#1f1f1f"/>
         <text x="596" y="85" fill="#8c8c8c" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.06em">DOC COMMENTS</text>
 
         <!-- Nodes: tools white, files tinted, the two generators focal. -->
         <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#e6e6e6" text-anchor="middle">
-          <rect x="280" y="72" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="280" y="72" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="376" y="100">OCCT 8.0.1 headers</text>
 
           <rect x="280" y="144" width="192" height="48" rx="6" fill="#33261f" stroke="#f08a59"/>
           <text x="376" y="165">netocc-gen</text>
 
-          <rect x="280" y="216" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="280" y="216" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="376" y="237">Interface files (.i)</text>
 
-          <rect x="504" y="216" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="504" y="216" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="600" y="237">Value-type structs</text>
 
-          <rect x="56" y="328" width="192" height="64" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="56" y="328" width="192" height="64" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="152" y="350">Typemap library</text>
 
           <rect x="280" y="336" width="192" height="48" rx="6" fill="#33261f" stroke="#f08a59"/>
           <text x="376" y="364">SWIG</text>
 
-          <rect x="56" y="432" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="56" y="432" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="152" y="460">C++ wrappers</text>
 
-          <rect x="280" y="432" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="280" y="432" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="376" y="460">C# proxies</text>
 
           <rect x="56" y="544" width="192" height="48" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
@@ -74,16 +74,16 @@
           <rect x="280" y="544" width="192" height="48" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
           <text x="376" y="572">dotnet build</text>
 
-          <rect x="56" y="616" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="56" y="616" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="152" y="637">NetOcc&lt;Module&gt;</text>
 
-          <rect x="280" y="616" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="280" y="616" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="376" y="637">NetOcc.dll</text>
 
-          <rect x="504" y="616" width="192" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="504" y="616" width="192" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="600" y="637">NetOcc.xml</text>
 
-          <rect x="56" y="688" width="640" height="48" rx="6" fill="#212121" stroke="#a6a6a6"/>
+          <rect x="56" y="688" width="640" height="48" rx="6" fill="#2c2c2c" stroke="#a6a6a6"/>
           <text x="376" y="716">NuGet packages</text>
         </g>
         <g font-family="'Geist Mono', monospace" font-size="9" fill="#a6a6a6" text-anchor="middle">
@@ -101,7 +101,7 @@
         <g font-family="'Geist Mono', monospace" font-size="8" fill="#8c8c8c" letter-spacing="0.14em">
           <rect x="40" y="770" width="14" height="10" rx="2" fill="#1f1f1f" stroke="#e6e6e6" stroke-width="0.8"/>
           <text x="62" y="778">TOOL</text>
-          <rect x="120" y="770" width="14" height="10" rx="2" fill="#212121" stroke="#a6a6a6" stroke-width="0.8"/>
+          <rect x="120" y="770" width="14" height="10" rx="2" fill="#2c2c2c" stroke="#a6a6a6" stroke-width="0.8"/>
           <text x="142" y="778">FILE</text>
         </g>
       </g></svg>

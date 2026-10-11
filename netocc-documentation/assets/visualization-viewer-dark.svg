@@ -42,7 +42,7 @@
           <text x="400" y="78" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">one per display</text>
 
           <rect x="560" y="40" width="200" height="52" rx="6" fill="#171717"/>
-          <rect x="560" y="40" width="200" height="52" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="560" y="40" width="200" height="52" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="660" y="62" fill="#e6e6e6" font-size="12" font-weight="600">native window</text>
           <text x="660" y="78" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">HWND, X11 Window, NSView</text>
 

@@ -45,21 +45,21 @@
         <!-- Geometry: store treatment. -->
         <g font-family="'Geist', sans-serif">
           <rect x="500" y="76" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="500" y="76" width="200" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="500" y="76" width="200" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="600" y="104" fill="#e6e6e6" font-size="12" font-weight="600" text-anchor="middle">gp_Pnt</text>
           <rect x="500" y="156" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="500" y="156" width="200" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="500" y="156" width="200" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="600" y="178" fill="#e6e6e6" font-size="12" font-weight="600" text-anchor="middle">Geom_Curve</text>
           <text x="600" y="193" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">+ range first..last</text>
           <rect x="500" y="224" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="500" y="224" width="200" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="500" y="224" width="200" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="600" y="246" fill="#e6e6e6" font-size="12" font-weight="600" text-anchor="middle">Geom2d_Curve</text>
           <text x="600" y="261" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace" text-anchor="middle">on each face</text>
           <rect x="500" y="304" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="500" y="304" width="200" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="500" y="304" width="200" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="600" y="332" fill="#e6e6e6" font-size="12" font-weight="600" text-anchor="middle">Geom_Surface</text>
           <rect x="500" y="372" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="500" y="372" width="200" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="500" y="372" width="200" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="600" y="400" fill="#e6e6e6" font-size="12" font-weight="600" text-anchor="middle">Poly_Triangulation</text>
         </g>
       </g></svg>

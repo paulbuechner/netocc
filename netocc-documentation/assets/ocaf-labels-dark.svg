@@ -10,9 +10,9 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Zone: the document's labels (top band) and their attributes (bottom band). -->
-        <rect x="40" y="124" width="720" height="356" rx="8" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.12)"/>
-        <path d="M40,372 H760 V472 A8,8 0 0 1 752,480 H48 A8,8 0 0 1 40,472 Z" fill="rgba(230,230,230,0.03)"/>
-        <line x1="40" y1="372" x2="760" y2="372" stroke="rgba(230,230,230,0.12)"/>
+        <rect x="40" y="124" width="720" height="356" rx="8" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.20)"/>
+        <path d="M40,372 H760 V472 A8,8 0 0 1 752,480 H48 A8,8 0 0 1 40,472 Z" fill="rgba(230,230,230,0.06)"/>
+        <line x1="40" y1="372" x2="760" y2="372" stroke="rgba(230,230,230,0.20)"/>
         <g font-family="'Geist Mono', monospace" font-size="8" fill="#a6a6a6" letter-spacing="0.14em">
           <text x="56" y="144">LABELS</text>
           <text x="56" y="392">ATTRIBUTES</text>
@@ -59,22 +59,22 @@
         <!-- Attributes: class, then the value it holds. -->
         <g font-family="'Geist', sans-serif" text-anchor="middle">
           <rect x="56" y="416" width="156" height="44" rx="6" fill="#171717"/>
-          <rect x="56" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="56" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="134" y="434" fill="#e6e6e6" font-size="12" font-weight="600">TDataStd_Name</text>
           <text x="134" y="450" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">width</text>
 
           <rect x="224" y="416" width="156" height="44" rx="6" fill="#171717"/>
-          <rect x="224" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="224" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="302" y="434" fill="#e6e6e6" font-size="12" font-weight="600">TDataStd_Real</text>
           <text x="302" y="450" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">40.0</text>
 
           <rect x="420" y="416" width="156" height="44" rx="6" fill="#171717"/>
-          <rect x="420" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="420" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="498" y="434" fill="#e6e6e6" font-size="12" font-weight="600">TDataStd_Name</text>
           <text x="498" y="450" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">part</text>
 
           <rect x="588" y="416" width="156" height="44" rx="6" fill="#171717"/>
-          <rect x="588" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="588" y="416" width="156" height="44" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="666" y="434" fill="#e6e6e6" font-size="12" font-weight="600">TNaming_NamedShape</text>
           <text x="666" y="450" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">a box</text>
         </g>

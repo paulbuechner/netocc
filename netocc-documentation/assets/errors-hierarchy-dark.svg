@@ -6,7 +6,7 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Zones: one per subtree of Standard_Failure. -->
-        <g fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.10)" stroke-width="0.8">
+        <g fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.18)" stroke-width="0.8">
           <rect x="40" y="112" width="312" height="628" rx="8"/>
           <rect x="480" y="152" width="280" height="208" rx="8"/>
           <rect x="480" y="380" width="280" height="148" rx="8"/>

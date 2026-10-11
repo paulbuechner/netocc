@@ -11,22 +11,22 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Loop fragment: TransferRoots translates root by root. -->
-        <rect x="344" y="272" width="320" height="72" rx="4" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.22)"/>
+        <rect x="344" y="272" width="320" height="72" rx="4" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.30)"/>
 
         <!-- Lifelines. -->
-        <line x1="160" y1="84" x2="160" y2="476" stroke="rgba(230,230,230,0.20)" stroke-dasharray="3,3"/>
-        <line x1="400" y1="84" x2="400" y2="476" stroke="rgba(230,230,230,0.20)" stroke-dasharray="3,3"/>
-        <line x1="640" y1="84" x2="640" y2="476" stroke="rgba(230,230,230,0.20)" stroke-dasharray="3,3"/>
+        <line x1="160" y1="84" x2="160" y2="476" stroke="rgba(230,230,230,0.28)" stroke-dasharray="3,3"/>
+        <line x1="400" y1="84" x2="400" y2="476" stroke="rgba(230,230,230,0.28)" stroke-dasharray="3,3"/>
+        <line x1="640" y1="84" x2="640" y2="476" stroke="rgba(230,230,230,0.28)" stroke-dasharray="3,3"/>
 
         <!-- Activation bars: the reader holds control for each call. -->
-        <g fill="#212121" stroke="#a6a6a6" stroke-width="0.8">
+        <g fill="#2c2c2c" stroke="#a6a6a6" stroke-width="0.8">
           <rect x="396" y="124" width="8" height="80"/>
           <rect x="396" y="252" width="8" height="120"/>
           <rect x="396" y="412" width="8" height="40"/>
         </g>
 
         <!-- Loop tab and guard. -->
-        <rect x="344" y="272" width="40" height="16" rx="2" fill="#171717" stroke="rgba(230,230,230,0.22)"/>
+        <rect x="344" y="272" width="40" height="16" rx="2" fill="#171717" stroke="rgba(230,230,230,0.30)"/>
         <text x="364" y="283" fill="#a6a6a6" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">LOOP</text>
         <text x="416" y="286" fill="#a6a6a6" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[each root entity]</text>
 
@@ -48,7 +48,7 @@
           <rect x="500" y="144" width="44" height="12" rx="2"/>
           <rect x="228" y="182" width="100" height="14" rx="2"/>
           <rect x="232" y="230" width="92" height="14" rx="2"/>
-          <rect x="492" y="300" width="60" height="12" rx="2" fill="#1b1b1b"/>
+          <rect x="492" y="300" width="60" height="12" rx="2" fill="#202020"/>
           <rect x="244" y="352" width="68" height="12" rx="2"/>
           <rect x="244" y="390" width="68" height="14" rx="2"/>
           <rect x="240" y="430" width="76" height="14" rx="2"/>
@@ -67,19 +67,19 @@
         </g>
 
         <!-- Callout below the lifelines: the result when there are several shapes. -->
-        <path d="M280,456 V488" fill="none" stroke="rgba(230,230,230,0.40)" stroke-dasharray="4,3"/>
+        <path d="M280,456 V488" fill="none" stroke="rgba(230,230,230,0.48)" stroke-dasharray="4,3"/>
         <circle cx="280" cy="454" r="2" fill="#e6e6e6"/>
         <text x="280" y="506" fill="#e6e6e6" font-size="14" font-style="italic" font-family="'Instrument Serif', serif" text-anchor="middle">a compound for several</text>
 
         <!-- Actors. -->
         <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#e6e6e6" text-anchor="middle">
           <rect x="72" y="40" width="176" height="44" rx="6" fill="#171717"/>
-          <rect x="72" y="40" width="176" height="44" rx="6" fill="rgba(166,166,166,0.10)" stroke="#8c8c8c"/>
+          <rect x="72" y="40" width="176" height="44" rx="6" fill="rgba(166,166,166,0.18)" stroke="#8c8c8c"/>
           <text x="160" y="66">your code</text>
           <rect x="312" y="40" width="176" height="44" rx="6" fill="#1f1f1f" stroke="#e6e6e6"/>
           <text x="400" y="66">STEPControl_Reader</text>
           <rect x="552" y="40" width="176" height="44" rx="6" fill="#171717"/>
-          <rect x="552" y="40" width="176" height="44" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="552" y="40" width="176" height="44" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="640" y="66">model of entities</text>
         </g>
       </g></svg>

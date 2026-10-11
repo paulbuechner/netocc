@@ -10,7 +10,7 @@
         <rect width="100%" height="100%" fill="#171717"/>
 
         <!-- Lifelines: your code 124, garbage collector 308, proxy 492, native object 676. -->
-        <g stroke="rgba(230,230,230,0.22)" stroke-width="1" stroke-dasharray="3,3">
+        <g stroke="rgba(230,230,230,0.30)" stroke-width="1" stroke-dasharray="3,3">
           <line x1="124" y1="96" x2="124" y2="512"/>
           <line x1="308" y1="96" x2="308" y2="512"/>
           <line x1="492" y1="96" x2="492" y2="512"/>
@@ -18,11 +18,11 @@
         </g>
 
         <!-- ALT fragment over all four lifelines. -->
-        <rect x="64" y="216" width="672" height="272" rx="4" fill="rgba(230,230,230,0.02)" stroke="rgba(230,230,230,0.22)" stroke-width="1"/>
-        <rect x="64" y="216" width="40" height="16" rx="2" fill="#171717" stroke="rgba(230,230,230,0.22)" stroke-width="1"/>
+        <rect x="64" y="216" width="672" height="272" rx="4" fill="rgba(230,230,230,0.04)" stroke="rgba(230,230,230,0.30)" stroke-width="1"/>
+        <rect x="64" y="216" width="40" height="16" rx="2" fill="#171717" stroke="rgba(230,230,230,0.30)" stroke-width="1"/>
         <text x="84" y="228" fill="#a6a6a6" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.12em">ALT</text>
         <text x="76" y="248" fill="#a6a6a6" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[disposed]</text>
-        <line x1="72" y1="360" x2="728" y2="360" stroke="rgba(230,230,230,0.20)" stroke-width="1" stroke-dasharray="4,3"/>
+        <line x1="72" y1="360" x2="728" y2="360" stroke="rgba(230,230,230,0.28)" stroke-width="1" stroke-dasharray="4,3"/>
         <text x="76" y="380" fill="#a6a6a6" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.04em">[dropped]</text>
 
         <!-- Activation bars on the proxy. -->
@@ -31,7 +31,7 @@
           <rect x="488" y="280" width="8" height="64" fill="#171717"/>
           <rect x="488" y="416" width="8" height="56" fill="#171717"/>
         </g>
-        <g fill="rgba(230,230,230,0.06)" stroke="#a6a6a6" stroke-width="0.8">
+        <g fill="rgba(230,230,230,0.12)" stroke="#a6a6a6" stroke-width="0.8">
           <rect x="488" y="136" width="8" height="64"/>
           <rect x="488" y="280" width="8" height="64"/>
           <rect x="488" y="416" width="8" height="56"/>
@@ -52,30 +52,30 @@
           <rect x="560" y="172" width="48" height="12" rx="2" fill="#171717"/>
           <text x="584" y="181" fill="#8c8c8c">CREATE</text>
 
-          <rect x="184" y="256" width="64" height="24" rx="2" fill="#1b1b1b"/>
+          <rect x="184" y="256" width="64" height="24" rx="2" fill="#202020"/>
           <text x="216" y="265" fill="#f08a59">CALL</text>
           <text x="216" y="276" fill="#f08a59" font-size="9" letter-spacing="0">Dispose()</text>
 
-          <rect x="540" y="304" width="88" height="24" rx="2" fill="#1b1b1b"/>
+          <rect x="540" y="304" width="88" height="24" rx="2" fill="#202020"/>
           <text x="584" y="313" fill="#8c8c8c">DELETE</text>
           <text x="584" y="324" fill="#8c8c8c">OR RELEASE REF</text>
 
-          <rect x="360" y="392" width="80" height="24" rx="2" fill="#1b1b1b"/>
+          <rect x="360" y="392" width="80" height="24" rx="2" fill="#202020"/>
           <text x="400" y="401" fill="#8c8c8c">FINALIZER</text>
           <text x="400" y="412" fill="#8c8c8c">ON GC THREAD</text>
 
-          <rect x="540" y="432" width="88" height="24" rx="2" fill="#1b1b1b"/>
+          <rect x="540" y="432" width="88" height="24" rx="2" fill="#202020"/>
           <text x="584" y="441" fill="#8c8c8c">DELETE</text>
           <text x="584" y="452" fill="#8c8c8c">OR RELEASE REF</text>
         </g>
 
         <!-- Actors, after the lifelines; the proxy is focal. -->
         <g font-family="'Geist', sans-serif" text-anchor="middle">
-          <rect x="48" y="40" width="152" height="56" rx="6" fill="rgba(166,166,166,0.10)" stroke="#8c8c8c"/>
+          <rect x="48" y="40" width="152" height="56" rx="6" fill="rgba(166,166,166,0.18)" stroke="#8c8c8c"/>
           <text x="124" y="64" fill="#e6e6e6" font-size="12" font-weight="600">your code</text>
           <text x="124" y="80" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">C#</text>
 
-          <rect x="232" y="40" width="152" height="56" rx="6" fill="rgba(230,230,230,0.03)" stroke="rgba(230,230,230,0.30)"/>
+          <rect x="232" y="40" width="152" height="56" rx="6" fill="rgba(230,230,230,0.06)" stroke="rgba(230,230,230,0.38)"/>
           <text x="308" y="64" fill="#e6e6e6" font-size="12" font-weight="600">garbage collector</text>
           <text x="308" y="80" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">finalizer thread</text>
 

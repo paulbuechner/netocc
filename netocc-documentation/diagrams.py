@@ -57,8 +57,14 @@ DARK = {
     "#bf4520": "#f08a59",  # accent
     "#2e5aa8": "#739fdf",  # link
 }
-# rgba() bases -> (dark base, alpha factor): tints of the accent need more alpha on black to read
-DARK_RGBA = {INK: (DARK_INK, 1.0), (79, 93, 117): ((166, 166, 166), 1.0), ACCENT: (DARK_ACCENT, 1.6)}
+# rgba() bases -> (dark base, alpha): tints need more alpha on black to read, the faint ones most (a store's 5% fill
+# would match a node's); ink_alpha is continuous, so the order of the tints holds
+DARK_RGBA = {INK: (DARK_INK, lambda a: ink_alpha(a)), (79, 93, 117): ((166, 166, 166), lambda a: ink_alpha(a)),
+             ACCENT: (DARK_ACCENT, lambda a: a * 1.6)}
+
+
+def ink_alpha(alpha):
+    return alpha + min(alpha, 0.08)
 
 
 def font_file(path):
@@ -153,7 +159,7 @@ def dark_color(color, html):
     if min(rgb) >= 200:  # a tint composited over the paper, as a label mask on a zone: composite the dark tint
         if rgb[0] - rgb[2] > 6:
             return hex_color(blend(DARK_PAPER, DARK_ACCENT, (PAPER[2] - rgb[2]) / (PAPER[2] - ACCENT[2]) * 1.6))
-        return hex_color(blend(DARK_PAPER, DARK_INK, (PAPER[0] - sum(rgb) / 3) / (PAPER[0] - sum(INK) / 3)))
+        return hex_color(blend(DARK_PAPER, DARK_INK, ink_alpha((PAPER[0] - sum(rgb) / 3) / (PAPER[0] - sum(INK) / 3))))
     sys.exit(f"{html}: {color} has no dark counterpart: use the skin's colors or add it to DARK")
 
 
@@ -162,8 +168,8 @@ def dark_rgba(match, html):
     alpha = float(match.group(4))
     if rgb not in DARK_RGBA:
         sys.exit(f"{html}: {match.group(0)} has no dark counterpart: use the skin's colors or add it to DARK_RGBA")
-    base, factor = DARK_RGBA[rgb]
-    return f"rgba({','.join(str(c) for c in base)},{min(alpha * factor, 1.0):.2f})"
+    base, scale = DARK_RGBA[rgb]
+    return f"rgba({','.join(str(c) for c in base)},{min(scale(alpha), 1.0):.2f})"
 
 
 def darken(svg, html):

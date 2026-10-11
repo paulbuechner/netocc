@@ -33,7 +33,7 @@
         <!-- Main chain. -->
         <g font-family="'Geist', sans-serif" text-anchor="middle">
           <rect x="60" y="40" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="40" width="200" height="48" rx="6" fill="rgba(166,166,166,0.10)" stroke="#8c8c8c"/>
+          <rect x="60" y="40" width="200" height="48" rx="6" fill="rgba(166,166,166,0.18)" stroke="#8c8c8c"/>
           <text x="160" y="68" fill="#e6e6e6" font-size="12" font-weight="600">TopoDS_Shape</text>
 
           <rect x="60" y="144" width="200" height="48" rx="6" fill="#171717"/>
@@ -42,12 +42,12 @@
           <text x="160" y="179" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">on each face</text>
 
           <rect x="60" y="248" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="248" width="200" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="60" y="248" width="200" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="160" y="268" fill="#e6e6e6" font-size="12" font-weight="600">nodes + triangles</text>
           <text x="160" y="283" fill="#a6a6a6" font-size="9" font-family="'Geist Mono', monospace">in the face's coordinates</text>
 
           <rect x="60" y="352" width="200" height="48" rx="6" fill="#171717"/>
-          <rect x="60" y="352" width="200" height="48" rx="6" fill="rgba(230,230,230,0.05)" stroke="#a6a6a6"/>
+          <rect x="60" y="352" width="200" height="48" rx="6" fill="rgba(230,230,230,0.10)" stroke="#a6a6a6"/>
           <text x="160" y="380" fill="#e6e6e6" font-size="12" font-weight="600">vertex and index buffers</text>
         </g>
 
