@@ -122,26 +122,72 @@ html:has(dialog.diagram-lightbox[open]) {
   }
 }
 
-/* The start page as wide as an article beside the navigation, at every window width: an article page's main is a flex
-   row of the table of contents (flex .35, at most 360px, gone below 768px), the article (flex 1, 3rem margins, 1rem
-   below 992px, none below 768px) and the affix (230px, gone at 1140px and below). The landing layout has no table of
-   contents or affix, so empty pseudo-elements take their places. */
-body[data-layout=landing] > main::before {
-  content: "";
-  flex: .35;
-  max-width: 360px;
+/* The page across the whole window, like shadcn's docs: the header's brand and links at the left edge, search and
+   theme at the right; the table of contents at the left edge and "In this article" at the right, both 264px; the
+   breadcrumb, article and next-article links centred between them at a reading width of 820px (the diagrams are 800
+   wide). DocFX centres a container capped at 1768px and gives the table of contents a flex share instead. The start
+   page's landing layout has neither column: empty pseudo-elements take their places, so its text sits where every
+   article's does. Below 768px DocFX's own layout stays: the table of contents is an offcanvas panel. */
+@media (min-width: 768px) {
+  body > header > nav > .container-xxl,
+  body > main.container-xxl,
+  body > footer > .container-xxl {
+    max-width: none;
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+
+  html body:not([data-search])[data-layout=""] > main > .toc-offcanvas,
+  body[data-layout=landing] > main::before {
+    flex: 0 0 264px;
+    max-width: 264px;
+  }
+
+  body[data-layout=landing] > main::before,
+  body[data-layout=landing] > main::after {
+    content: "";
+  }
+
+  /* shadcn's divider: a faint line down the table of contents' right edge, as tall as the sticky column, fading out
+     at the top and the bottom */
+  html body:not([data-search])[data-layout=""] > main > .toc-offcanvas {
+    padding-right: 1.25rem;
+    border-right: 1px solid transparent;
+    border-image: linear-gradient(to bottom, transparent, var(--bs-border-color-translucent) 15%,
+                                  var(--bs-border-color-translucent) 85%, transparent) 1;
+  }
+
+  html body:not([data-search])[data-layout=""] > main > .affix,
+  body[data-layout=landing] > main::after {
+    flex: 0 0 264px;
+    width: 264px;
+  }
+
+  html body:not([data-search])[data-layout=""] > main > .content,
+  body[data-layout=landing] > main > .content {
+    flex: 1 1 0;
+    min-width: 0;
+    align-items: center;
+  }
+
+  html body:not([data-search])[data-layout=""] > main > .content > *,
+  body[data-layout=landing] > main > .content > * {
+    width: 100%;
+    max-width: 820px;
+  }
 }
 
-body[data-layout=landing] > main > .content {
-  flex: 1;
-  min-width: 0;
-  margin: 0 3rem;
+@media (min-width: 992px) {
+  html body:not([data-search])[data-layout=""] > main > .content,
+  body[data-layout=landing] > main > .content {
+    margin: 0 2rem;
+  }
 }
 
-body[data-layout=landing] > main::after {
-  content: "";
-  flex: none;
-  width: 230px;
+@media (min-width: 768px) and (max-width: 991.98px) {
+  body[data-layout=landing] > main > .content {
+    margin: 0 1rem;
+  }
 }
 
 @media only screen and (max-width: 1140px) {
@@ -150,19 +196,9 @@ body[data-layout=landing] > main::after {
   }
 }
 
-@media (max-width: 991.98px) {
-  body[data-layout=landing] > main > .content {
-    margin: 0 1rem;
-  }
-}
-
 @media (max-width: 767.98px) {
   body[data-layout=landing] > main::before {
     display: none;
-  }
-
-  body[data-layout=landing] > main > .content {
-    margin: 0;
   }
 }
 
@@ -277,4 +313,9 @@ article :is(.IMPORTANT, .CAUTION) {
   color: var(--bs-danger-text-emphasis);
   background-color: var(--bs-danger-bg-subtle);
   border-color: var(--bs-danger-border-subtle);
+}
+
+/* No footer: the license note is in Licensing and the README. */
+body > footer {
+  display: none;
 }
