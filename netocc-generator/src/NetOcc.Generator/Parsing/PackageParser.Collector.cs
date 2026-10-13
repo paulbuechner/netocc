@@ -300,7 +300,8 @@ internal sealed partial class PackageParser
                            e.QualifiedName.Contains("::", StringComparison.Ordinal)
                              ? e.QualifiedName
                              : null,
-                           underlying == "int" ? null : underlying);
+                           underlying == "int" ? null : underlying,
+                           e.TypedefNameForAnonDecl is not null);
     }
 
     // the declaration writes an underlying type: every enum class, an unscoped enum with ": type"

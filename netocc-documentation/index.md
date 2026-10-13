@@ -39,14 +39,14 @@ How C++ signatures look in C#: [From C++ to C#](articles/mapping.md).
 
 ## Covered
 
-All 365 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, ApplicationFramework and DataExchange modules, and of Visualization's TKService, TKV3d, TKOpenGl (the driver) and TKMeshVS: geometry, topology, booleans, fillets, offsets, sweeps, shape healing, meshing, HLR, OCAF and XCAF documents, STEP, IGES, STL, glTF, OBJ, PLY and VRML, and 3D views.
+All 365 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, ApplicationFramework and DataExchange modules, and of Visualization's TKService, TKV3d, TKOpenGl (the driver) and TKMeshVS: geometry, topology, booleans, fillets, offsets, sweeps, shape healing, meshing, HLR, OCAF and XCAF documents, STEP, IGES, STL, glTF, OBJ, PLY and VRML, and 3D views. NetOcc.Vtk puts shapes into VTK scenes, on [NetVtk](https://github.com/paulbuechner/netvtk): [VTK scenes](articles/vtk.md).
 
 ## Where to go
 
 | | |
 |---|---|
 | **Start** | [Introduction](articles/introduction.md): OCCT's layers and packages. [Getting started](articles/getting-started.md): install, a first part. |
-| **Guide** | [Geometry](articles/geometry.md), [Topology](articles/topology.md), [Modeling](articles/modeling.md), [Analysis and repair](articles/analysis.md), [Meshing](articles/meshing.md), [Files](articles/data-exchange.md), [Assemblies](articles/xcaf.md), [Documents](articles/ocaf.md), [3D views](articles/visualization.md) |
+| **Guide** | [Geometry](articles/geometry.md), [Topology](articles/topology.md), [Modeling](articles/modeling.md), [Analysis and repair](articles/analysis.md), [Meshing](articles/meshing.md), [Files](articles/data-exchange.md), [Assemblies](articles/xcaf.md), [Documents](articles/ocaf.md), [3D views](articles/visualization.md), [VTK scenes](articles/vtk.md) |
 | **Concepts** | [From C++ to C#](articles/mapping.md), [Object lifetimes](articles/lifetimes.md), [Errors](articles/errors.md), [How NetOcc works](articles/architecture.md) |
 | **Reference** | [Class index](classes/index.md): every type, linked to OCCT's reference manual. [Platforms](articles/platforms.md), [Building from source](articles/building.md), [Troubleshooting](articles/troubleshooting.md) |
 | **Development** | [Design decisions](articles/design.md), [Pitfalls](articles/pitfalls.md), [Licensing](articles/licensing.md), [Skipped members](articles/skipped.md) |

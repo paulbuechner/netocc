@@ -58,7 +58,7 @@ Needs Python 3.10+, vcpkg (`VCPKG_ROOT`), CMake + Ninja, the .NET 10 SDK with th
 
 ```bash
 python build.py tools                        # SWIG 4.5.1 from conda-forge into .tools/ (micromamba)
-python build.py occt --triplet x64-windows   # OCCT 8.0.1 via vcpkg manifest, all state in .vcpkg/
+python build.py occt --triplet x64-windows   # OCCT 8.0.1 via vcpkg manifest (TKIVtk on NetVtk's VTK too), all state in .vcpkg/
 python build.py generate                     # SWIG -> build/generated/{cxx,cs}
 python build.py native --triplet x64-windows # NetOcc libraries + OCCT libs -> artifacts/runtimes/win-x64/native
 python build.py test --arch x64              # NUnit on every framework + net35 on CLR 2
@@ -67,7 +67,7 @@ python build.py pack --rids win-x64          # NuGet packages, version <OCCT ver
 python build.py change fixed "..."           # a changelog entry for the next release, in changes/
 ```
 
-Triplets: `x64-windows`, `x86-windows`, `x64-linux-dynamic`, `arm64-osx-dynamic` (overlays in `vcpkg/triplets`: release-only, OCCT built with its precondition checks enabled). Linux locally: `docker/linux-x64.Dockerfile`.
+Triplets: `x64-windows`, `x86-windows`, `x64-linux-dynamic`, `arm64-osx-dynamic` (overlays in `vcpkg/triplets`, NetVtk's copied: release-only). OCCT's options, its precondition checks among them, are in the overlay port `vcpkg/ports/opencascade`; VTK comes from NetVtk's vcpkg registry, the same build as NetVtk's. NetOcc's packages hold neither TKIVtk nor VTK: NetOcc.Vtk ([netocc-vtk](../netocc-vtk)) ships TKIVtk, NetVtk ships VTK. Linux locally: `docker/linux-x64.Dockerfile`.
 
 ## Layout
 

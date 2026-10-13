@@ -16,6 +16,10 @@ One AnyCPU assembly: .NET Framework 3.5, 4.5 to 4.8, .NET 6, 8 and 10, and netst
 
 .NET apps load the natives from `runtimes/<rid>/native`. .NET Framework apps get them in `x64\` and `x86\` next to the app, so AnyCPU works; NetOcc picks the folder for the process.
 
+## NetOcc.Vtk
+
+The same frameworks and RIDs. `NetOcc.Vtk.runtime.<rid>` holds NetOccVtk and OCCT's TKIVtk only: OCCT's other libraries come with `NetOcc.runtime.<rid>`, VTK's with `NetVtk.runtime.<rid>`. On Linux, VTK needs X11, GL and EGL libraries besides; its rendering needs OpenGL 3.2.
+
 ## 32-bit
 
 On win-x86, `size_t` is four bytes: a `ulong` above 32 bits throws `OcctException` (`Standard_OutOfRange`) instead of wrapping around, as C `long`, which is 32 bits on Windows, does everywhere.

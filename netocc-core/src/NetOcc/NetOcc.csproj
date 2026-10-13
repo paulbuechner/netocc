@@ -30,6 +30,8 @@
 
   <ItemGroup>
     <InternalsVisibleTo Include="NetOcc.Tests" />
+    <!-- NetOcc.Vtk's SWIG modules import NetOcc's: its proxies' pointers and constructors, the typemaps' helpers -->
+    <InternalsVisibleTo Include="NetOcc.Vtk" />
   </ItemGroup>
 
   <!-- NuGet (python build.py pack): this assembly; the natives live in NetOcc.runtime.<rid> (pack/) -->

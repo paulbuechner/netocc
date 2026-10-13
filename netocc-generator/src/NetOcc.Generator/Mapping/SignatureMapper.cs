@@ -15,7 +15,11 @@ namespace NetOcc.Generator.Mapping;
 /// <c>const&amp;</c> → <c>in</c>, handles ⇄ proxies, strings and GUIDs through the common typemaps.
 /// Anything else is skipped with a reason.
 /// </summary>
-internal sealed partial class SignatureMapper(TypeRegistry registry)
+/// <param name="fixedLongLong">
+/// <c>long long</c> is the same type on every platform in the collections these packages use: VTK's
+/// vtkIdType (TKIVtk's IVtk_IdType), not <c>int64_t</c>, which is <c>long</c> on Linux.
+/// </param>
+internal sealed partial class SignatureMapper(TypeRegistry registry, bool fixedLongLong = false)
 {
   // builtins with the same C# width on every platform, and their C# type: char its byte, whose sign
   // differs per platform (C long, 32-bit on Windows and 64-bit elsewhere, has its own cases: a C#
@@ -384,6 +388,19 @@ internal sealed partial class SignatureMapper(TypeRegistry registry)
       return Handle(n, spelled, suffix, byMutableReference);
     }
 
+    // vtkSmartPointer<T> of NetVtk's T: the object, as T* (NetVtkInterop.i)
+    if (n.Name == "vtkSmartPointer")
+    {
+      return n.TemplateArguments is [NamedType { TemplateArguments.Count: 0 } target]
+             && !byMutableReference
+             && registry.Class(target.Name) is { Kind: WrapKind.Vtk or WrapKind.VtkDerived } vtk
+        ? vtk.Kind == WrapKind.Vtk
+          ? VtkObject(target.Name, $"{spelled.Spelling}{suffix}", vtk)
+          : TypeMapping.Of($"{spelled.Spelling}{suffix}", target.Name, target.Name, vtk.Use)
+        : TypeMapping.Skipped(
+          $"{spelled.Spelling}{suffix}: a smart pointer NetVtkInterop.i doesn't map");
+    }
+
     if (n.TemplateArguments.Count > 0)
     {
       var (instantiation, uses, skip) = Collection(n);
@@ -403,6 +420,12 @@ internal sealed partial class SignatureMapper(TypeRegistry registry)
     if (registry.Class(n.Name) is not { } known)
     {
       return TypeMapping.Skipped($"class {n.Name} is not wrapped");
+    }
+
+    // a VTK object goes by pointer: its reference count is its lifetime
+    if (known.Kind is WrapKind.Vtk or WrapKind.VtkDerived)
+    {
+      return TypeMapping.Skipped($"{spelled.Spelling}{suffix}: a VTK object by value or reference");
     }
 
     // a struct: const& is a pointer to the caller's struct (in), & lets the callee write it (ref)
@@ -460,7 +483,7 @@ internal sealed partial class SignatureMapper(TypeRegistry registry)
         ? mapped.Type.CsType[3..]
         : mapped.Type.CsType
     }, null);
-    if (n.Name == "opencascade::handle"
+    if (n.Name is "opencascade::handle" or "vtkSmartPointer"
         || n.TemplateArguments.Count > 0
         || TypeRegistry.TypemappedClasses.Contains(n.Name)
         || n.Name.StartsWith("std::", StringComparison.Ordinal))

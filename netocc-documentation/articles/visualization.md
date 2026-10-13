@@ -1,6 +1,6 @@
 # 3D views
 
-OCCT draws with OpenGL into a native window: an HWND on Windows, an X11 window on Linux, an NSView on macOS. The UI framework provides the window, NetOcc's `Aspect_Window.FromNativeHandle` wraps it for the view.
+OCCT draws with OpenGL into a native window: an HWND on Windows, an X11 window on Linux, an NSView on macOS. The UI framework provides the window, NetOcc's `Aspect_Window.FromNativeHandle` wraps it for the view. For shapes in VTK scenes, next to simulation results, see [VTK scenes](vtk.md).
 
 <img class="diagram-light" src="../assets/visualization-viewer.svg" width="800" height="348" alt="The objects behind a 3D view" loading="lazy">
 <img class="diagram-dark" src="../assets/visualization-viewer-dark.svg" width="800" height="348" alt="The objects behind a 3D view" loading="lazy">

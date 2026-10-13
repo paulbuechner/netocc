@@ -22,7 +22,7 @@ internal sealed partial class InterfaceWriter
 {
   private void WriteClass(StringBuilder body, ClassModel c, ModuleContext module)
   {
-    var baseName = c.Name == RootTransient
+    var baseName = c.Name == RootTransient || Kind(c) == WrapKind.VtkDerived
       ? null
       : c.Ancestors.FirstOrDefault(a => registry.Class(a) is { Kind: not WrapKind.ValueType })
         ?? (Kind(c) == WrapKind.Transient ? RootTransient : null);
@@ -39,7 +39,11 @@ internal sealed partial class InterfaceWriter
                       ? $"class {c.Name} {{"
                       : $"class {c.Name} : public {baseName} {{")
       .AppendLine("public:");
-    Constructors(body, c, module, c.Constructors, IsDirector(c));
+    if (Kind(c) != WrapKind.VtkDerived)
+    {
+      Constructors(body, c, module, c.Constructors, IsDirector(c));
+    }
+
     Methods(body, c, module);
     if (IsDirector(c))
     {
@@ -155,9 +159,11 @@ internal sealed partial class InterfaceWriter
   /// </summary>
   private bool IsKept(CppType type, MappedType mapped, HashSet<string> referenced)
   {
+    // a VTK object counts its references: what keeps it registers one (NetVtkInterop.i)
     if (Target(type) is not { } target
         || mapped.CsType == SignatureMapper.CsAddress
-        || registry.Class(target) is { Kind: WrapKind.ValueType })
+        || registry.Class(target) is
+          { Kind: WrapKind.ValueType or WrapKind.Vtk or WrapKind.VtkDerived })
     {
       return false;
     }
@@ -204,6 +210,13 @@ internal sealed partial class InterfaceWriter
           module.Skipped.Add($"{label}: {rangeSkip}");
         }
 
+        continue;
+      }
+
+      // a VTK class's New() is its C# constructor (%netvtk_new), and NewInstance() a new object of
+      // its class, which C# makes with new
+      if (Kind(c) == WrapKind.VtkDerived && m.Name is "New" or "NewInstance")
+      {
         continue;
       }
 

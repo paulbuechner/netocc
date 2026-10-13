@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\..\NetVtk.props" />
+
+  <PropertyGroup>
+    <!-- NetOcc's frameworks, which NetVtk has too -->
+    <TargetFrameworks>netstandard2.0;net35;net45;net452;net462;net6.0;net8.0;net10.0</TargetFrameworks>
+    <CheckEolTargetFramework>false</CheckEolTargetFramework>
+    <AssemblyName>NetOcc.Vtk</AssemblyName>
+    <RootNamespace>OCC.Core</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <!-- as NetOcc's: SWIG proxies hide base members (VTK's SafeDownCast, IsA) and have no doc comments -->
+    <NoWarn>$(NoWarn);CS0108;CS0114;CS1591;CS8981;CS0612;CS0618</NoWarn>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NetOccVtkGeneratedCs>$(MSBuildThisFileDirectory)..\..\build\generated\cs</NetOccVtkGeneratedCs>
+  </PropertyGroup>
+
+  <!-- SWIG output (python build.py generate); not committed -->
+  <ItemGroup>
+    <Compile Include="$(NetOccVtkGeneratedCs)\**\*.cs" Link="Generated\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <!-- NetOcc at this version (the same release), NetVtk at exactly the release whose VTK TKIVtk is built on -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\netocc-core\src\NetOcc\NetOcc.csproj" />
+    <PackageReference Include="NetVtk" Version="[$(NetVtkVersion)]" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="NetOcc.Vtk.Tests" />
+  </ItemGroup>
+
+  <!-- NuGet (python build.py pack): this assembly; NetOccVtk and TKIVtk live in NetOcc.Vtk.runtime.<rid> (pack/) -->
+  <PropertyGroup>
+    <Version Condition="'$(Version)' == ''">0.0.0-dev</Version>
+    <Authors>Paul Büchner</Authors>
+    <Copyright>Copyright (c) 2026 Paul Büchner</Copyright>
+    <Description>OCCT shapes in VTK scenes: C# bindings for Open CASCADE Technology's TKIVtk (IVtk, IVtkOCC, IVtkVTK, IVtkTools) on NetOcc and NetVtk. IVtkTools_ShapeDataSource feeds a shape into VTK pipelines, IVtkTools_ShapePicker picks its sub-shapes. For .NET Framework 3.5+, .NET 6+ and netstandard2.0, on Windows (x64, x86), Linux (x64) and macOS (arm64).</Description>
+    <PackageTags>occt;opencascade;vtk;cad;cae;visualization;picking</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://paulbuechner.github.io/netocc/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/paulbuechner/netocc</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" Visible="false" />
+  </ItemGroup>
+
+  <!-- build.py pack sets NetOccVtkRuntimeRids (win-x64;win-x86;...): one dependency per RID, same version -->
+  <ItemGroup Condition="'$(NetOccVtkRuntimeRids)' != ''">
+    <NetOccVtkRuntimeRid Include="$(NetOccVtkRuntimeRids)" />
+    <PackageReference Include="@(NetOccVtkRuntimeRid->'NetOcc.Vtk.runtime.%(Identity)')" Version="$(Version)" PrivateAssets="none" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+  </ItemGroup>
+
+  <Target Name="NetOccVtkCheckGenerated" BeforeTargets="CoreCompile">
+    <Error Condition="!Exists('$(NetOccVtkGeneratedCs)')" Text="SWIG output missing: run 'python build.py generate' first." />
+  </Target>
+
+</Project>

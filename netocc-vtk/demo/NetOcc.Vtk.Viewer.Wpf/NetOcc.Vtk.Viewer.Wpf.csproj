@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>The NetOcc.Vtk demo: an OCCT part and a temperature on it in one VTK scene, with a scalar bar, and faces picked with IVtkTools_ShapePicker; WPF, Windows.</Description>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <RootNamespace>NetOcc.Vtk.Viewer</RootNamespace>
+    <AssemblyName>NetOcc.Vtk.Viewer.Wpf</AssemblyName>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <!-- the source-generated P/Invoke (LibraryImport) and the window procedure's function pointer -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Authors>Paul Büchner</Authors>
+    <Copyright>Copyright (c) 2026 Paul Büchner</Copyright>
+    <NetOccArtifacts>$(MSBuildThisFileDirectory)..\..\..\netocc-core\artifacts\runtimes</NetOccArtifacts>
+    <NetOccVtkArtifacts>$(MSBuildThisFileDirectory)..\..\artifacts\runtimes</NetOccVtkArtifacts>
+  </PropertyGroup>
+
+  <!-- on the projects, as the tests: NetOcc's natives and NetOcc.Vtk's next to the app; VTK's come with NetVtk -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NetOcc.Vtk\NetOcc.Vtk.csproj" />
+    <None Include="$(NetOccArtifacts)\win-x64\native\*;$(NetOccVtkArtifacts)\win-x64\native\*" Link="x64\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+
+</Project>

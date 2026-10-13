@@ -20,7 +20,12 @@ License terms
   vcpkg-configuration.json. One of those patches modifies
   src/Visualization/TKService/Image/Image_AlienPixMap.cxx. Build options:
   BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF, USE_TBB=ON, USE_MMGR_TYPE=TBB (see vcpkg.json and
-  vcpkg/triplets).
+  vcpkg/ports/opencascade).
+- NetOcc.Vtk (netocc-vtk) and its native library NetOccVtk: MIT, as NetOcc's; NetOccVtk incorporates
+  material from OCCT's and VTK's header files. NetOcc.Vtk.runtime.<rid> ships OCCT's TKIVtk, under OCCT's
+  terms above; the overlay port's patch 0007 modifies src/Visualization/TKIVtk/IVtk/IVtk_Types.hxx. VTK's
+  libraries (BSD 3-Clause) come with NetVtk's runtime packages; NetOcc's own packages hold neither TKIVtk
+  nor VTK.
 
 Third-party libraries built by vcpkg and shipped next to OCCT
 ------------------------------------------------------------

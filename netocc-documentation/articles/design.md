@@ -66,9 +66,9 @@ Hand-written, in `netocc-core/src/SWIG_files/common/`; every generated module in
 
 ## OCCT through vcpkg
 
-- **Manifest mode:** `netocc-core/vcpkg.json` depends on `opencascade` (FreeType, RapidJSON, TBB; no FreeImage or VTK), `vcpkg-configuration.json` pins the registry's git baseline, and an override pins OCCT's version. TBB comes with hwloc, its default on Windows and Linux: the port asks for TBB's defaults, and only an overlay port would drop it.
+- **Manifest mode:** `netocc-core/vcpkg.json` depends on `opencascade` (FreeType, RapidJSON, TBB, and VTK for NetOcc.Vtk from NetVtk's registry; no FreeImage), `vcpkg-configuration.json` pins the registry's git baseline, and an override pins OCCT's version. TBB comes with hwloc, its default on Windows and Linux: the port asks for TBB's defaults, and only an overlay port would drop it.
 - **Nothing global:** `build.py occt` puts the install, buildtree, packages, downloads, registry cache and binary cache under `netocc-core/.vcpkg/`.
-- **Overlay triplets:** release builds only, and OCCT's precondition checks on (`BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF`): release OCCT compiles them out by default, and bad input then crashes instead of throwing.
+- **Overlay triplets** (NetVtk's, copied: the same VTK build): release builds only. **The opencascade overlay port** keeps OCCT's precondition checks on (`BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF`): release OCCT compiles them out by default, and bad input then crashes instead of throwing.
 - **OCCT allocates through oneTBB** (`USE_MMGR_TYPE=TBB`): BRepMesh takes blocks of 1 MB per face, which the system allocator maps and unmaps each time; meshing a box took as long in native C++ as through NetOcc. Not chosen: jemalloc (not in the pinned port), a smaller block size in BRepMesh (a patch to keep).
 - **Caching:** CI keeps each triplet's binary archives in the Actions cache, pruned to what the install uses and saved when the set changes.
 - **The toolkit map** comes from vcpkg's buildtree, which keeps OCCT's CMake lists the install leaves out.

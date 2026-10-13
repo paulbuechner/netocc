@@ -1,0 +1,17 @@
+# netocc-gen generate --config config/vtk.yaml --core ../netocc-vtk --netvtk <NetVtk's swig/>: NetOcc.Vtk's modules,
+# OCCT's TKIVtk on NetOcc's modules (imported) and NetVtk's VTK objects (NetVtkInterop.i). Hand-edited.
+
+generate:
+  - TKIVtk
+
+# one native library for all of them, apart from NetOcc's
+library: NetOccVtk
+
+# NetOcc's modules, which these import: scanned for their types, never written by this config
+import: ../../netocc-core/src/SWIG_files/wrapper
+
+# IVtk_IdType is vtkIdType, long long on every platform: its collections (picked shape ids) are C#'s
+fixed_long_long: true
+
+# netocc-documentation's skipped-members page reads ../log/skips: NetOcc.Vtk's go beside its folder
+skips: ../../netocc-vtk/log/skips

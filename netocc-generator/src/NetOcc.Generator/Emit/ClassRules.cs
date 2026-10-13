@@ -68,11 +68,14 @@ internal static class ClassRules
     c.Traits.IsTransient
       ? WrapKind.Transient
       :
-      c.Traits is
-        { IsCopyable: true, IsAbstract: false, IsCreatable: true, HasPublicDestructor: true }
-        ?
-        WrapKind.ValueClass
-        : WrapKind.Plain;
+      c.Ancestors.Contains("vtkObjectBase")
+        ? WrapKind.VtkDerived
+        :
+        c.Traits is
+          { IsCopyable: true, IsAbstract: false, IsCreatable: true, HasPublicDestructor: true }
+          ?
+          WrapKind.ValueClass
+          : WrapKind.Plain;
 
   /// <summary>The package's classes that get proxies: selected, not covered otherwise.</summary>
   public static IEnumerable<ClassModel> Proxied(PackageModel package, PackageConfig config) =>

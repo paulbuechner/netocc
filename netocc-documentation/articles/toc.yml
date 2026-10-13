@@ -22,6 +22,8 @@
     href: ocaf.md
   - name: 3D views
     href: visualization.md
+  - name: VTK scenes
+    href: vtk.md
 - name: Concepts
   items:
   - name: From C++ to C#

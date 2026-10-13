@@ -1,0 +1,8 @@
+{
+  "NetOccVtk": [
+    "IVtk",
+    "IVtkOCC",
+    "IVtkVTK",
+    "IVtkTools"
+  ]
+}

@@ -12,6 +12,7 @@ vcpkg_from_github(
         0004-cmake-add-additional-path-extraction-for-OpenCASCADE.patch
         0005-drop-bin-letter.patch
         0006-step-progress-of-related-and-mapped-representations.patch
+        0007-ivtk-64-bit-ids-on-32-bit-windows.patch
 )
 
 if (VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
@@ -44,6 +45,11 @@ vcpkg_cmake_configure(
         -DINSTALL_DIR_SCRIPT=share/trash # not relocatable
         -DINSTALL_TEST_CASES=OFF
         -DUSE_TK=OFF
+        # keep OCCT's precondition checks (Standard_*_Raise_if) in release: NetOcc turns them into OcctException
+        -DBUILD_RELEASE_DISABLE_EXCEPTIONS=OFF
+        # allocate through oneTBB's scalable allocator (the tbb feature): BRepMesh takes blocks of 1 MB per face, which
+        # the system allocator maps and unmaps each time (meshing 2-3.5x faster, 3-4x in parallel)
+        -DUSE_MMGR_TYPE=TBB
 )
 
 vcpkg_cmake_install()

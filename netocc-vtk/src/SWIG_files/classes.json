@@ -1,0 +1,177 @@
+{
+  "IVtk": [
+    {
+      "name": "IVtk_DisplayMode",
+      "kind": "enum",
+      "cpp": "IVtk_DisplayMode",
+      "header": "IVtk_Types.hxx"
+    },
+    {
+      "name": "IVtk_IShape",
+      "kind": "class",
+      "cpp": "IVtk_IShape"
+    },
+    {
+      "name": "IVtk_IShapeData",
+      "kind": "class",
+      "cpp": "IVtk_IShapeData"
+    },
+    {
+      "name": "IVtk_IShapeMesher",
+      "kind": "class",
+      "cpp": "IVtk_IShapeMesher"
+    },
+    {
+      "name": "IVtk_IShapePickerAlgo",
+      "kind": "class",
+      "cpp": "IVtk_IShapePickerAlgo"
+    },
+    {
+      "name": "IVtk_IView",
+      "kind": "class",
+      "cpp": "IVtk_IView"
+    },
+    {
+      "name": "IVtk_Interface",
+      "kind": "class",
+      "cpp": "IVtk_Interface"
+    },
+    {
+      "name": "IVtk_MeshType",
+      "kind": "enum",
+      "cpp": "IVtk_MeshType",
+      "header": "IVtk_Types.hxx"
+    },
+    {
+      "name": "IVtk_SelectionMode",
+      "kind": "enum",
+      "cpp": "IVtk_SelectionMode",
+      "header": "IVtk_Types.hxx"
+    },
+    {
+      "name": "NCollection_List_Handle_IVtk_IShape",
+      "kind": "class",
+      "cpp": "NCollection_List",
+      "instance": true
+    },
+    {
+      "name": "NCollection_List_long_long",
+      "kind": "class",
+      "cpp": "NCollection_List",
+      "instance": true
+    },
+    {
+      "name": "NCollection_Mat4_double",
+      "kind": "class",
+      "cpp": "NCollection_Mat4",
+      "instance": true
+    },
+    {
+      "name": "NCollection_Vec2_double",
+      "kind": "class",
+      "cpp": "NCollection_Vec2",
+      "instance": true
+    },
+    {
+      "name": "NCollection_Vec2_float",
+      "kind": "class",
+      "cpp": "NCollection_Vec2",
+      "instance": true
+    },
+    {
+      "name": "NCollection_Vec3_double",
+      "kind": "class",
+      "cpp": "NCollection_Vec3",
+      "instance": true
+    },
+    {
+      "name": "NCollection_Vec3_float",
+      "kind": "class",
+      "cpp": "NCollection_Vec3",
+      "instance": true
+    },
+    {
+      "name": "NCollection_Vec4_double",
+      "kind": "class",
+      "cpp": "NCollection_Vec4",
+      "instance": true
+    }
+  ],
+  "IVtkOCC": [
+    {
+      "name": "IVtkOCC_SelectableObject",
+      "kind": "class",
+      "cpp": "IVtkOCC_SelectableObject"
+    },
+    {
+      "name": "IVtkOCC_Shape",
+      "kind": "class",
+      "cpp": "IVtkOCC_Shape"
+    },
+    {
+      "name": "IVtkOCC_ShapeMesher",
+      "kind": "class",
+      "cpp": "IVtkOCC_ShapeMesher"
+    },
+    {
+      "name": "IVtkOCC_ShapePickerAlgo",
+      "kind": "class",
+      "cpp": "IVtkOCC_ShapePickerAlgo"
+    },
+    {
+      "name": "IVtkOCC_ViewerSelector",
+      "kind": "class",
+      "cpp": "IVtkOCC_ViewerSelector"
+    }
+  ],
+  "IVtkVTK": [
+    {
+      "name": "IVtkVTK_ShapeData",
+      "kind": "class",
+      "cpp": "IVtkVTK_ShapeData"
+    },
+    {
+      "name": "IVtkVTK_View",
+      "kind": "class",
+      "cpp": "IVtkVTK_View"
+    }
+  ],
+  "IVtkTools": [
+    {
+      "name": "IVtkTools",
+      "kind": "namespace",
+      "cpp": "IVtkTools"
+    },
+    {
+      "name": "IVtkTools_DisplayModeFilter",
+      "kind": "class",
+      "cpp": "IVtkTools_DisplayModeFilter"
+    },
+    {
+      "name": "IVtkTools_ShapeDataSource",
+      "kind": "class",
+      "cpp": "IVtkTools_ShapeDataSource"
+    },
+    {
+      "name": "IVtkTools_ShapeObject",
+      "kind": "class",
+      "cpp": "IVtkTools_ShapeObject"
+    },
+    {
+      "name": "IVtkTools_ShapePicker",
+      "kind": "class",
+      "cpp": "IVtkTools_ShapePicker"
+    },
+    {
+      "name": "IVtkTools_SubPolyDataFilter",
+      "kind": "class",
+      "cpp": "IVtkTools_SubPolyDataFilter"
+    },
+    {
+      "name": "NCollection_Map_long_long",
+      "kind": "class",
+      "cpp": "NCollection_Map",
+      "instance": true
+    }
+  ]
+}

@@ -40,5 +40,6 @@ What's going on:
 | take shapes apart and build them from edges and faces | [Topology](topology.md) |
 | read STEP files with colors and assemblies | [Assemblies](xcaf.md) |
 | show shapes in a window | [3D views](visualization.md) |
+| show shapes next to simulation results in VTK | [VTK scenes](vtk.md) |
 | translate OCCT C++ code into C# | [From C++ to C#](mapping.md) |
 | handle failures | [Errors](errors.md) |

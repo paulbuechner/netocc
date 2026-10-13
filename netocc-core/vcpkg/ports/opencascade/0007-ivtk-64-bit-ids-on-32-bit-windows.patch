@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Paul=20B=C3=BCchner?= <45827409+paulbuechner@users.noreply.github.com>
+Date: Mon, 12 Oct 2026 05:00:00 +0200
+Subject: [PATCH] Visualization, TKIVtk - 64-bit VTK ids on 32-bit Windows
+
+IVtk_Types.hxx refused a VTK built with VTK_USE_64BIT_IDS on 32-bit Windows.
+NetVtk builds VTK with 64-bit ids on every architecture, so that vtkIdType is
+long long everywhere; TKIVtk's code handles its ids alike on 32 and 64 bits
+(the sub-shape ids it narrows to int, it narrows on both). The guard against a
+VTK with 32-bit ids on a 64-bit target stays.
+---
+ src/Visualization/TKIVtk/IVtk/IVtk_Types.hxx | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/src/Visualization/TKIVtk/IVtk/IVtk_Types.hxx b/src/Visualization/TKIVtk/IVtk/IVtk_Types.hxx
+index 561d614..24ba24d 100644
+--- a/src/Visualization/TKIVtk/IVtk/IVtk_Types.hxx
++++ b/src/Visualization/TKIVtk/IVtk/IVtk_Types.hxx
+@@ -26,14 +26,9 @@
+ 
+ #include <limits>
+ 
+-#ifdef VTK_USE_64BIT_IDS
+-  #if defined(_WIN32) && !defined(_WIN64)
+-    #error "64-bit VTK library can not be linked for 32-bit target platform"
+-  #endif
+-#else
+-  #ifdef _WIN64
+-    #error "32-bit VTK library can not be linked for 64-bit target platform"
+-  #endif
++// 64-bit ids work on a 32-bit target too: vtkIdType is then long long, as on a 64-bit one
++#if !defined(VTK_USE_64BIT_IDS) && defined(_WIN64)
++  #error "32-bit VTK library can not be linked for 64-bit target platform"
+ #endif
+ 
+ typedef vtkIdType   IVtk_IdType;
