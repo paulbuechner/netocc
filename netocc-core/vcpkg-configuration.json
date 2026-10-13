@@ -5,6 +5,14 @@
     "repository": "https://github.com/microsoft/vcpkg",
     "baseline": "dc1232a6e05dcc49703091e83743e3b4df9b9b7c"
   },
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/paulbuechner/netvtk",
+      "baseline": "1042a5c33533b2db2a4ad6b7683f706de63ea9e3",
+      "packages": ["vtk"]
+    }
+  ],
   "overlay-ports": ["./vcpkg/ports"],
   "overlay-triplets": ["./vcpkg/triplets"]
 }

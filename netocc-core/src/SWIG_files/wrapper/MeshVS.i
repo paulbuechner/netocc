@@ -153,7 +153,7 @@ static_assert(sizeof(MeshVS_TwoNodes) == 8 && alignof(MeshVS_TwoNodes) == 4 && s
 inline int NetOcc_SizeOf_MeshVS_TwoNodes() { return (int)sizeof(MeshVS_TwoNodes); }
 %}
 
-enum MeshVS_EntityType {
+typedef enum {
   MeshVS_ET_NONE = 0,
   MeshVS_ET_Node = 1,
   MeshVS_ET_0D = 2,
@@ -162,7 +162,7 @@ enum MeshVS_EntityType {
   MeshVS_ET_Volume = 16,
   MeshVS_ET_Element = 30,
   MeshVS_ET_All = 31,
-};
+} MeshVS_EntityType;
 
 enum MeshVS_MeshSelectionMethod {
   MeshVS_MSM_PRECISE = 0,
@@ -213,7 +213,7 @@ enum MeshVS_DrawerAttribute {
   MeshVS_DA_User = 39,
 };
 
-enum MeshVS_SelectionModeFlags {
+typedef enum {
   MeshVS_SMF_Mesh = 0,
   MeshVS_SMF_Node = 1,
   MeshVS_SMF_0D = 2,
@@ -223,7 +223,7 @@ enum MeshVS_SelectionModeFlags {
   MeshVS_SMF_Element = 30,
   MeshVS_SMF_All = 31,
   MeshVS_SMF_Group = 256,
-};
+} MeshVS_SelectionModeFlags;
 
 %occt_datamap(MeshVS_DataMapOfIntegerAsciiString, int, TCollection_AsciiString, NCollection_DefaultHasher<int>, int, string)
 %occt_datamap(MeshVS_DataMapOfIntegerColor, int, Quantity_Color, NCollection_DefaultHasher<int>, int, Quantity_Color)

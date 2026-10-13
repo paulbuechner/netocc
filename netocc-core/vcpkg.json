@@ -2,14 +2,19 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
   "name": "netocc-core",
   "version-string": "0.0.0",
-  "description": "OCCT for the NetOcc SWIG wrapper",
+  "description": "OCCT for the NetOcc SWIG wrapper, with TKIVtk on NetVtk's VTK for NetOcc.Vtk",
   "dependencies": [
     {
       "name": "opencascade",
-      "features": ["rapidjson", "tbb"]
+      "features": ["rapidjson", "tbb", "vtk"]
+    },
+    {
+      "name": "vtk",
+      "features": ["cgns", "exodus", "volume"]
     }
   ],
   "overrides": [
-    { "name": "opencascade", "version": "8.0.1" }
+    { "name": "opencascade", "version": "8.0.1" },
+    { "name": "vtk", "version": "9.7.1" }
   ]
 }

@@ -11,6 +11,9 @@ MIT wherever NetOcc can, OCCT's terms where it must. This isn't legal advice. Th
 | `NetOcc.dll` | MIT | C# calling the native libraries |
 | `NetOcc.xml`, the IntelliSense documentation | LGPL-2.1 with the OCCT exception | the doc comments of OCCT's headers: shipped with `OCCT-LICENSE.txt`, never committed. The package's license expression then reads `MIT AND LGPL-2.1-only WITH OCCT-exception-1.0` |
 | OCCT's libraries (`TK*`) | LGPL-2.1 with the OCCT exception | shipped as separate, replaceable libraries with their license texts, and the exact source published: OCCT's tag and vcpkg's port patches. One patch changes `Image_AlienPixMap.cxx`, so the shipped OCCT is modified |
+| NetOcc.Vtk: `NetOcc.Vtk.dll`, `NetOccVtk` | MIT | as NetOcc's; `NetOccVtk` incorporates OCCT's and VTK's header material (VTK's BSD-3-Clause asks for its notice) |
+| TKIVtk, in `NetOcc.Vtk.runtime.<rid>` | LGPL-2.1 with the OCCT exception | as OCCT's other libraries; netocc's patch `0007` changes `IVtk_Types.hxx` (64-bit VTK ids on win-x86), so it is modified too |
+| VTK's libraries | BSD-3-Clause | NetVtk's runtime packages ship them, not netocc's; NetOcc.Vtk's runtime notices carry VTK's `Copyright.txt` |
 | FreeType, RapidJSON, zlib, libpng, brotli, bzip2, oneTBB, hwloc | FTL, MIT, zlib, libpng, MIT, bzip2, Apache-2.0, BSD-3-Clause | attribution in `NOTICE`, license texts in `THIRD-PARTY-NOTICES.txt`; no FreeImage (GPL, FIPL) |
 | SWIG | the tool GPL-3.0, its runtime library terms of your choice | the generated output is unrestricted |
 | ClangSharp, libclang | MIT, Apache-2.0 WITH LLVM-exception | the generator's dependencies only |

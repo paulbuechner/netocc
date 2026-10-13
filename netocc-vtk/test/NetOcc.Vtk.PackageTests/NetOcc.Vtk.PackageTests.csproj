@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    The packed NetOcc.Vtk, consumed like an app would: restored from artifacts/packages (nuget.config here, with
+    netocc-core's packs for NetOcc) in the version build.py pack wrote to NetOcc.Vtk.version.props; NetVtk at the version
+    and from the source build.py passes. Run by build.py test-package; it only restores after a pack.
+  -->
+  <Import Project="..\..\artifacts\packages\NetOcc.Vtk.version.props" Condition="Exists('..\..\artifacts\packages\NetOcc.Vtk.version.props')" />
+
+  <PropertyGroup>
+    <TargetFrameworks>net8.0;net48</TargetFrameworks>
+    <SelfContained>false</SelfContained>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>NetOcc.Vtk.PackageTests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetOcc.Vtk" Version="$(NetOccVtkPackageVersion)" />
+    <PackageReference Include="NUnit" Version="4.6.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="6.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'" />
+  </ItemGroup>
+
+  <Target Name="NetOccVtkRequirePackage" BeforeTargets="CollectPackageReferences;Build">
+    <Error Condition="'$(NetOccVtkPackageVersion)' == ''" Text="No packed NetOcc.Vtk: run 'python build.py pack' first." />
+  </Target>
+
+</Project>

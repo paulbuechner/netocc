@@ -291,14 +291,21 @@ def sift_swig_messages(module: str, messages: str) -> tuple[list[str], int, list
 
 
 def cmd_generate(_: argparse.Namespace) -> None:
+    generate_modules(SWIG_FILES, GENERATED, native_libraries())
+
+
+def generate_modules(swig_files: Path, generated: Path, libraries: dict[str, list[str]],
+                     includes: list[Path] | None = None) -> None:
+    """SWIG over swig_files' modules into generated/cxx/<library> and generated/cs/<module>, with SWIG's guards.
+    includes: more directories for %include and %import after swig_files' own (../netocc-vtk: NetOcc's modules, NetVtk's
+    interop)."""
     swig = swig_executable()
     env = swig_env()
-    libraries = native_libraries()
     library_of = {module: library for library, modules in libraries.items() for module in modules}
-    cxx_dir = GENERATED / "cxx"
-    cs_root = GENERATED / "cs"
-    if GENERATED.exists():
-        shutil.rmtree(GENERATED)
+    cxx_dir = generated / "cxx"
+    cs_root = generated / "cs"
+    if generated.exists():
+        shutil.rmtree(generated)
     cxx_dir.mkdir(parents=True)
 
     # C++ per library (CMake builds one from each directory), C# per module
@@ -312,11 +319,12 @@ def cmd_generate(_: argparse.Namespace) -> None:
                "-namespace", f"OCC.Core.{module}",
                "-dllimport", library_of[module],
                "-I" + str(SWIG_FILES / "common"),
-               "-I" + str(SWIG_FILES / "wrapper"),
-               "-I" + str(SWIG_FILES),  # %include "extras/<Pkg>.i"
+               "-I" + str(swig_files / "wrapper"),
+               "-I" + str(swig_files),  # %include "extras/<Pkg>.i"
+               *("-I" + str(d) for d in includes or []),
                "-outdir", cs_dir,
                "-o", cxx_dir / library_of[module] / f"{module}_wrap.cxx",
-               SWIG_FILES / "wrapper" / f"{module}.i"]
+               swig_files / "wrapper" / f"{module}.i"]
         return module, subprocess.run([str(c) for c in cmd], env=env, capture_output=True, text=True,
                                       encoding="utf-8", errors="replace")
 
@@ -355,7 +363,7 @@ def cmd_generate(_: argparse.Namespace) -> None:
     opaque = sorted(str(f.relative_to(cs_root)) for f in cs_root.rglob("*.cs") if "SWIGTYPE_" in f.read_text(encoding="utf-8"))
     if opaque:
         sys.exit(f"SWIG left unmapped types (SWIGTYPE_*) in {len(opaque)} file(s), e.g. {', '.join(opaque[:5])}")
-    print(f"SWIG: {len(library_of)} modules in {len(libraries)} libraries -> {GENERATED}; {harmless} imported classes seen "
+    print(f"SWIG: {len(library_of)} modules in {len(libraries)} libraries -> {generated}; {harmless} imported classes seen "
           f"before their base in the importing module (Warning 401, left out); {lookups} director classes, {in_types} parameter types by in",
           flush=True)
 
@@ -797,10 +805,12 @@ def cmd_changelog(args: argparse.Namespace) -> None:
 
 
 def check_changes(base: str) -> None:
-    """A pull request that changes what the packages hold says so: an entry in changes/ (or an edit of CHANGELOG.md)."""
-    changed = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD", "--", "."], cwd=ROOT, check=True,
-                             capture_output=True, text=True).stdout.split()
-    shipped = [p for p in changed if p.startswith(("netocc-core/src/", "netocc-core/pack/"))]
+    """A pull request that changes what the packages hold (NetOcc's, ../netocc-vtk's NetOcc.Vtk) says so: an entry in
+    changes/ (or an edit of CHANGELOG.md)."""
+    changed = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD", "--", ".", "../netocc-vtk"], cwd=ROOT,
+                             check=True, capture_output=True, text=True).stdout.split()
+    shipped = [p for p in changed if p.startswith(("netocc-core/src/", "netocc-core/pack/", "netocc-vtk/src/",
+                                                   "netocc-vtk/pack/"))]
     noted = [p for p in changed if p.startswith("netocc-core/changes/") or p == "netocc-core/CHANGELOG.md"]
     if shipped and not noted:
         sys.exit("this changes the packages but adds no changelog entry: python build.py change <type> \"what changed\" "

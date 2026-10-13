@@ -81,6 +81,14 @@ internal sealed partial class TypeRegistry
               nested.GetValueOrDefault(name));
     }
 
+    foreach (Match m in TypedefEnumPattern().Matches(text))
+    {
+      var name = m.Groups[1].Value;
+      AddEnum(name, package, HeaderOf(name),
+              csBases.TryGetValue(name, out var csBase) ? SignatureMapper.CppBuiltin(csBase) : null,
+              isTypedefName: true);
+    }
+
     // the module instantiates these, so they're requested
     foreach (var instantiation in Collections(text, package))
     {
@@ -92,6 +100,24 @@ internal sealed partial class TypeRegistry
     foreach (Match m in ShimPattern().Matches(text))
     {
       AddClass(new KnownClass(m.Groups[1].Value, package, WrapKind.Plain));
+    }
+  }
+
+  /// <summary>
+  /// NetVtk's VTK objects, from the interface files its package ships (<c>swig/wrapper</c>, the
+  /// classes each declares with <c>%vtk_object</c>): C# reaches them through NetVtkInterop.i, by
+  /// VTK's headers (<c>vtkPolyData.h</c>).
+  /// </summary>
+  public void ScanNetVtk(string wrapperDirectory)
+  {
+    foreach (var file in Directory.EnumerateFiles(wrapperDirectory, "*.i")
+               .Order(StringComparer.Ordinal))
+    {
+      foreach (Match m in VtkObjectPattern().Matches(File.ReadAllText(file)))
+      {
+        var name = m.Groups[1].Value;
+        AddClass(new KnownClass(name, NetVtkPackage, WrapKind.Vtk, $"{name}.h"));
+      }
     }
   }
 
@@ -157,6 +183,14 @@ internal sealed partial class TypeRegistry
       }
     }
   }
+
+  // typedef enum { ... } X; (a typedef's name for an anonymous enum)
+  [GeneratedRegex(@"^typedef enum \{[^}]*^\} (\w+);", RegexOptions.Multiline)]
+  private static partial Regex TypedefEnumPattern();
+
+  // NetVtk's %vtk_object(X)
+  [GeneratedRegex(@"^%vtk_object\((\w+)\)$", RegexOptions.Multiline)]
+  private static partial Regex VtkObjectPattern();
 
   [GeneratedRegex(@"^%import ""(\w+)\.i""", RegexOptions.Multiline)]
   private static partial Regex ImportPattern();

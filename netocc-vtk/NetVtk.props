@@ -1,0 +1,12 @@
+<Project>
+
+  <!--
+    The NetVtk release NetOcc.Vtk builds on: its proxies and VTK's libraries (NetVtk.runtime). The same VTK build as
+    netocc-core's (opencascade[vtk] from NetVtk's vcpkg registry, vcpkg-configuration.json's baseline): change both
+    together. build.py passes a local pack's version instead (its option netvtk-packages).
+  -->
+  <PropertyGroup>
+    <NetVtkVersion Condition="'$(NetVtkVersion)' == ''">9.7.1.1-next.1</NetVtkVersion>
+  </PropertyGroup>
+
+</Project>

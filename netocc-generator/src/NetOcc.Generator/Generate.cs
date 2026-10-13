@@ -32,8 +32,13 @@ internal static class Generate
   /// Compare instead of writing: 1 if any output file would change. Writes nothing, the skip logs
   /// neither.
   /// </param>
+  /// <param name="netVtk">
+  /// NetVtk's SWIG files (its package's <c>swig/</c>), for modules on VTK: its objects come from
+  /// their <c>wrapper/</c>, VTK's headers from the vtk-X.Y directory beside OCCT's.
+  /// </param>
   public static int Run(Workspace workspace, string occtInclude, string occtLibraries, string core,
-                        IReadOnlyList<string> only, TextWriter output, bool check = false)
+                        IReadOnlyList<string> only, TextWriter output, bool check = false,
+                        string? netVtk = null)
   {
     var config = workspace.Config;
     var packages = only.Count > 0 ? workspace.Expand(only) : workspace.Configured;
@@ -43,14 +48,31 @@ internal static class Generate
         $"warning: {package} isn't in config generate: build.py won't build it (modules.json)");
     }
 
-    var paths = new Paths(core, workspace.ConfigDirectory);
+    var paths = new Paths(core, workspace.ConfigDirectory, config.Skips);
     var registry = ScanOthers(paths, packages, workspace.Configured, output);
+    // another run's modules these import (NetOcc's, for NetOcc.Vtk): their types, never written
+    if (config.Import is { } import)
+    {
+      foreach (var file in Directory.EnumerateFiles(
+                   Path.GetFullPath(Path.Combine(workspace.ConfigDirectory, import)), "*.i")
+                 .Order(StringComparer.Ordinal))
+      {
+        registry.ScanModule(file);
+      }
+    }
+
+    IReadOnlyList<string> includes = PackageParser.IncludeDirectories(occtInclude);
+    if (netVtk is not null)
+    {
+      registry.ScanNetVtk(Path.Combine(netVtk, "wrapper"));
+      includes = [.. includes, VtkInclude(occtInclude)];
+    }
 
     var exports = LibraryExports.Load(occtLibraries);
     output.WriteLine(exports is null
                        ? $"warning: no OCCT DLLs (TK*.dll) in {Path.GetFullPath(occtLibraries)}: members declared exported but never defined won't link"
                        : $"exports: {exports.Count} symbols from {exports.Libraries} OCCT libraries");
-    var parser = new PackageParser(PackageParser.IncludeDirectories(occtInclude), [], exports);
+    var parser = new PackageParser(includes, [], exports);
     // every package's value types: a plain-data struct may hold another package's
     // (Geom_Curve::ResD1 holds a gp_Pnt)
     HashSet<string> valueTypes = [.. config.Packages.Values.SelectMany(p => p.ValueTypes)];
@@ -85,9 +107,10 @@ internal static class Generate
     // the modules build.py runs SWIG over, in toolkits.yaml's module order
     outputs.Emit(Path.Combine(paths.SwigFiles, "modules.json"),
                  ModulesJson(workspace.Configured,
-                             p => config.AliasPackages.TryGetValue(p, out var module)
-                               ? module
-                               : workspace.Source.ModuleOf(p), workspace.Source.Modules));
+                             p => config.Library
+                                  ?? (config.AliasPackages.TryGetValue(p, out var module)
+                                    ? module
+                                    : workspace.Source.ModuleOf(p)), workspace.Source.Modules));
     // the types each package gives C#, which the documentation links to OCCT's reference manual; a
     // run over some packages keeps the others' entries
     var classIndex = Path.Combine(paths.SwigFiles, "classes.json");
@@ -111,7 +134,7 @@ internal static class Generate
     }
 
     output.WriteLine(outputs.Changed.Count == 0
-                       ? "check: netocc-core is up to date"
+                       ? $"check: {Path.GetFileName(Path.GetFullPath(core).TrimEnd('\\', '/'))} is up to date"
                        : $"check: {outputs.Changed.Count} file(s) differ; run generate");
     return outputs.Changed.Count == 0 ? 0 : 1;
   }
@@ -286,7 +309,7 @@ internal static class Generate
     var classes = models.SelectMany(m => m.Classes)
       .GroupBy(c => c.Name)
       .ToDictionary(g => g.Key, g => g.First());
-    var writer = new InterfaceWriter(registry, new SignatureMapper(registry),
+    var writer = new InterfaceWriter(registry, new SignatureMapper(registry, config.FixedLongLong),
                                      workspace.Source.Version, p => config.For(p).Prelude,
                                      HandWrittenOf, classes.GetValueOrDefault,
                                      Directors(models, config));
@@ -505,7 +528,7 @@ internal static class Generate
     foreach (var e in model.Enums)
     {
       registry.AddEnum(e.Name, model.Name, HeaderOf(e.Header, e.QualifiedName), e.Underlying,
-                       e.QualifiedName);
+                       e.QualifiedName, e.IsTypedefName);
     }
 
     // the configured value types whatever `classes` lists (gp lists only gp), plain data where
@@ -552,10 +575,19 @@ internal static class Generate
     }
   }
 
+  // VTK's headers beside OCCT's in the install that built OCCT on them: include/vtk-X.Y
+  private static string VtkInclude(string occtInclude) =>
+    Directory.EnumerateDirectories(Path.GetFullPath(Path.Combine(occtInclude, "..")), "vtk-*")
+      .Order(StringComparer.Ordinal)
+      .LastOrDefault()
+    ?? throw new InvalidOperationException(
+      $"no VTK headers (include/vtk-X.Y) beside {occtInclude}: build OCCT with its vtk feature");
+
   /// <summary>
-  /// Where a run reads and writes: netocc-core's generated files, the generator's skip logs.
+  /// Where a run reads and writes: the generated files, the generator's skip logs (or the config's
+  /// <c>skips</c>).
   /// </summary>
-  private sealed class Paths(string core, string configDirectory)
+  private sealed class Paths(string core, string configDirectory, string? skips)
   {
     public string SwigFiles { get; } = Path.Combine(core, "src", "SWIG_files");
 
@@ -566,7 +598,8 @@ internal static class Generate
     /// <summary>The value-type structs, src/NetOcc/&lt;Pkg&gt;/&lt;Type&gt;.g.cs.</summary>
     public string Structs { get; } = Path.Combine(core, "src", "NetOcc");
 
-    public string Skips { get; } = Path.Combine(configDirectory, "..", "log", "skips");
+    public string Skips { get; } =
+      Path.Combine(configDirectory, skips ?? Path.Combine("..", "log", "skips"));
 
     public string Interface(string package) => Path.Combine(Wrapper, $"{package}.i");
   }

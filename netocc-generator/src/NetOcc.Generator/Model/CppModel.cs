@@ -37,8 +37,13 @@ internal sealed record PackageModel(string Name, IReadOnlyList<string> Headers,
 /// The underlying type when it isn't int (<c>enum class Domain : uint8_t</c>: unsigned char),
 /// otherwise null.
 /// </param>
+/// <param name="IsTypedefName">
+/// The name is a typedef's for an anonymous enum (<c>typedef enum { ... } IVtk_SelectionMode;</c>):
+/// C++ has no <c>enum IVtk_SelectionMode</c>, so the .i declares it the same way.
+/// </param>
 internal sealed record EnumModel(string Name, string Header, IReadOnlyList<EnumConstant> Constants,
-                                 string? QualifiedName = null, string? Underlying = null);
+                                 string? QualifiedName = null, string? Underlying = null,
+                                 bool IsTypedefName = false);
 
 internal sealed record EnumConstant(string Name, long Value);
 

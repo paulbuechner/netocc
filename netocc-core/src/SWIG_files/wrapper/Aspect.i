@@ -282,7 +282,7 @@ enum class Aspect_XRSession_InfoString {
   InfoString_SerialNumber = 3,
 };
 
-enum Aspect_PolygonOffsetMode {
+typedef enum {
   Aspect_POM_Off = 0,
   Aspect_POM_Fill = 1,
   Aspect_POM_Line = 2,
@@ -290,7 +290,7 @@ enum Aspect_PolygonOffsetMode {
   Aspect_POM_All = 7,
   Aspect_POM_None = 8,
   Aspect_POM_Mask = 15,
-};
+} Aspect_PolygonOffsetMode;
 
 enum Aspect_TypeOfColorScaleData {
   Aspect_TOCSD_AUTO = 0,

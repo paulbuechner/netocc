@@ -116,7 +116,9 @@ internal sealed partial class InterfaceWriter(TypeRegistry registry, SignatureMa
     ];
     var collections = Collections(own, module);
 
-    var direct = uses.Select(u => u.Package).ToHashSet();
+    var direct = uses.Select(u => u.Package)
+      .Where(p => p != TypeRegistry.NetVtkPackage)
+      .ToHashSet();
     // handle-managed classes and collections: Standard_Transient's typemaps (DownCast takes a
     // Handle(Standard_Transient))
     if (classes.Any(c => Kind(c) == WrapKind.Transient)
@@ -137,11 +139,15 @@ internal sealed partial class InterfaceWriter(TypeRegistry registry, SignatureMa
                     : $"%module {own}Module")
       .AppendLine()
       .AppendLine("%include \"NetOcc.i\"")
-      .AppendLine()
-      .AppendLine("%{")
-      .AppendLine($"#include <{own}_module.hxx>")
-      .AppendLine("%}")
       .AppendLine();
+    // NetVtk's objects: its interop typemaps (the NetVtk package's swig/interop)
+    if (module.Typemaps.Any(t => t.StartsWith("%netvtk_object", StringComparison.Ordinal))
+        || classes.Any(c => Kind(c) == WrapKind.VtkDerived))
+    {
+      text.AppendLine("%include \"NetVtkInterop.i\"").AppendLine();
+    }
+
+    text.AppendLine("%{").AppendLine($"#include <{own}_module.hxx>").AppendLine("%}").AppendLine();
     // one flat list: a module SWIG imports doesn't import again, so SWIG meets the packages in this
     // order, the bases of a class before it
     if (imports.Count > 0)
@@ -206,6 +212,25 @@ internal sealed partial class InterfaceWriter(TypeRegistry registry, SignatureMa
 
   private WrapKind Kind(ClassModel c) => registry.Class(c.Name)?.Kind ?? WrapKind.Plain;
 
+  // the C# class a VTK class's proxy derives from: NetVtk's nearest one, or a nearer one of this
+  // run
+  private string VtkBase(ClassModel c)
+  {
+    foreach (var ancestor in c.Ancestors)
+    {
+      switch (registry.Class(ancestor)?.Kind)
+      {
+        case WrapKind.Vtk:
+          return $"global::Vtk.{ancestor}";
+        case WrapKind.VtkDerived:
+          return ancestor;
+      }
+    }
+
+    throw new InvalidOperationException(
+      $"{c.Name} derives from vtkObjectBase, but from no class NetVtk wraps");
+  }
+
   // the typemap macros and features of the package's structs and classes, which go before every
   // declaration
   private StringBuilder ClassMacros(List<ClassModel> valueTypes, List<ClassModel> classes)
@@ -219,6 +244,19 @@ internal sealed partial class InterfaceWriter(TypeRegistry registry, SignatureMa
     foreach (var c in classes)
     {
       var kind = Kind(c);
+      if (kind == WrapKind.VtkDerived)
+      {
+        macros.AppendLine($"%netvtk_derived({c.Name}, {VtkBase(c)})");
+        // VTK creates its objects through New(): a C# constructor calls it
+        if (!c.Traits.IsAbstract
+            && c.Methods.Any(m => m is { IsStatic: true, Name: "New", Parameters.Count: 0 }))
+        {
+          macros.AppendLine($"%netvtk_new({c.Name})");
+        }
+
+        continue;
+      }
+
       if (kind == WrapKind.Transient)
       {
         macros.AppendLine(c.Name == RootTransient
@@ -299,13 +337,18 @@ internal sealed partial class InterfaceWriter(TypeRegistry registry, SignatureMa
 
       // a nested enum's constants are only unique in its scope: scoped in the .i, where SWIG sees
       // all of them
-      enums.AppendLine($"enum {(e.QualifiedName is null ? "" : "class ")}{e.Name} {{");
+      // a file-scope typedef's name for an anonymous enum as C++ declares it: SWIG would spell
+      // "enum X" in a template's wrappers otherwise, which C++ hasn't
+      var typedefName = e.IsTypedefName && e.QualifiedName is null;
+      enums.AppendLine(typedefName
+                         ? "typedef enum {"
+                         : $"enum {(e.QualifiedName is null ? "" : "class ")}{e.Name} {{");
       foreach (var constant in e.Constants)
       {
         enums.AppendLine($"  {constant.Name} = {constant.Value},");
       }
 
-      enums.AppendLine("};").AppendLine();
+      enums.AppendLine(typedefName ? $"}} {e.Name};" : "};").AppendLine();
     }
 
     return enums;

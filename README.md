@@ -92,11 +92,25 @@ All 362 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, 
 - 3D views in a WPF, Avalonia or any other native window;
 - C# subclasses of the classes OCCT is meant to be derived from: progress indicators, message printers, presentations, a view controller.
 
+## VTK scenes
+
+NetOcc.Vtk puts OCCT shapes into [VTK](https://vtk.org) scenes, next to simulation results: OCCT's TKIVtk on NetOcc and [NetVtk](https://github.com/paulbuechner/netvtk), the C# bindings for VTK 9.7.1.
+
+```bash
+dotnet add package NetOcc.Vtk
+```
+
+- `IVtkTools_ShapeDataSource` is a `vtkPolyDataAlgorithm`: a shape in any VTK pipeline, a result field on its faces.
+- `IVtkTools_ShapePicker` picks shapes and their faces, edges and vertices.
+- One VTK: TKIVtk is built on NetVtk's VTK (from NetVtk's vcpkg registry, the same build), whose libraries come with NetVtk's packages. NetOcc.Vtk depends on NetOcc of its version and on one NetVtk release; NetOcc's own packages hold neither TKIVtk nor VTK.
+
+More in [VTK scenes](https://paulbuechner.github.io/netocc/articles/vtk.html).
+
 ## Documentation
 
 [paulbuechner.github.io/netocc](https://paulbuechner.github.io/netocc/):
 
-- [Guide](https://paulbuechner.github.io/netocc/articles/introduction.html): geometry, topology, modeling, meshing, files, documents, 3D views; every example compiles against the package in CI, and all but the on-screen views run there.
+- [Guide](https://paulbuechner.github.io/netocc/articles/introduction.html): geometry, topology, modeling, meshing, files, documents, 3D views, VTK scenes; every example compiles against the package in CI, and all but the on-screen views run there.
 - [From C++ to C#](https://paulbuechner.github.io/netocc/articles/mapping.html): how OCCT's signatures look in C#.
 - [Class index](https://paulbuechner.github.io/netocc/classes/index.html): every type, linked to OCCT's reference manual.
 
@@ -115,12 +129,15 @@ A WPF and an Avalonia 12 viewer that open STEP files with their colors and assem
   </tr>
 </table>
 
+NetOcc.Vtk's WPF demo shows a part with a temperature on it, a scalar bar and picked faces: [netocc-vtk/demo](netocc-vtk/demo).
+
 ## Repository
 
 | Folder | Content |
 |---|---|
 | [netocc-core](netocc-core) | typemap library, generated SWIG interfaces, native shims, the `NetOcc` assembly, tests, NuGet packages |
 | [netocc-generator](netocc-generator) | `netocc-gen`: reads OCCT's headers and writes netocc-core's interface files |
+| [netocc-vtk](netocc-vtk) | NetOcc.Vtk: OCCT's TKIVtk on NetOcc and NetVtk, its tests, packages and WPF demo |
 | [netocc-documentation](netocc-documentation) | the documentation site and the examples it shows |
 | [netocc-demos](netocc-demos) | the WPF and Avalonia viewers |
 
@@ -128,8 +145,8 @@ Building from source: [netocc-core/README.md](netocc-core/README.md), or the [bu
 
 ## Versions
 
-A version is the OCCT version the bindings are generated for and NetOcc's revision: `8.0.1.2` is the second release for OCCT 8.0.1. Changes per release: [netocc-core/CHANGELOG.md](netocc-core/CHANGELOG.md).
+A version is the OCCT version the bindings are generated for and NetOcc's revision: `8.0.1.2` is the second release for OCCT 8.0.1. NetOcc.Vtk has NetOcc's version. Changes per release: [netocc-core/CHANGELOG.md](netocc-core/CHANGELOG.md).
 
 ## License
 
-MIT, see [LICENSE](LICENSE). OCCT is LGPL-2.1 with the Open CASCADE exception, and so is the IntelliSense documentation taken from its headers, see [netocc-core/NOTICE](netocc-core/NOTICE). NetOcc is not affiliated with, endorsed by, or sponsored by Open Cascade SAS.
+MIT, see [LICENSE](LICENSE). OCCT is LGPL-2.1 with the Open CASCADE exception, and so is the IntelliSense documentation taken from its headers, see [netocc-core/NOTICE](netocc-core/NOTICE). VTK, whose libraries NetOcc.Vtk takes from NetVtk, is BSD-3-Clause. NetOcc is not affiliated with, endorsed by, or sponsored by Open Cascade SAS.

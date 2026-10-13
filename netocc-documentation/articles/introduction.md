@@ -29,6 +29,7 @@ Each layer builds on the ones below. The guide follows them bottom-up.
 | Assemblies, colors, names | `XCAFDoc`, `XCAFApp`, `STEPCAFControl` | [Assemblies](xcaf.md) |
 | Application data, undo | `TDocStd`, `TDF`, `TDataStd`, `TNaming` | [Documents](ocaf.md) |
 | 3D views | `V3d`, `AIS`, `OpenGl`, `Aspect`, `Graphic3d` | [3D views](visualization.md) |
+| Shapes in VTK scenes (NetOcc.Vtk) | `IVtkOCC`, `IVtkTools` | [VTK scenes](vtk.md) |
 
 ## Reading the examples
 

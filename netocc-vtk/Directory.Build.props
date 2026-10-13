@@ -1,0 +1,16 @@
+<Project>
+
+  <!--
+    A sibling netvtk checkout's packs (its netvtk-core's build.py pack), as build.py takes them: local development on a
+    NetVtk nuget.org doesn't have yet. Without one, NetVtk.props's release from nuget.org.
+  -->
+  <PropertyGroup>
+    <NetOccVtkSiblingNetVtk>$(MSBuildThisFileDirectory)..\..\netvtk\netvtk-core\artifacts\packages</NetOccVtkSiblingNetVtk>
+  </PropertyGroup>
+  <Import Project="$(NetOccVtkSiblingNetVtk)\NetVtk.version.props" Condition="'$(NetVtkVersion)' == '' and Exists('$(NetOccVtkSiblingNetVtk)\NetVtk.version.props')" />
+  <PropertyGroup Condition="'$(NetVtkVersion)' == '' and '$(NetVtkPackageVersion)' != ''">
+    <NetVtkVersion>$(NetVtkPackageVersion)</NetVtkVersion>
+    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(NetOccVtkSiblingNetVtk)</RestoreAdditionalProjectSources>
+  </PropertyGroup>
+
+</Project>
