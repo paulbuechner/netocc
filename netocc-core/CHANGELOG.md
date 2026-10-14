@@ -4,6 +4,12 @@ Notable changes to the NetOcc packages (`NetOcc`, `NetOcc.runtime.<rid>`), in th
 
 Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), until the release PR writes them here (`python build.py release`). Each release's section becomes its GitHub release notes and the packages' release notes.
 
+## [8.0.1.1-next.4] - 2026-10-13
+
+### Added
+
+- NetOcc.Vtk and NetOcc.Vtk.runtime.<rid>: OCCT's TKIVtk (IVtk, IVtkOCC, IVtkVTK, IVtkTools) on NetVtk, for OCCT shapes in VTK scenes next to simulation results. IVtkTools_ShapeDataSource is a NetVtk vtkPolyDataAlgorithm, IVtkTools_ShapePicker picks shapes and their faces, edges and vertices. It depends on NetOcc of the same version and on exactly one NetVtk release, whose VTK build TKIVtk is compiled against; NetOcc's own packages hold neither TKIVtk nor VTK.
+
 ## [8.0.1.1-next.3] - 2026-10-05
 
 ### Fixed
@@ -81,6 +87,7 @@ Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), 
 - One AnyCPU assembly for .NET Framework 3.5 to 4.8, .NET 6, 8 and 10, and netstandard2.0.
 - Natives for win-x64, win-x86, linux-x64 and osx-arm64, one package each (`NetOcc.runtime.<rid>`).
 
+[8.0.1.1-next.4]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.4
 [8.0.1.1-next.3]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.3
 [8.0.1.1-next.2]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.2
 [8.0.1.1-next.1]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.1
