@@ -899,6 +899,28 @@ def write_restore_config() -> Path:
     return config
 
 
+def dependency_problems(package: Path, expected: dict[str, str]) -> list[str]:
+    """The dependencies of a .nupkg that differ from the expected ones (id -> version as a nuspec writes it: 1.2 for >= 1.2,
+    [1.2] exactly) in any of its framework groups, as "<id> <version>" or "<id> missing"; empty when all match."""
+    import zipfile
+    from xml.etree import ElementTree
+    with zipfile.ZipFile(package) as archive:
+        nuspec = next(name for name in archive.namelist() if "/" not in name and name.endswith(".nuspec"))
+        root = ElementTree.fromstring(archive.read(nuspec))
+
+    def local(element: ElementTree.Element) -> str:
+        return element.tag.rsplit("}", 1)[-1]
+
+    problems: list[str] = []
+    for group in [e for e in root.iter() if local(e) == "group"] or [root]:
+        declared = {d.get("id"): d.get("version") for d in group.iter() if local(d) == "dependency"}
+        for name, version in expected.items():
+            problem = None if declared.get(name) == version else f"{name} {declared.get(name) or 'missing'}"
+            if problem and problem not in problems:
+                problems.append(problem)
+    return problems
+
+
 def cmd_pack(args: argparse.Namespace) -> None:
     version = args.version or local_version(occt_version())
     check_version(version)

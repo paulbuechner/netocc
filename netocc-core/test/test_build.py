@@ -7,6 +7,7 @@ from __future__ import annotations
 import importlib.util
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 from unittest import mock
 
@@ -201,6 +202,39 @@ class LibraryTests(unittest.TestCase):
 
         # Assert
         self.assertEqual(stems, ["libz", "libz", "libz", "z", None, None])
+
+
+class PackageTests(unittest.TestCase):
+    def test_dependency_problems_name_each_dependency_a_group_has_at_another_version_or_lacks(self):
+        # Arrange (a nuspec as NuGet writes it, a group per framework)
+        nuspec = """<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Demo</id>
+    <version>8.0.1.2-local.2</version>
+    <dependencies>
+      <group targetFramework="net10.0">
+        <dependency id="NetOcc" version="8.0.1.2-local.1" exclude="Build,Analyzers" />
+        <dependency id="NetVtk" version="[9.7.1.1]" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework3.5">
+        <dependency id="NetOcc" version="8.0.1.2-local.2" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
+"""
+        with tempfile.TemporaryDirectory() as directory:
+            package = Path(directory, "Demo.8.0.1.2-local.2.nupkg")
+            with zipfile.ZipFile(package, "w") as archive:
+                archive.writestr("Demo.nuspec", nuspec)
+
+            # Act
+            problems = (build.dependency_problems(package, {"NetOcc": "8.0.1.2-local.1", "NetVtk": "[9.7.1.1]"}),
+                        build.dependency_problems(package, {"NetVtk": "[9.7.1.1]"}))
+
+        # Assert (the second group differs in NetOcc and lacks NetVtk)
+        self.assertEqual(problems, (["NetOcc 8.0.1.2-local.2", "NetVtk missing"], ["NetVtk missing"]))
 
 
 if __name__ == "__main__":

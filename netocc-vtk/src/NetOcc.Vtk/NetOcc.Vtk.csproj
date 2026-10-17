@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk" TreatAsLocalProperty="Version">
 
   <Import Project="..\..\NetVtk.props" />
 
@@ -22,7 +22,8 @@
     <Compile Include="$(NetOccVtkGeneratedCs)\**\*.cs" Link="Generated\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
 
-  <!-- NetOcc at this version (the same release), NetVtk at exactly the release whose VTK TKIVtk is built on -->
+  <!-- NetOcc at the version build.py pack passes as Version (>= in the package), NetVtk at exactly the release whose VTK
+       TKIVtk is built on -->
   <ItemGroup>
     <ProjectReference Include="..\..\..\netocc-core\src\NetOcc\NetOcc.csproj" />
     <PackageReference Include="NetVtk" Version="[$(NetVtkVersion)]" />
@@ -32,8 +33,13 @@
     <InternalsVisibleTo Include="NetOcc.Vtk.Tests" />
   </ItemGroup>
 
-  <!-- NuGet (python build.py pack): this assembly; NetOccVtk and TKIVtk live in NetOcc.Vtk.runtime.<rid> (pack/) -->
+  <!--
+    NuGet (python build.py pack): this assembly; NetOccVtk and TKIVtk live in NetOcc.Vtk.runtime.<rid> (pack/). Version is
+    local here (TreatAsLocalProperty): build.py passes NetOcc's as Version, which reaches the NetOcc reference (the
+    dependency), and this package's own as NetOccVtkVersion: a local pack's -local.<time>, CI's and a release's NetOcc's.
+  -->
   <PropertyGroup>
+    <Version Condition="'$(NetOccVtkVersion)' != ''">$(NetOccVtkVersion)</Version>
     <Version Condition="'$(Version)' == ''">0.0.0-dev</Version>
     <Authors>Paul Büchner</Authors>
     <Copyright>Copyright (c) 2026 Paul Büchner</Copyright>

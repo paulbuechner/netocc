@@ -3,14 +3,13 @@
 
 /*
  * IVtk's companion (hand-written; the generated module includes it): the VTK build TKIVtk and NetOccVtk are compiled
- * against, which the tests compare with NetVtk's at run time (they must be the same build: NetVtkInterop.i).
+ * against (NetVtkInterop.i's %netvtk_build), which NetOcc.Vtk checks against NetVtk's when it loads (NativeLibraries).
  */
 
-%{
-#include <vtkVersionMacros.h>
-%}
+%include "NetVtkInterop.i"
+
+%netvtk_build(NetOccVtk_VtkBuild)
 
 %inline %{
-inline const char* NetOccVtk_VtkVersion() { return VTK_VERSION; }
 inline int NetOccVtk_IdTypeSize() { return (int)sizeof(vtkIdType); }
 %}

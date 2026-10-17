@@ -11,8 +11,8 @@ using Vtk;
 namespace NetOcc.Vtk.Tests;
 
 /// <summary>
-/// TKIVtk and NetOccVtk run on NetVtk's VTK libraries: compiled against the same VTK (version, id
-/// width) as the one that loaded.
+/// TKIVtk and NetOccVtk run on NetVtk's VTK libraries: compiled against the same VTK build (version,
+/// NetVtk's port-version, id width) as the one that loaded.
 /// </summary>
 [TestFixture]
 public class BuildTests
@@ -21,11 +21,10 @@ public class BuildTests
   public void Vtk_IsTheBuildTKIVtkWasCompiledAgainst()
   {
     // Act
-    var compiled = IVtkModule.NetOccVtk_VtkVersion();
-    var loaded = vtkVersion.GetVTKVersion();
+    var compiled = IVtkModule.NetOccVtk_VtkBuild();
 
     // Assert
-    Assert.That(loaded, Is.EqualTo(compiled));
+    Assert.That(compiled, Is.EqualTo(VtkBuild.Current).And.StartWith(vtkVersion.GetVTKVersion() + "#"));
   }
 
   [Test]

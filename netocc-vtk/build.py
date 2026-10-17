@@ -15,6 +15,10 @@ on NetVtk's vcpkg registry), runs SWIG and computes the versions; this drives th
 NetVtk: the version in NetVtk.props, from nuget.org; --netvtk-packages <dir> (or the environment's NETVTK_PACKAGES) takes
 it from a folder of packed NetVtk instead, at the version its NetVtk.version.props names (netvtk-core's build.py pack).
 Without either, a sibling netvtk checkout's packs (../../netvtk/netvtk-core/artifacts/packages) are used when present.
+
+Versions: NetOcc.Vtk depends on the NetOcc netocc-core's build.py pack made (>= its version). CI and releases pack it at
+that version (--version); a local pack gets one of its own, <OCCT version>.<next revision>-local.<utc time>, as NetOcc's
+do: packed again on the same NetOcc, a version NuGet has extracted before would keep its first copy.
 """
 from __future__ import annotations
 
@@ -161,10 +165,10 @@ def cmd_test(args: argparse.Namespace) -> None:
 
 
 def netocc_version() -> str:
-    """The version of NetOcc in netocc-core's pack output (NetOcc.version.props), which NetOcc.Vtk takes."""
+    """The version of NetOcc in netocc-core's pack output (NetOcc.version.props), which NetOcc.Vtk depends on."""
     props = core.PACKAGES / "NetOcc.version.props"
     if not props.is_file():
-        sys.exit("no packed NetOcc: run netocc-core's build.py pack first (NetOcc.Vtk takes its version)")
+        sys.exit("no packed NetOcc: run netocc-core's build.py pack first (NetOcc.Vtk depends on it)")
     match = re.search(r"<NetOccPackageVersion>([^<]+)<", props.read_text(encoding="utf-8"))
     if not match:
         sys.exit(f"{props}: no NetOcc version")
@@ -172,8 +176,10 @@ def netocc_version() -> str:
 
 
 def cmd_pack(args: argparse.Namespace) -> None:
-    # NetOcc.Vtk is NetOcc's version, and depends on that NetOcc
-    version = args.version or netocc_version()
+    # NetOcc.Vtk depends on the packed NetOcc; its version is the one asked for (CI and releases: NetOcc's), else a local one
+    # of its own
+    netocc = netocc_version()
+    version = args.version or core.local_version(core.occt_version())
     core.check_version(version)
     rids = args.rids.split(",") if args.rids else [rid for rid, _ in core.TRIPLETS.values()]
     missing = [rid for rid in rids if not natives(rid).is_dir()]
@@ -188,18 +194,26 @@ def cmd_pack(args: argparse.Namespace) -> None:
     for rid in rids:
         core.run(["dotnet", "pack", ROOT / "pack" / "NetOcc.Vtk.runtime.csproj", "-c", "Release", "-o", PACKAGES,
                   f"-p:NetOccVtkRid={rid}", f"-p:Version={version}", *ci])
-    # NetOcc at the same version (netocc-core's pack), NetVtk at NetVtk.props's or the local one's; -p: splits values at
-    # ';', so the sources' separators are escaped
+    # Version reaches the NetOcc project reference, whose version the dependency takes: NetOcc's. NetOcc.Vtk's own comes as
+    # NetOccVtkVersion, which its project puts in Version's place (TreatAsLocalProperty). NetVtk at NetVtk.props's or the
+    # local one's; -p: splits values at ';', so the sources' separators are escaped
     packages = netvtk_packages(args)
-    managed = [f"-p:Version={version}", f"-p:NetVtkVersion={netvtk_version(packages)}", *ci]
+    netvtk = netvtk_version(packages)
+    managed = [f"-p:Version={netocc}", f"-p:NetOccVtkVersion={version}", f"-p:NetVtkVersion={netvtk}", *ci]
     env = dict(os.environ, NetOccVtkRuntimeRids=";".join(rids))
     sources = "%3B".join(str(s) for s in [PACKAGES, core.PACKAGES, *([packages] if packages else [])])
     core.run(["dotnet", "restore", PROJECT, *managed, f"-p:RestoreAdditionalProjectSources={sources}"], env=env)
     core.run(["dotnet", "pack", PROJECT, "-c", "Release", "--no-restore", "-o", PACKAGES, *managed], env=env)
+    # the NetOcc it was packed on (>=), exactly its NetVtk, its runtime packages at its own version
+    package = next(PACKAGES.glob("NetOcc.Vtk.[0-9]*.nupkg"))
+    expected = {"NetOcc": netocc, "NetVtk": f"[{netvtk}]", **{f"NetOcc.Vtk.runtime.{rid}": version for rid in rids}}
+    if problems := core.dependency_problems(package, expected):
+        sys.exit(f"{package.name} depends on {', '.join(problems)}, not on "
+                 f"{', '.join(f'{name} {want}' for name, want in expected.items())}")
     (PACKAGES / "NetOcc.Vtk.version.props").write_text(
         f"<Project>\n  <PropertyGroup>\n    <NetOccVtkPackageVersion>{version}</NetOccVtkPackageVersion>\n"
         f"  </PropertyGroup>\n</Project>\n", encoding="utf-8")
-    print(f"NetOcc.Vtk {version}: {', '.join(sorted(p.name for p in PACKAGES.glob('*.*nupkg')))}")
+    print(f"NetOcc.Vtk {version} on NetOcc {netocc}: {', '.join(sorted(p.name for p in PACKAGES.glob('*.*nupkg')))}")
 
 
 def cmd_test_package(args: argparse.Namespace) -> None:
@@ -227,7 +241,7 @@ def parser() -> argparse.ArgumentParser:
     t.add_argument("--no-rendering", action="store_true", help="leave out the tests that render (no OpenGL 3.2)")
     t.set_defaults(fn=cmd_test)
     pk = sub.add_parser("pack", help="NetOcc.Vtk and NetOcc.Vtk.runtime.<rid> -> artifacts/packages")
-    pk.add_argument("--version", help="package version; default: the packed NetOcc's (netocc-core's build.py pack)")
+    pk.add_argument("--version", help="package version; default <OCCT version>.<next revision>-local.<utc time>")
     pk.add_argument("--rids", help="comma-separated; default all four")
     pk.set_defaults(fn=cmd_pack)
     tp = sub.add_parser("test-package", help="the packed NetOcc.Vtk, consumed like an app")

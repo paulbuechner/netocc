@@ -15,6 +15,6 @@
   ],
   "overrides": [
     { "name": "opencascade", "version": "8.0.1" },
-    { "name": "vtk", "version": "9.7.1" }
+    { "name": "vtk", "version": "9.7.1", "port-version": 1 }
   ]
 }
