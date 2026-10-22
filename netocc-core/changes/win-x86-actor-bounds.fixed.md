@@ -1,1 +1,0 @@
-win-x86: NetOcc.Vtk shows shapes where they are. MSVC's x86 code at /O2 computed VTK's actor bounds wrong, so VTK culled actors and reset cameras off the scene; NetVtk's VTK is built at /O2 /Os now, and OCCT with it (the same triplet).
