@@ -2,12 +2,13 @@
 
   <!--
     The packed NetOcc.Vtk, consumed like an app would: restored from artifacts/packages (nuget.config here, with
-    netocc-core's packs for NetOcc) in the version build.py pack wrote to NetOcc.Vtk.version.props; NetVtk at the version
-    and from the source build.py passes. Run by build.py test-package; it only restores after a pack.
+    netocc-core's packs for NetOcc) in the version build.py pack wrote to NetOcc.Vtk.version.props; NetVtk from nuget.org,
+    or the folder of packed NetVtk the pack names. Run by build.py test-package; it only restores after a pack.
   -->
   <Import Project="..\..\artifacts\packages\NetOcc.Vtk.version.props" Condition="Exists('..\..\artifacts\packages\NetOcc.Vtk.version.props')" />
 
   <PropertyGroup>
+    <RestoreAdditionalProjectSources Condition="'$(NetVtkPackageSource)' != ''">$(RestoreAdditionalProjectSources);$(NetVtkPackageSource)</RestoreAdditionalProjectSources>
     <TargetFrameworks>net8.0;net48</TargetFrameworks>
     <SelfContained>false</SelfContained>
     <LangVersion>latest</LangVersion>

@@ -58,7 +58,10 @@ python build.py test-package --arch x64         # the packed NetOcc.Vtk, consume
 dotnet build demo/NetOcc.Vtk.Viewer.Wpf -c Release
 ```
 
-NetVtk comes from nuget.org (the release `NetVtk.props` names), or from a folder of packed NetVtk: `--netvtk-packages <dir>`, `NETVTK_PACKAGES`, or a sibling `../../netvtk` checkout's `netvtk-core/artifacts/packages`.
+NetVtk comes from nuget.org (the release `NetVtk.props` names). Local development on a netvtk checkout's packs (`python build.py pack` in its `netvtk-core`):
+
+1. Copy `local-dev.props.template` to `local-dev.props` (git-ignored) and adjust `LocalNetVtkPackagesPath`; every solution and `build.py` then restore NetVtk from there. Delete it to go back to nuget.org.
+2. Copy `NetOcc.Vtk.local-dev.slnx` to a personal `NetOcc.Vtk.<you>.slnx` (git-ignored) and open that one.
 
 ## Layout
 
@@ -72,5 +75,7 @@ NetVtk comes from nuget.org (the release `NetVtk.props` names), or from a folder
 | `test/NetOcc.Vtk.PackageTests` | the packed NetOcc.Vtk from `artifacts/packages` (`build.py test-package`) |
 | `demo/NetOcc.Vtk.Viewer.Wpf` | a part with a temperature on it, a scalar bar, faces picked by a click |
 | `NetVtk.props` | the NetVtk release NetOcc.Vtk builds on |
+| `local-dev.props.template` | local development on a netvtk checkout's packs (copy to `local-dev.props`) |
+| `NetOcc.Vtk.slnx`, `NetOcc.Vtk.local-dev.slnx` | the solution; the template for a personal one |
 
 License: MIT, see `../LICENSE`. OCCT is LGPL-2.1 with the Open CASCADE exception, VTK BSD-3-Clause, see `../netocc-core/NOTICE`.

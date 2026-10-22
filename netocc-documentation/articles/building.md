@@ -52,7 +52,7 @@ Where a port broke or could break, and how to see it:
 
 ## netocc-vtk
 
-NetOcc.Vtk builds on netocc-core: its `build.py occt` builds OCCT's TKIVtk too, on VTK from [NetVtk](https://github.com/paulbuechner/netvtk)'s vcpkg registry, and its `build.py pack` makes the NetOcc that NetOcc.Vtk depends on. NetVtk comes from nuget.org (the release `netocc-vtk/NetVtk.props` names) or from a folder of packed NetVtk (`--netvtk-packages <dir>`).
+NetOcc.Vtk builds on netocc-core: its `build.py occt` builds OCCT's TKIVtk too, on VTK from [NetVtk](https://github.com/paulbuechner/netvtk)'s vcpkg registry, and its `build.py pack` makes the NetOcc that NetOcc.Vtk depends on. NetVtk comes from nuget.org (the release `netocc-vtk/NetVtk.props` names) or from a netvtk checkout's packs in local development (`netocc-vtk/local-dev.props`, from its `local-dev.props.template`).
 
 ```bash
 cd netocc-vtk

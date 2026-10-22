@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Local development switch. Copy this file to local-dev.props (git-ignored) in the same folder and adjust the paths;
+  delete it to go back to nuget.org. Directory.Build.props reads it, for every solution and for build.py.
+
+  The defaults assume netocc and netvtk side by side in one folder (only the relative layout matters):
+    <root>\netocc    (this repository)
+    <root>\netvtk
+-->
+<Project>
+  <PropertyGroup>
+    <!-- netvtk: the packs `python build.py pack` writes in netvtk-core, used instead of the release NetVtk.props names;
+         their NetVtk.version.props names the version. A folder without a pack fails the build. Ends with a backslash. -->
+    <LocalNetVtkPackagesPath>$(MSBuildThisFileDirectory)..\..\netvtk\netvtk-core\artifacts\packages\</LocalNetVtkPackagesPath>
+  </PropertyGroup>
+</Project>

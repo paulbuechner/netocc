@@ -12,9 +12,9 @@ on NetVtk's vcpkg registry), runs SWIG and computes the versions; this drives th
     python build.py pack [--version 8.0.1.2] [--rids win-x64,win-x86]   # NetOcc.Vtk + NetOcc.Vtk.runtime.<rid>
     python build.py test-package [--arch x64]       # the packed NetOcc.Vtk, consumed like an app would
 
-NetVtk: the version in NetVtk.props, from nuget.org; --netvtk-packages <dir> (or the environment's NETVTK_PACKAGES) takes
-it from a folder of packed NetVtk instead, at the version its NetVtk.version.props names (netvtk-core's build.py pack).
-Without either, a sibling netvtk checkout's packs (../../netvtk/netvtk-core/artifacts/packages) are used when present.
+NetVtk: the version in NetVtk.props, from nuget.org; with a local-dev.props (local-dev.props.template), the packs of a
+local netvtk checkout its LocalNetVtkPackagesPath names, as every solution takes them (Directory.Build.props). A pack
+records that folder (NetOcc.Vtk.version.props), and test-package restores from it.
 
 Versions: NetOcc.Vtk depends on the NetOcc netocc-core's build.py pack made (>= its version). CI and releases pack it at
 that version (--version); a local pack gets one of its own, <OCCT version>.<next revision>-local.<utc time>, as NetOcc's
@@ -23,6 +23,8 @@ do: packed again on the same NetOcc, a version NuGet has extracted before would 
 from __future__ import annotations
 
 import argparse
+import functools
+import json
 import os
 import re
 import shutil
@@ -43,8 +45,6 @@ SWIG_FILES = ROOT / "src" / "SWIG_files"
 PROJECT = ROOT / "src" / "NetOcc.Vtk" / "NetOcc.Vtk.csproj"
 TESTS = ROOT / "test" / "NetOcc.Vtk.Tests"
 PACKAGE_TESTS = ROOT / "test" / "NetOcc.Vtk.PackageTests"
-NETVTK_PROPS = ROOT / "NetVtk.props"
-SIBLING_NETVTK = ROOT.parent.parent / "netvtk" / "netvtk-core" / "artifacts" / "packages"
 FRAMEWORKS = ["net10.0", "net8.0", "net48"]
 
 
@@ -53,41 +53,27 @@ def natives(rid: str) -> Path:
 
 
 # --------------------------------------------------------------------------- NetVtk
-def netvtk_packages(args: argparse.Namespace) -> Path | None:
-    """The folder of packed NetVtk to take it from, or None for nuget.org."""
-    folder = getattr(args, "netvtk_packages", None) or os.environ.get("NETVTK_PACKAGES")
-    if folder:
-        return Path(folder).resolve()
-    return SIBLING_NETVTK if (SIBLING_NETVTK / "NetVtk.version.props").is_file() else None
-
-
-def netvtk_version(packages: Path | None) -> str:
-    """The NetVtk version: the packed one's, or NetVtk.props's pinned release."""
-    props = packages / "NetVtk.version.props" if packages else NETVTK_PROPS
-    match = re.search(r"<NetVtk(?:Package)?Version[^>]*>([^<]+)<", props.read_text(encoding="utf-8"))
-    if not match:
-        sys.exit(f"{props}: no NetVtk version")
-    return match.group(1).strip()
-
-
-def netvtk_properties(args: argparse.Namespace) -> list[str]:
-    """MSBuild properties for NetVtk's version and, for a local folder, its source."""
-    packages = netvtk_packages(args)
-    properties = [f"-p:NetVtkVersion={netvtk_version(packages)}"]
-    if packages:
-        properties.append(f"-p:RestoreAdditionalProjectSources={packages}")
-    return properties
+@functools.cache
+def netvtk_source() -> tuple[str, Path | None]:
+    """NetVtk's version and the folder of local packs it comes from (local-dev.props' LocalNetVtkPackagesPath), or None
+    for nuget.org: as MSBuild evaluates NetOcc.Vtk, so build.py and the solutions take the same NetVtk."""
+    out = subprocess.run(["dotnet", "msbuild", PROJECT, "-getProperty:NetVtkVersion",
+                          "-getProperty:LocalNetVtkPackagesPath"], capture_output=True, text=True, check=True).stdout
+    properties = json.loads(out)["Properties"]
+    folder = Path(properties["LocalNetVtkPackagesPath"]).resolve() if properties["LocalNetVtkPackagesPath"] else None
+    if folder and not (folder / "NetVtk.version.props").is_file():
+        sys.exit(f"no packed NetVtk in {folder} (local-dev.props): run netvtk-core's build.py pack first")
+    return properties["NetVtkVersion"], folder
 
 
 def nuget_root() -> Path:
     return Path(os.environ.get("NUGET_PACKAGES") or Path.home() / ".nuget" / "packages")
 
 
-def netvtk_swig(args: argparse.Namespace) -> Path:
+def netvtk_swig() -> Path:
     """NetVtk's SWIG files (its package's swig/), restored at the version NetOcc.Vtk builds on."""
-    properties = netvtk_properties(args)
-    core.run(["dotnet", "restore", PROJECT, *properties])
-    version = netvtk_version(netvtk_packages(args))
+    core.run(["dotnet", "restore", PROJECT])
+    version, _ = netvtk_source()
     swig = nuget_root() / "netvtk" / version.lower() / "swig"
     if not (swig / "interop" / "NetVtkInterop.i").is_file():
         sys.exit(f"NetVtk {version} has no swig/interop/NetVtkInterop.i at {swig}")
@@ -95,18 +81,17 @@ def netvtk_swig(args: argparse.Namespace) -> Path:
 
 
 def cmd_netvtk(args: argparse.Namespace) -> None:
-    print(netvtk_swig(args))
+    print(netvtk_swig())
 
 
 # --------------------------------------------------------------------------- generate, native
 def libraries() -> dict[str, list[str]]:
     """modules.json, as netocc-gen writes it with config/vtk.yaml: the library and its modules."""
-    import json
     return json.loads((SWIG_FILES / "modules.json").read_text(encoding="utf-8"))
 
 
 def cmd_generate(args: argparse.Namespace) -> None:
-    swig = netvtk_swig(args)
+    swig = netvtk_swig()
     # NetOcc's modules (imported), their companions (extras/), NetVtk's interop typemaps
     core.generate_modules(SWIG_FILES, GENERATED, libraries(),
                           [core.SWIG_FILES / "wrapper", core.SWIG_FILES, swig / "interop"])
@@ -158,7 +143,7 @@ def cmd_test(args: argparse.Namespace) -> None:
     arch = ["--arch", args.arch] if core.host_is_windows() else []
     for framework in frameworks:
         cmd = ["dotnet", "test", TESTS / "NetOcc.Vtk.Tests.csproj", "-c", "Release", *arch,
-               "--framework", framework, *netvtk_properties(args)]
+               "--framework", framework]
         if args.no_rendering:
             cmd += ["--filter", "TestCategory!=Rendering"]
         core.run(cmd)
@@ -197,8 +182,7 @@ def cmd_pack(args: argparse.Namespace) -> None:
     # Version reaches the NetOcc project reference, whose version the dependency takes: NetOcc's. NetOcc.Vtk's own comes as
     # NetOccVtkVersion, which its project puts in Version's place (TreatAsLocalProperty). NetVtk at NetVtk.props's or the
     # local one's; -p: splits values at ';', so the sources' separators are escaped
-    packages = netvtk_packages(args)
-    netvtk = netvtk_version(packages)
+    netvtk, packages = netvtk_source()
     managed = [f"-p:Version={netocc}", f"-p:NetOccVtkVersion={version}", f"-p:NetVtkVersion={netvtk}", *ci]
     env = dict(os.environ, NetOccVtkRuntimeRids=";".join(rids))
     sources = "%3B".join(str(s) for s in [PACKAGES, core.PACKAGES, *([packages] if packages else [])])
@@ -210,8 +194,10 @@ def cmd_pack(args: argparse.Namespace) -> None:
     if problems := core.dependency_problems(package, expected):
         sys.exit(f"{package.name} depends on {', '.join(problems)}, not on "
                  f"{', '.join(f'{name} {want}' for name, want in expected.items())}")
+    # and where its NetVtk comes from, for the projects that consume the pack: a local one only restores from there
+    source = f"    <NetVtkPackageSource>{packages}</NetVtkPackageSource>\n" if packages else ""
     (PACKAGES / "NetOcc.Vtk.version.props").write_text(
-        f"<Project>\n  <PropertyGroup>\n    <NetOccVtkPackageVersion>{version}</NetOccVtkPackageVersion>\n"
+        f"<Project>\n  <PropertyGroup>\n    <NetOccVtkPackageVersion>{version}</NetOccVtkPackageVersion>\n{source}"
         f"  </PropertyGroup>\n</Project>\n", encoding="utf-8")
     print(f"NetOcc.Vtk {version} on NetOcc {netocc}: {', '.join(sorted(p.name for p in PACKAGES.glob('*.*nupkg')))}")
 
@@ -222,13 +208,12 @@ def cmd_test_package(args: argparse.Namespace) -> None:
     frameworks = ["net8.0", "net48"] if core.host_is_windows() else ["net8.0"]
     for framework in frameworks:
         core.run(["dotnet", "test", PACKAGE_TESTS / "NetOcc.Vtk.PackageTests.csproj", "-c", "Release", "--arch",
-                  args.arch, "--framework", framework, *netvtk_properties(args)])
+                  args.arch, "--framework", framework])
 
 
 # --------------------------------------------------------------------------- command line
 def parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("--netvtk-packages", help="a folder of packed NetVtk (netvtk-core's artifacts/packages)")
     sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("netvtk", help="restore NetVtk; print its SWIG files").set_defaults(fn=cmd_netvtk)
     sub.add_parser("generate", help="SWIG over the modules -> build/generated").set_defaults(fn=cmd_generate)

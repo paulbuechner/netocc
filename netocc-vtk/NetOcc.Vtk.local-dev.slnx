@@ -1,0 +1,31 @@
+<Solution>
+  <!--
+    Local development solution: the main solution plus the files local development reads and NetVtk's interop typemaps
+    IVtk.i uses. local-dev.props (local-dev.props.template) decides where NetVtk comes from, not this solution. This file
+    is the template for everyone's personal view: copy it to a git-ignored NetOcc.Vtk.<user>.slnx and adjust it there.
+  -->
+  <Folder Name="/Solution Items/">
+    <File Path="CLAUDE.md" />
+    <File Path="Directory.Build.props" />
+    <!-- git-ignored and per-machine: shows as missing until you copy the template -->
+    <File Path="local-dev.props" />
+    <File Path="local-dev.props.template" />
+    <File Path="NetVtk.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/NetOcc.Vtk/NetOcc.Vtk.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/NetOcc.Vtk.Tests/NetOcc.Vtk.Tests.csproj" />
+  </Folder>
+  <Folder Name="/demo/">
+    <Project Path="demo/NetOcc.Vtk.Viewer.Wpf/NetOcc.Vtk.Viewer.Wpf.csproj" />
+  </Folder>
+  <Folder Name="/netocc-core/">
+    <Project Path="../netocc-core/src/NetOcc/NetOcc.csproj" />
+  </Folder>
+  <Folder Name="/netvtk/">
+    <File Path="../../netvtk/netvtk-core/src/SWIG_files/interop/NetVtkInterop.i" />
+  </Folder>
+</Solution>

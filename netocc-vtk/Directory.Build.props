@@ -1,16 +1,19 @@
 <Project>
 
   <!--
-    A sibling netvtk checkout's packs (its netvtk-core's build.py pack), as build.py takes them: local development on a
-    NetVtk nuget.org doesn't have yet. Without one, NetVtk.props's release from nuget.org.
+    local-dev.props (git-ignored; from local-dev.props.template) switches NetVtk from nuget.org (NetVtk.props) to the
+    packs of a local netvtk checkout: LocalNetVtkPackagesPath, whose NetVtk.version.props names the version. build.py
+    reads it through MSBuild too.
   -->
-  <PropertyGroup>
-    <NetOccVtkSiblingNetVtk>$(MSBuildThisFileDirectory)..\..\netvtk\netvtk-core\artifacts\packages</NetOccVtkSiblingNetVtk>
+  <Import Project="$(MSBuildThisFileDirectory)local-dev.props" Condition="Exists('$(MSBuildThisFileDirectory)local-dev.props')" />
+  <Import Project="$(LocalNetVtkPackagesPath)NetVtk.version.props" Condition="'$(LocalNetVtkPackagesPath)' != '' and Exists('$(LocalNetVtkPackagesPath)NetVtk.version.props')" />
+  <PropertyGroup Condition="'$(LocalNetVtkPackagesPath)' != ''">
+    <NetVtkVersion Condition="'$(NetVtkVersion)' == ''">$(NetVtkPackageVersion)</NetVtkVersion>
+    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(LocalNetVtkPackagesPath)</RestoreAdditionalProjectSources>
   </PropertyGroup>
-  <Import Project="$(NetOccVtkSiblingNetVtk)\NetVtk.version.props" Condition="'$(NetVtkVersion)' == '' and Exists('$(NetOccVtkSiblingNetVtk)\NetVtk.version.props')" />
-  <PropertyGroup Condition="'$(NetVtkVersion)' == '' and '$(NetVtkPackageVersion)' != ''">
-    <NetVtkVersion>$(NetVtkPackageVersion)</NetVtkVersion>
-    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(NetOccVtkSiblingNetVtk)</RestoreAdditionalProjectSources>
-  </PropertyGroup>
+
+  <Target Name="NetVtkRequireLocalPack" BeforeTargets="CollectPackageReferences;Build" Condition="'$(LocalNetVtkPackagesPath)' != ''">
+    <Error Condition="!Exists('$(LocalNetVtkPackagesPath)NetVtk.version.props')" Text="No packed NetVtk in $(LocalNetVtkPackagesPath) (local-dev.props): run 'python build.py pack' in netvtk-core first." />
+  </Target>
 
 </Project>

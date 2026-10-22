@@ -2,13 +2,13 @@
 
   <!--
     The examples of the VTK article (articles/vtk.md), as samples/ holds NetOcc's: on the packed NetOcc.Vtk (netocc-vtk's
-    build.py pack writes NetOcc.Vtk.version.props, nuget.config reads the packages next to it and netocc-core's), NetVtk at
-    the version the pack names: from nuget.org, or a sibling netvtk checkout's packs as netocc-vtk takes them.
+    build.py pack writes NetOcc.Vtk.version.props, nuget.config reads the packages next to it and netocc-core's), NetVtk
+    from nuget.org, or the folder of packed NetVtk the pack names.
   -->
   <Import Project="..\..\netocc-vtk\artifacts\packages\NetOcc.Vtk.version.props" Condition="Exists('..\..\netocc-vtk\artifacts\packages\NetOcc.Vtk.version.props')" />
-  <Import Project="..\..\netocc-vtk\Directory.Build.props" />
 
   <PropertyGroup>
+    <RestoreAdditionalProjectSources Condition="'$(NetVtkPackageSource)' != ''">$(RestoreAdditionalProjectSources);$(NetVtkPackageSource)</RestoreAdditionalProjectSources>
     <TargetFramework>net10.0</TargetFramework>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
