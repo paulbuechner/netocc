@@ -1,15 +1,17 @@
-# The release PR, like changesets' "Version Packages": whenever changelog entries (netocc-core/changes/) reach main, this
-# writes the next release into CHANGELOG.md (build.py release: <OCCT version>.<next revision>) and opens or updates the
-# pull request "Release NetOcc <version>" into main. On next, like changesets' pre mode, the release is the next
-# prerelease (<version>-next.1, -next.2, ...), its pull request into next. Merging it makes build.yml publish that version;
-# a release after merging next into main (without new entries: run this by hand on main) lists the prereleases' notes too.
+# The release PR, like changesets' "Version Packages": on any push to main with entries (netocc-core/changes/) pending,
+# this writes the next release into CHANGELOG.md (build.py release: <OCCT version>.<next revision>) and opens or updates
+# the pull request "Release NetOcc <version>" into main. On next, like changesets' pre mode, the release is the next
+# prerelease (<version>-next.1, -next.2, ...), its pull request into next. Merging it makes build.yml publish that
+# version; a release after merging next into main (without new entries: run this by hand on main) lists the prereleases'
+# notes too.
 # Needs Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests".
 name: release PR
 
 on:
+  # every push, not only one with entries: the pull request is rebuilt on the pushed commit (create-pull-request resets
+  # its branch onto the base), so the release commit comes after everything it releases
   push:
     branches: [main, next]
-    paths: ["netocc-core/changes/**"]
   workflow_dispatch:
     inputs:
       prerelease:
