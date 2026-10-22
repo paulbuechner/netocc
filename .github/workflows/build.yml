@@ -20,8 +20,9 @@ on:
   pull_request:
     paths: ["netocc-core/**", "netocc-vtk/**", "netocc-demos/**", "netocc-documentation/samples/**", "README.md", ".github/workflows/build.yml"]
   workflow_dispatch:
-  # keeps the vcpkg caches: GitHub evicts caches unused for 7 days, and scheduled runs can start late or be dropped,
-  # so twice a week (off the full hour). GitHub disables this after 60 days without activity in the repository.
+  # keeps the vcpkg caches, main's and (job next) next's: GitHub evicts caches unused for 7 days, and scheduled runs can
+  # start late or be dropped, so twice a week (off the full hour). GitHub disables this after 60 days without activity
+  # in the repository.
   schedule:
     - cron: "17 4 * * 1,4"
 
@@ -46,6 +47,29 @@ defaults:
     working-directory: netocc-core
 
 jobs:
+  # The schedule runs on main only, and a run restores only its own branch's caches and main's: next's would expire
+  # after 7 days without a push, and next would then restore main's, which its vcpkg inputs don't match (no package
+  # restored). So each scheduled run starts this workflow on next too.
+  next:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: this workflow on next
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/branches/next" --silent; then
+            gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref next
+          else
+            echo "no branch next"
+          fi
+
   # the version: OCCT's and NetOcc's revision (build.py version). On main, the newest release in CHANGELOG.md is published
   # unless it has its tag already or is on nuget.org, on next the newest if it's a prerelease (a release there is main's,
   # merged); everything else packs <OCCT>.<next revision>-ci.<run>
@@ -176,6 +200,21 @@ jobs:
           path: netocc-core/artifacts/runtimes/${{ matrix.rid }}
           if-no-files-found: error
 
+      # OCCT's documentation comments as NetOcc's XML documentation (build.py docs), which pack ships: the same for
+      # every platform, so made once, on Windows, where libclang parses OCCT's headers with the Windows SDK's C headers;
+      # on Linux it lacks its own stddef.h. Here, on this job's install, rather than in a job of its own, which would
+      # restore the vcpkg cache again and, on another runner image, miss it and build OCCT a second time.
+      - name: documentation
+        if: matrix.rid == 'win-x64'
+        shell: bash
+        run: python build.py docs --triplet x64-windows
+      - if: matrix.rid == 'win-x64'
+        uses: actions/upload-artifact@v7
+        with:
+          name: documentation
+          path: netocc-core/artifacts/docs
+          if-no-files-found: error
+
       # NetOcc.Vtk on the same OCCT install: TKIVtk's wrappers on NetVtk (from nuget.org). The tests that render need OpenGL
       # 3.2: Linux has Mesa's llvmpipe under Xvfb, the Windows and macOS runners none.
       - name: NetOcc.Vtk
@@ -202,42 +241,8 @@ jobs:
           path: netocc-vtk/artifacts/runtimes/${{ matrix.rid }}
           if-no-files-found: error
 
-  # OCCT's documentation comments as NetOcc's XML documentation (build.py docs), which pack ships: the same for every
-  # platform, so made once, beside the natives. On Windows, where libclang parses OCCT's headers with the Windows SDK's C
-  # headers; on Linux it lacks its own stddef.h.
-  documentation:
-    needs: version
-    # x64-windows's vcpkg cache is the win-x64 natives' (same image); a cold one builds OCCT here too
-    runs-on: windows-2025
-    timeout-minutes: 350
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-      - uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: 10.0.x
-      - name: OCCT
-        uses: ./.github/actions/occt
-        with:
-          triplet: x64-windows
-      - uses: ./.github/actions/swig
-
-      # SWIG's C# for the net10.0 assembly, whose members netocc-gen docs documents
-      - name: SWIG and documentation
-        shell: bash
-        run: |
-          python build.py generate
-          python build.py docs --triplet x64-windows
-      - uses: actions/upload-artifact@v7
-        with:
-          name: documentation
-          path: netocc-core/artifacts/docs
-          if-no-files-found: error
-
   pack:
-    needs: [version, natives, documentation]
+    needs: [version, natives]
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:

@@ -1,4 +1,4 @@
-# OCCT for a vcpkg triplet (build.py occt) from vcpkg's binary cache, for build.yml's natives and documentation jobs. A cold
+# OCCT for a vcpkg triplet (build.py occt) from vcpkg's binary cache, for build.yml's natives job. A cold
 # cache builds OCCT, which takes hours.
 name: OCCT
 description: vcpkg at the registry baseline, its binary cache and OCCT for a triplet (build.py occt)
@@ -46,6 +46,14 @@ runs:
       env:
         VCPKG_ROOT: ${{ github.workspace }}/.vcpkg-tool
       run: python build.py occt --triplet ${{ inputs.triplet }} ${{ inputs.save-cache == 'true' && '--prune-archives' || '' }}
+
+    # what opencascade's ABI hash is made of (vcpkg_abi_info.txt): the ports' files, the compiler's hash (in
+    # triplet_abi) and the versions of CMake and, on Windows, PowerShell, which vcpkg takes from the runner image. When
+    # a cache restores nothing, the difference to an earlier run's shows what changed.
+    - name: vcpkg ABI inputs
+      shell: bash
+      working-directory: netocc-core
+      run: cat .vcpkg/installed-${{ inputs.triplet }}/${{ inputs.triplet }}/share/opencascade/vcpkg_abi_info.txt
 
     - if: inputs.save-cache == 'true' && steps.occt.outputs.archives-changed == 'true'
       uses: actions/cache/save@v6
