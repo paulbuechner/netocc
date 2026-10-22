@@ -12,8 +12,8 @@ namespace OCC.Core;
 /// NetOccVtk, NetOcc.Vtk's native library, loads as NetOcc's do (NetOcc's NativeLibraryLoader, the
 /// same directories). It needs VTK's libraries, NetVtk.runtime's, which may be in another directory
 /// (runtimes\&lt;rid&gt;\native where NetOcc's are in x64\): NetVtk loads them first, and the OS
-/// loader then finds them loaded. TKIVtk and NetOccVtk must have been compiled against the VTK build
-/// NetVtk's natives carry: <see cref="Vtk.VtkBuild.Require"/> throws where they weren't.
+/// loader then finds them loaded. TKIVtk and NetOccVtk must have been compiled against the VTK
+/// build NetVtk's natives carry: <see cref="Vtk.VtkBuild.Require"/> throws where they weren't.
 /// </summary>
 internal static class NativeLibraries
 {
