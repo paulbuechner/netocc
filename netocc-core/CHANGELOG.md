@@ -4,6 +4,16 @@ Notable changes to the NetOcc packages (`NetOcc`, `NetOcc.runtime.<rid>`), in th
 
 Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), until the release PR writes them here (`python build.py release`). Each release's section becomes its GitHub release notes and the packages' release notes.
 
+## [8.0.1.1-next.5] - 2026-10-22
+
+### Changed
+
+- NetOcc.Vtk builds on NetVtk 9.7.1.1-next.3, with its reverse Z and Windows' render windows (one renders into a texture a Direct3D 11 device shares). When it loads, NetOcc.Vtk checks that NetVtk's natives are the VTK build TKIVtk was compiled against (`Vtk.VtkBuild`), and throws an `InvalidOperationException` naming both builds where they are not.
+
+### Fixed
+
+- win-x86: NetOcc.Vtk shows shapes where they are. MSVC's x86 code at /O2 computed VTK's actor bounds wrong, so VTK culled actors and reset cameras off the scene; NetVtk's VTK is built at /O2 /Os now, and OCCT with it (the same triplet).
+
 ## [8.0.1.1-next.4] - 2026-10-13
 
 ### Added
@@ -87,6 +97,7 @@ Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), 
 - One AnyCPU assembly for .NET Framework 3.5 to 4.8, .NET 6, 8 and 10, and netstandard2.0.
 - Natives for win-x64, win-x86, linux-x64 and osx-arm64, one package each (`NetOcc.runtime.<rid>`).
 
+[8.0.1.1-next.5]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.5
 [8.0.1.1-next.4]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.4
 [8.0.1.1-next.3]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.3
 [8.0.1.1-next.2]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.2

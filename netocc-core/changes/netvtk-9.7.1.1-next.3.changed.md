@@ -1,1 +1,0 @@
-NetOcc.Vtk builds on NetVtk 9.7.1.1-next.3, with its reverse Z and Windows' render windows (one renders into a texture a Direct3D 11 device shares). When it loads, NetOcc.Vtk checks that NetVtk's natives are the VTK build TKIVtk was compiled against (`Vtk.VtkBuild`), and throws an `InvalidOperationException` naming both builds where they are not.
