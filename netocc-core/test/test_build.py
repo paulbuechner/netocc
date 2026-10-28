@@ -1,10 +1,11 @@
 # SPDX-FileCopyrightText: 2026 Paul Büchner
 # SPDX-License-Identifier: MIT
 
-"""Tests of build.py's versions, changelog and SWIG message rules: python test/test_build.py (stdlib unittest)."""
+"""Tests of build.py's versions, changelog, SWIG message and package rules: python test/test_build.py (stdlib unittest)."""
 from __future__ import annotations
 
 import importlib.util
+import sys
 import tempfile
 import unittest
 import zipfile
@@ -12,6 +13,7 @@ from pathlib import Path
 from unittest import mock
 
 CORE = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(CORE))  # build.py imports sbom.py beside it
 _spec = importlib.util.spec_from_file_location("build", CORE / "build.py")
 build = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(build)
@@ -193,15 +195,6 @@ class SwigMessageTests(unittest.TestCase):
         # Assert
         self.assertEqual((harmless, lost), (1, ["Demo.i(30) : Warning 401: Base class 'Other_Base' undefined."]))
         self.assertEqual(kept, messages.splitlines()[2:])
-
-
-class LibraryTests(unittest.TestCase):
-    def test_library_stem_matches_a_staged_copy_with_its_installed_file(self):
-        # Act
-        stems = [build.library_stem(n) for n in ("libz.so.1", "libz.so.1.3.2", "libz.1.dylib", "z.dll", "z.lib", "gperf")]
-
-        # Assert
-        self.assertEqual(stems, ["libz", "libz", "libz", "z", None, None])
 
 
 class PackageTests(unittest.TestCase):

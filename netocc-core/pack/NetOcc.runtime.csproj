@@ -28,6 +28,7 @@
   <ItemGroup>
     <None Include="$(NetOccStage)\native\*" Pack="true" PackagePath="runtimes/$(NetOccRid)/native/" Visible="false" />
     <None Include="$(NetOccStage)\THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(NetOccStage)\sbom.cdx.json" Pack="true" PackagePath="sbom/" Visible="false" />
     <!-- empty lib/ placeholders: compatible with .NET Framework 3.5+ and netstandard2.0 consumers (.NET 6+ included) -->
     <None Include="_._" Pack="true" PackagePath="lib/net35/;lib/netstandard2.0/" Visible="false" />
     <!-- Windows only: .NET Framework ignores runtimes/, so the targets copy the natives into x64\ or x86\ next to the app -->
@@ -36,6 +37,7 @@
 
   <Target Name="NetOccCheckStage" BeforeTargets="GenerateNuspec">
     <Error Condition="!Exists('$(NetOccStage)\native')" Text="No natives in $(NetOccStage)\native: run build.py native for $(NetOccRid) first." />
+    <Error Condition="!Exists('$(NetOccStage)\sbom.cdx.json')" Text="No SBOM in $(NetOccStage): run build.py native for $(NetOccRid) again." />
   </Target>
 
 </Project>

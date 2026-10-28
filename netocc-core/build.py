@@ -38,6 +38,8 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
+import sbom
+
 ROOT = Path(__file__).resolve().parent
 TOOLS = ROOT / ".tools"
 VCPKG_STATE = ROOT / ".vcpkg"
@@ -488,6 +490,8 @@ def cmd_native(args: argparse.Namespace) -> None:
     if not host_is_windows():
         flatten_stage(stage)
     write_notices(args.triplet, stage, stage.parent / "THIRD-PARTY-NOTICES.txt")
+    sbom.write(stage, stage.parent / sbom.FILE, f"NetOcc.runtime.{rid}", installed=vcpkg_installed(args.triplet),
+               triplet=args.triplet, repository=REPOSITORY)
 
 
 def loader_name(library: Path) -> str | None:
@@ -516,35 +520,11 @@ def flatten_stage(stage: Path) -> None:
             library.rename(stage / name)
 
 
-# header-only ports compiled into the shipped libraries: no file of theirs is staged, but their code is (RWGltf's JSON)
-COMPILED_IN = ["rapidjson"]
-
-
-def library_stem(name: str) -> str | None:
-    """A shared library's name without its version and extension (libz.so.1.3.1, libz.1.dylib, z.dll: libz, libz, z), so a
-    port's installed file and its staged copy (renamed to the SONAME) match; None for other files."""
-    match = re.fullmatch(r"(.+?)(?:\.so(?:\.\d+)*|(?:\.\d+)*\.dylib|\.dll)", name, re.I)
-    return match.group(1).lower() if match else None
-
-
-def shipped_ports(triplet: str, stage: Path) -> list[str]:
-    """The vcpkg ports whose libraries the stage holds (vcpkg's installed file lists: <port>_<version>_<triplet>.list),
-    and the compiled-in header-only ones. Not build tools (gperf) or empty ports (pthread), whose licenses would go
-    into the package for nothing."""
-    staged = {stem for path in stage.iterdir() if (stem := library_stem(path.name))}
-    ports = set()
-    for listing in (vcpkg_installed(triplet) / "vcpkg" / "info").glob(f"*_{triplet}.list"):
-        port = listing.name.split("_", 1)[0]
-        if port in COMPILED_IN or any(library_stem(Path(f).name) in staged for f in listing.read_text(encoding="utf-8").splitlines()):
-            ports.add(port)
-    return sorted(ports)
-
-
 def write_notices(triplet: str, stage: Path, target: Path) -> None:
     """NetOcc's license, NOTICE and the license of every vcpkg port the stage ships, for the runtime package."""
     parts = [("NetOcc", (ROOT / "LICENSE").read_text(encoding="utf-8")),
              ("NetOcc NOTICE", (ROOT / "NOTICE").read_text(encoding="utf-8"))]
-    for port in shipped_ports(triplet, stage):
+    for port in sbom.shipped_ports(vcpkg_installed(triplet), triplet, stage):
         license_file = vcpkg_prefix(triplet) / "share" / port / "copyright"
         parts.append((port, license_file.read_text(encoding="utf-8", errors="replace")))
     rule = "=" * 78
@@ -939,6 +919,7 @@ def cmd_pack(args: argparse.Namespace) -> None:
 
     ci = ["-p:ContinuousIntegrationBuild=true"] if os.environ.get("GITHUB_ACTIONS") else []
     for rid in rids:
+        sbom.stamp(natives(rid).parent / sbom.FILE, version)
         run(["dotnet", "pack", ROOT / "pack" / "NetOcc.runtime.csproj", "-c", "Release", "-o", PACKAGES,
              f"-p:NetOccRid={rid}", f"-p:Version={version}", *ci])
 

@@ -1,6 +1,6 @@
 # Licensing
 
-MIT wherever NetOcc can, OCCT's terms where it must. This isn't legal advice. The repository carries `LICENSE` (MIT) and `netocc-core/NOTICE`; the packages carry `NOTICE`, the runtime packages `THIRD-PARTY-NOTICES.txt` (NOTICE and every vcpkg port's license).
+MIT wherever NetOcc can, OCCT's terms where it must. This isn't legal advice. The repository carries `LICENSE` (MIT) and `netocc-core/NOTICE`; the packages carry `NOTICE`, the runtime packages `THIRD-PARTY-NOTICES.txt` (NOTICE and every vcpkg port's license) and `sbom/sbom.cdx.json`, a CycloneDX SBOM with the data fields of BSI TR-03183-2: every file of the package with its SHA-512, under the port it comes from or NetOcc's own libraries, each port with its creator, version, license and its texts, copyright, source, patches and what it needs of the others, for an application's own SBOM, where NuGet lists the runtime package alone.
 
 | Part | License | Why, and what it takes |
 |---|---|---|

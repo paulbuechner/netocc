@@ -84,9 +84,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      # the version and release rules this job publishes by
-      - name: build.py's tests
-        run: python test/test_build.py
+      # the version and release rules this job publishes by, and the runtime packages' SBOM
+      - name: build.py's and sbom.py's tests
+        run: |
+          python test/test_build.py
+          python test/test_sbom.py
       - id: version
         name: version and release notes
         shell: bash

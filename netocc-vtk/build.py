@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parent
 CORE_ROOT = ROOT.parent / "netocc-core"
 sys.path.insert(0, str(CORE_ROOT))
 import build as core  # noqa: E402  netocc-core's build.py
+import sbom  # noqa: E402  netocc-core's sbom.py
 
 BUILD = ROOT / "build"
 GENERATED = BUILD / "generated"
@@ -133,6 +134,9 @@ def cmd_native(args: argparse.Namespace) -> None:
     text = vtk_license.read_text(encoding="utf-8", errors="replace").strip()
     with notices.open("a", encoding="utf-8") as out:
         out.write(f"{rule}\nvtk\n{rule}\n\n{text}\n\n")
+    sbom.write(stage, stage.parent / sbom.FILE, f"NetOcc.Vtk.runtime.{rid}",
+               installed=core.vcpkg_installed(args.triplet), triplet=args.triplet, repository=core.REPOSITORY,
+               compiled_in={"vtk": "headers compiled into NetOccVtk and TKIVtk; its libraries come with NetVtk.runtime"})
 
 
 # --------------------------------------------------------------------------- test, pack
@@ -177,6 +181,7 @@ def cmd_pack(args: argparse.Namespace) -> None:
     PACKAGES.mkdir(parents=True)
     ci = ["-p:ContinuousIntegrationBuild=true"] if os.environ.get("GITHUB_ACTIONS") else []
     for rid in rids:
+        sbom.stamp(natives(rid).parent / sbom.FILE, version)
         core.run(["dotnet", "pack", ROOT / "pack" / "NetOcc.Vtk.runtime.csproj", "-c", "Release", "-o", PACKAGES,
                   f"-p:NetOccVtkRid={rid}", f"-p:Version={version}", *ci])
     # Version reaches the NetOcc project reference, whose version the dependency takes: NetOcc's. NetOcc.Vtk's own comes as
