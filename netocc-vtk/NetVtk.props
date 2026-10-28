@@ -6,7 +6,7 @@
     override with its port-version): change all three together. local-dev.props takes a local pack's version instead (Directory.Build.props).
   -->
   <PropertyGroup>
-    <NetVtkVersion Condition="'$(NetVtkVersion)' == ''">9.7.1.1-next.3</NetVtkVersion>
+    <NetVtkVersion Condition="'$(NetVtkVersion)' == ''">9.7.1.1-next.4</NetVtkVersion>
   </PropertyGroup>
 
 </Project>
