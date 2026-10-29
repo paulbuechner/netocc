@@ -4,6 +4,16 @@ Notable changes to the NetOcc packages (`NetOcc`, `NetOcc.runtime.<rid>`), in th
 
 Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), until the release PR writes them here (`python build.py release`). Each release's section becomes its GitHub release notes and the packages' release notes.
 
+## [8.0.1.1-next.6] - 2026-10-28
+
+### Added
+
+- Each runtime package carries sbom/sbom.cdx.json, a CycloneDX SBOM with the data fields of BSI TR-03183-2: every file of the package with its SHA-512, under NetOcc or the vcpkg port it comes from, each with its creator, version, license and its texts, copyright, source, patches and what it needs of the others, for an application's own SBOM, where NuGet lists the package alone; NetOcc.Vtk's lists VTK's compiled-in headers too.
+
+### Changed
+
+- NetOcc.Vtk builds on NetVtk 9.7.1.1-next.4, whose runtime packages carry their CycloneDX SBOM too.
+
 ## [8.0.1.1-next.5] - 2026-10-22
 
 ### Changed
@@ -97,6 +107,7 @@ Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), 
 - One AnyCPU assembly for .NET Framework 3.5 to 4.8, .NET 6, 8 and 10, and netstandard2.0.
 - Natives for win-x64, win-x86, linux-x64 and osx-arm64, one package each (`NetOcc.runtime.<rid>`).
 
+[8.0.1.1-next.6]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.6
 [8.0.1.1-next.5]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.5
 [8.0.1.1-next.4]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.4
 [8.0.1.1-next.3]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.3
