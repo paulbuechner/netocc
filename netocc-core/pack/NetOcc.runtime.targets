@@ -1,0 +1,110 @@
+<Project>
+
+  <!--
+    Which natives of the NetOcc.runtime packages an app gets. build.py pack packs this file into each runtime package as
+    NetOcc.runtime.<rid>.targets, beside NetOcc.runtime.<rid>.natives.targets: the package's natives, each with all it
+    loads (loads.py). Each package adds its own items; the targets are the same in all of them, the last import's stand.
+
+    NetOccModules (optional): the NetOcc modules the app uses, as a list (FoundationClasses;ModelingData;DataExchange).
+    Only their libraries, NetOccRuntime and what these load are copied, on .NET Framework and .NET; empty: all of them.
+    NetOccRequiredNative items (with Rid): natives that another package's natives load (NetOcc.Vtk's), kept with all
+    they load.
+
+    .NET Framework ignores runtimes\: the Windows packages copy their natives into x64\ or x86\ next to the app, where
+    NetOcc's loader looks, for the architecture the app runs as only: x86 for PlatformTarget x86 or an AnyCPU exe with
+    Prefer32Bit, x64 for x64, the RuntimeIdentifier's without a PlatformTarget, both for AnyCPU (the SDK leaves an exe
+    without a PlatformTarget AnyCPU, natives in runtimes\ notwithstanding). NuGet's copies of a RuntimeIdentifier's
+    natives next to the app are dropped: second copies, which Windows would find first for every library the process
+    loads.
+  -->
+
+  <Import Project="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).natives.targets"
+          Condition="Exists('$(MSBuildThisFileDirectory)$(MSBuildThisFileName).natives.targets')" />
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework' and $(MSBuildThisFileName.StartsWith('NetOcc.runtime.win-'))">
+    <_NetOccFrameworkNative Include="$(MSBuildThisFileDirectory)..\..\runtimes\$(MSBuildThisFileName.Substring(15))\native\*"
+                            Package="$(MSBuildThisFileName)" Arch="$(MSBuildThisFileName.Substring(19))" />
+  </ItemGroup>
+
+  <!-- the architectures a .NET Framework app runs as: ;x86; ;x64; or both -->
+  <Target Name="_NetOccFrameworkArchitectures">
+    <PropertyGroup>
+      <_NetOccPlatform>$(PlatformTarget.ToLowerInvariant())</_NetOccPlatform>
+      <_NetOccPlatform Condition="'$(_NetOccPlatform)' == '' and $(RuntimeIdentifier.ToLowerInvariant().EndsWith('-x86'))">x86</_NetOccPlatform>
+      <_NetOccPlatform Condition="'$(_NetOccPlatform)' == '' and $(RuntimeIdentifier.ToLowerInvariant().EndsWith('-x64'))">x64</_NetOccPlatform>
+      <_NetOccPlatform Condition="('$(_NetOccPlatform)' == '' or '$(_NetOccPlatform)' == 'anycpu') and '$(Prefer32Bit)' == 'true' and ('$(OutputType)' == 'Exe' or '$(OutputType)' == 'WinExe' or '$(OutputType)' == 'AppContainerExe')">x86</_NetOccPlatform>
+      <_NetOccArchitectures>;$(_NetOccPlatform);</_NetOccArchitectures>
+      <_NetOccArchitectures Condition="'$(_NetOccPlatform)' == '' or '$(_NetOccPlatform)' == 'anycpu'">;x86;x64;</_NetOccArchitectures>
+    </PropertyGroup>
+  </Target>
+
+  <!-- the natives NetOccModules needs, as ;<package>/<file>; in lower case; empty without NetOccModules -->
+  <Target Name="_NetOccSelectNatives" Condition="'$(NetOccModules)' != ''">
+    <ItemGroup>
+      <_NetOccModule Include="$(NetOccModules);Runtime" />
+      <_NetOccModuleLibrary Include="%(_NetOccNative.Module)" Package="%(_NetOccNative.Package)" File="%(_NetOccNative.Identity)"
+                            Condition="'%(_NetOccNative.Module)' != ''" />
+      <_NetOccUnknownModule Include="@(_NetOccModule)" Exclude="@(_NetOccModuleLibrary)" />
+      <_NetOccKnownModule Include="@(_NetOccModuleLibrary->Distinct())" Exclude="Runtime" />
+    </ItemGroup>
+    <Error Condition="'@(_NetOccUnknownModule)' != ''"
+           Text="NetOccModules names @(_NetOccUnknownModule->'%(Identity)', ', '), which NetOcc has no module of. Its modules: @(_NetOccKnownModule, ', ')." />
+    <ItemGroup>
+      <_NetOccOtherModule Include="@(_NetOccModuleLibrary)" Exclude="@(_NetOccModule)" />
+      <_NetOccModuleLibrary Remove="@(_NetOccOtherModule)" />
+      <_NetOccRoot Include="@(_NetOccModuleLibrary->'%(Package)/%(File)')" />
+      <_NetOccRoot Include="@(NetOccRequiredNative->'NetOcc.runtime.%(Rid)/%(Identity)')" />
+      <_NetOccLoader Include="@(_NetOccNative->'%(Package)/%(Identity)')" />
+      <_NetOccUnrooted Include="@(_NetOccLoader)" Exclude="@(_NetOccRoot)" />
+      <_NetOccLoader Remove="@(_NetOccUnrooted)" />
+      <_NetOccLoaded Include="%(_NetOccLoader.Loads)" Package="%(_NetOccLoader.Package)" />
+    </ItemGroup>
+    <PropertyGroup>
+      <_NetOccNeeded>;@(_NetOccLoaded->'%(Package)/%(Identity)');</_NetOccNeeded>
+      <_NetOccNeeded>$(_NetOccNeeded.ToLowerInvariant())</_NetOccNeeded>
+    </PropertyGroup>
+  </Target>
+
+  <!-- .NET Framework: the natives of the app's architectures into x64\ and x86\ -->
+  <Target Name="_NetOccFrameworkNatives" BeforeTargets="AssignTargetPaths"
+          DependsOnTargets="_NetOccFrameworkArchitectures;_NetOccSelectNatives" Condition="'@(_NetOccFrameworkNative)' != ''">
+    <ItemGroup>
+      <None Include="@(_NetOccFrameworkNative)" Link="%(_NetOccFrameworkNative.Arch)\%(_NetOccFrameworkNative.Filename)%(_NetOccFrameworkNative.Extension)"
+            CopyToOutputDirectory="PreserveNewest" Visible="false"
+            Condition="$(_NetOccArchitectures.Contains(';%(_NetOccFrameworkNative.Arch);')) and ('$(_NetOccNeeded)' == '' or $(_NetOccNeeded.Contains($([System.String]::Copy(';%(_NetOccFrameworkNative.Package)/%(_NetOccFrameworkNative.Filename)%(_NetOccFrameworkNative.Extension);').ToLowerInvariant()))))" />
+    </ItemGroup>
+  </Target>
+
+  <!-- NuGet's copies: none next to a .NET Framework app (an exe's default platform ignores natives in runtimes\); on .NET,
+       those NetOccModules needs, next to the app for a RuntimeIdentifier, else in runtimes\<rid>\native\ -->
+  <Target Name="_NetOccPackageNatives" AfterTargets="ResolvePackageAssets" DependsOnTargets="_NetOccSelectNatives">
+    <ItemGroup>
+      <NativeCopyLocalItems Remove="@(NativeCopyLocalItems)"
+                            Condition="$([System.String]::Copy('%(NativeCopyLocalItems.NuGetPackageId)').ToLowerInvariant().StartsWith('netocc.runtime.')) and ('$(TargetFrameworkIdentifier)' == '.NETFramework' or ('$(_NetOccNeeded)' != '' and !$(_NetOccNeeded.Contains($([System.String]::Copy(';%(NativeCopyLocalItems.NuGetPackageId)/%(NativeCopyLocalItems.Filename)%(NativeCopyLocalItems.Extension);').ToLowerInvariant())))))" />
+      <RuntimeTargetsCopyLocalItems Remove="@(RuntimeTargetsCopyLocalItems)"
+                                    Condition="$([System.String]::Copy('%(RuntimeTargetsCopyLocalItems.NuGetPackageId)').ToLowerInvariant().StartsWith('netocc.runtime.')) and '$(_NetOccNeeded)' != '' and !$(_NetOccNeeded.Contains($([System.String]::Copy(';%(RuntimeTargetsCopyLocalItems.NuGetPackageId)/%(RuntimeTargetsCopyLocalItems.Filename)%(RuntimeTargetsCopyLocalItems.Extension);').ToLowerInvariant())))" />
+    </ItemGroup>
+  </Target>
+
+  <!-- .NET Framework: the same for the natives a referenced project hands on (an AnyCPU library's x64\ and x86\) -->
+  <Target Name="_NetOccReferencedNatives" AfterTargets="GetCopyToOutputDirectoryItems"
+          DependsOnTargets="_NetOccFrameworkArchitectures;_NetOccSelectNatives" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <ItemGroup>
+      <_NetOccCopied Include="@(_SourceItemsToCopyToOutputDirectory);@(_SourceItemsToCopyToOutputDirectoryAlways);@(_SourceItemsToCopyToOutputDirectoryIfDifferent)" />
+      <_NetOccCopied Condition="$([System.String]::Copy('%(_NetOccCopied.FullPath)').ToLowerInvariant().Contains('\netocc.runtime.win-x64')) and $([System.String]::Copy('%(_NetOccCopied.FullPath)').ToLowerInvariant().Contains('\runtimes\win-x64\native\'))">
+        <_NetOccArch>x64</_NetOccArch>
+      </_NetOccCopied>
+      <_NetOccCopied Condition="$([System.String]::Copy('%(_NetOccCopied.FullPath)').ToLowerInvariant().Contains('\netocc.runtime.win-x86')) and $([System.String]::Copy('%(_NetOccCopied.FullPath)').ToLowerInvariant().Contains('\runtimes\win-x86\native\'))">
+        <_NetOccArch>x86</_NetOccArch>
+      </_NetOccCopied>
+      <_NetOccUnwanted Include="@(_NetOccCopied)"
+                       Condition="'%(_NetOccCopied._NetOccArch)' != '' and (!$(_NetOccArchitectures.Contains(';%(_NetOccCopied._NetOccArch);')) or ('$(_NetOccNeeded)' != '' and !$(_NetOccNeeded.Contains($([System.String]::Copy(';netocc.runtime.win-%(_NetOccCopied._NetOccArch)/%(_NetOccCopied.Filename)%(_NetOccCopied.Extension);').ToLowerInvariant())))))" />
+      <_SourceItemsToCopyToOutputDirectory Remove="@(_NetOccUnwanted)" />
+      <_SourceItemsToCopyToOutputDirectoryAlways Remove="@(_NetOccUnwanted)" />
+      <_SourceItemsToCopyToOutputDirectoryIfDifferent Remove="@(_NetOccUnwanted)" />
+      <AllItemsFullPathWithTargetPath Remove="@(_NetOccUnwanted)" />
+      <_NetOccCopied Remove="@(_NetOccCopied)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

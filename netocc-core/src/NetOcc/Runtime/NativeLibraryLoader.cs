@@ -15,7 +15,7 @@ namespace OCC.Core;
 /// Loads the NetOcc native libraries (NetOcc&lt;Module&gt; with the wrappers of an OCCT module,
 /// NetOccRuntime) and, through the OS loader, the OCCT libraries next to them, before the first
 /// P/Invoke. Probed locations, relative to the app base directory, then to NetOcc.dll's own (a
-/// plugin's; on .NET Framework also a shadow copy's original): <c>&lt;arch&gt;/</c> (AnyCPU .NET
+/// plugin's; on .NET Framework also a shadow copy's original): <c>&lt;arch&gt;/</c> (the .NET
 /// Framework layout), <c>runtimes/&lt;rid&gt;/native/</c>, and the directory itself. The
 /// netstandard2.0 build has no resolver: it preloads on Windows only and leaves other systems to
 /// .NET's default probing.

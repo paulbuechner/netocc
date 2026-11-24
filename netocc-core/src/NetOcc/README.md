@@ -3,7 +3,7 @@
 [Open CASCADE Technology](https://dev.opencascade.org) (OCCT) 8.0.1 for .NET: C# bindings generated from OCCT's headers. OCCT's names don't change, each OCCT package is a namespace (`gp_Pnt` is `OCC.Core.gp.gp_Pnt`), and IntelliSense shows OCCT's documentation.
 
 - **Frameworks:** .NET Framework 3.5 and 4.5+, .NET 6, 8 and 10, netstandard2.0, in one AnyCPU assembly.
-- **Platforms:** win-x64, win-x86, linux-x64 and osx-arm64. The natives come with the package (`NetOcc.runtime.<rid>`).
+- **Platforms:** win-x64, win-x86, linux-x64 and osx-arm64. The natives come with the package (`NetOcc.runtime.<rid>`): a .NET Framework app gets its architecture's in `x86\` or `x64\`, and `<NetOccModules>FoundationClasses;ModelingData;DataExchange</NetOccModules>` ships only the natives of the modules an app uses.
 - **Covered:** all 362 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, ApplicationFramework and DataExchange modules and of Visualization's TKService, TKV3d, TKOpenGl and TKMeshVS: geometry, topology, booleans, fillets, offsets, sweeps, shape healing, meshing, OCAF and XCAF documents, STEP, IGES, STL, glTF, OBJ, PLY and VRML files, and 3D views.
 
 ## Requirements

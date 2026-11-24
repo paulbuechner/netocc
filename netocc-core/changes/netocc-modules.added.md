@@ -1,0 +1,1 @@
+`NetOccModules` names the NetOcc modules an app uses (`FoundationClasses;ModelingData;ModelingAlgorithms;DataExchange`): the build copies their libraries, NetOccRuntime and what these load only, on .NET Framework and .NET. A STEP read with geometry needs 62 of the 69 files on Windows. Each runtime package lists what its natives load, read from the files at pack time.
