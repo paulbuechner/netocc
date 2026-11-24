@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parent
 CORE_ROOT = ROOT.parent / "netocc-core"
 sys.path.insert(0, str(CORE_ROOT))
 import build as core  # noqa: E402  netocc-core's build.py
+import loads  # noqa: E402  netocc-core's loads.py
 import sbom  # noqa: E402  netocc-core's sbom.py
 
 BUILD = ROOT / "build"
@@ -46,6 +47,7 @@ SWIG_FILES = ROOT / "src" / "SWIG_files"
 PROJECT = ROOT / "src" / "NetOcc.Vtk" / "NetOcc.Vtk.csproj"
 TESTS = ROOT / "test" / "NetOcc.Vtk.Tests"
 PACKAGE_TESTS = ROOT / "test" / "NetOcc.Vtk.PackageTests"
+PACKAGE_TEST_NETOCC_MODULES = "FoundationClasses;ModelingData;ModelingAlgorithms"
 FRAMEWORKS = ["net10.0", "net8.0", "net48"]
 
 
@@ -182,6 +184,9 @@ def cmd_pack(args: argparse.Namespace) -> None:
     ci = ["-p:ContinuousIntegrationBuild=true"] if os.environ.get("GITHUB_ACTIONS") else []
     for rid in rids:
         sbom.stamp(natives(rid).parent / sbom.FILE, version)
+        # what the natives load of NetOcc's and NetVtk's, which their targets keep when they select modules
+        loads.write_foreign(natives(rid), natives(rid).parent / "natives.targets", f"NetOcc.Vtk.runtime.{rid}", rid,
+                            ["NetOccRequiredNative", "NetVtkRequiredNative"])
         core.run(["dotnet", "pack", ROOT / "pack" / "NetOcc.Vtk.runtime.csproj", "-c", "Release", "-o", PACKAGES,
                   f"-p:NetOccVtkRid={rid}", f"-p:Version={version}", *ci])
     # Version reaches the NetOcc project reference, whose version the dependency takes: NetOcc's. NetOcc.Vtk's own comes as
@@ -211,9 +216,12 @@ def cmd_test_package(args: argparse.Namespace) -> None:
     if not (PACKAGES / "NetOcc.Vtk.version.props").exists():
         sys.exit("no packages: run build.py pack first")
     frameworks = ["net8.0", "net48"] if core.host_is_windows() else ["net8.0"]
-    for framework in frameworks:
-        core.run(["dotnet", "test", PACKAGE_TESTS / "NetOcc.Vtk.PackageTests.csproj", "-c", "Release", "--arch",
-                  args.arch, "--framework", framework])
+    # all modules, then modules without Visualization's TKV3d and Rendering's VTK, which TKIVtk imports: the natives keep
+    # them (NetOccModules and NetVtkModules from the environment: -p: splits values at ';')
+    for env in (None, dict(os.environ, NetOccModules=PACKAGE_TEST_NETOCC_MODULES, NetVtkModules="Common")):
+        for framework in frameworks:
+            core.run(["dotnet", "test", PACKAGE_TESTS / "NetOcc.Vtk.PackageTests.csproj", "-c", "Release", "--arch",
+                      args.arch, "--framework", framework], env=env)
 
 
 # --------------------------------------------------------------------------- command line

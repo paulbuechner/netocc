@@ -17,6 +17,8 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <RootNamespace>NetOcc.Vtk.PackageTests</RootNamespace>
+    <!-- with NetOccModules (build.py test-package's second run), a test checks what the natives keep -->
+    <DefineConstants Condition="'$(NetOccModules)' != ''">$(DefineConstants);NETOCC_MODULES</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

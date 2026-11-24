@@ -32,13 +32,19 @@
     <None Include="$(NetOccVtkStage)\sbom.cdx.json" Pack="true" PackagePath="sbom/" Visible="false" />
     <!-- empty lib/ placeholders: compatible with .NET Framework 3.5+ and netstandard2.0 consumers (.NET 6+ included) -->
     <None Include="_._" Pack="true" PackagePath="lib/net35/;lib/netstandard2.0/" Visible="false" />
-    <!-- Windows only: .NET Framework ignores runtimes/, so the targets copy the natives into x64\ or x86\ next to the app -->
-    <None Include="$(PackageId).targets" Condition="Exists('$(PackageId).targets')" Pack="true" PackagePath="build/net35/;buildTransitive/net35/" />
+    <!-- which natives an app gets (NetOcc.Vtk.runtime.targets): its architecture's in x64\ or x86\ on .NET Framework, which
+         ignores runtimes/, and what they load of NetOcc's and NetVtk's when those select modules; net35 for .NET
+         Framework, netstandard2.0 for .NET -->
+    <None Include="NetOcc.Vtk.runtime.targets" Pack="true" Visible="false"
+          PackagePath="build/net35/$(PackageId).targets;buildTransitive/net35/$(PackageId).targets;build/netstandard2.0/$(PackageId).targets;buildTransitive/netstandard2.0/$(PackageId).targets" />
+    <None Include="$(NetOccVtkStage)\natives.targets" Pack="true" Visible="false"
+          PackagePath="build/net35/$(PackageId).natives.targets;buildTransitive/net35/$(PackageId).natives.targets;build/netstandard2.0/$(PackageId).natives.targets;buildTransitive/netstandard2.0/$(PackageId).natives.targets" />
   </ItemGroup>
 
   <Target Name="NetOccVtkCheckStage" BeforeTargets="GenerateNuspec">
     <Error Condition="!Exists('$(NetOccVtkStage)\native')" Text="No natives in $(NetOccVtkStage)\native: run build.py native for $(NetOccVtkRid) first." />
     <Error Condition="!Exists('$(NetOccVtkStage)\sbom.cdx.json')" Text="No SBOM in $(NetOccVtkStage): run build.py native for $(NetOccVtkRid) again." />
+    <Error Condition="!Exists('$(NetOccVtkStage)\natives.targets')" Text="No natives.targets in $(NetOccVtkStage): pack through build.py pack." />
   </Target>
 
 </Project>
