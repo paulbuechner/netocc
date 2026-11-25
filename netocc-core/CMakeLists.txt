@@ -36,6 +36,9 @@ function(netocc_library name)
     target_compile_options(${name} PRIVATE -fvisibility=hidden -Wno-deprecated-declarations)
     if(APPLE)
       set_target_properties(${name} PROPERTIES BUILD_RPATH "@loader_path" INSTALL_RPATH "@loader_path")
+      # ld64 records every dylib it links, used or not: each module's library would load all of OCCT (NetOccModules).
+      # Drops those no symbol comes from, as MSVC and Ubuntu's GCC (--as-needed) do.
+      target_link_options(${name} PRIVATE "LINKER:-dead_strip_dylibs")
     else()
       set_target_properties(${name} PROPERTIES BUILD_RPATH "$ORIGIN" INSTALL_RPATH "$ORIGIN")
       # GNU ld allows undefined symbols in a shared library; a member OCCT lacks here would fail at its first call

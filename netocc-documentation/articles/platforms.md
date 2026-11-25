@@ -36,7 +36,7 @@ An app that uses some of OCCT's modules can ship their natives only: name them i
 
 The modules are FoundationClasses, ModelingData, ModelingAlgorithms, Visualization, ApplicationFramework and DataExchange; the [class index](../classes/index.md) lists each one's packages. The build copies their `NetOcc<Module>` libraries, NetOccRuntime and the OCCT and third-party libraries these load, on .NET Framework and .NET, from every runtime package. List every module whose classes the app uses: a call into another fails with `DllNotFoundException` for its `NetOcc<Module>`. Unset, every module ships.
 
-A STEP read with geometry needs the four above: 62 of the 69 files on Windows, without NetOccApplicationFramework, NetOccVisualization, TKOpenGl, TKMeshVS, brotlienc, hwloc and tbbmalloc_proxy. On macOS each module's library loads all of OCCT's, so only the other modules' NetOcc libraries stay out.
+A STEP read with geometry needs the four above: 62 of the 69 files on Windows, without NetOccApplicationFramework, NetOccVisualization, TKOpenGl, TKMeshVS, brotlienc, hwloc and tbbmalloc_proxy; 62 of the 68 on macOS, the same but hwloc. Geometry alone, without DataExchange, needs 26 of the 68 on macOS.
 
 ## NetOcc.Vtk
 

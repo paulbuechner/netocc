@@ -1,0 +1,1 @@
+On macOS, the NetOcc libraries, NetOccVtk and TKIVtk load only the OCCT and VTK libraries they use, as on Windows and Linux, not all of them: each module's library loaded 60 of NetOcc.runtime.osx-arm64's 68 files, FoundationClasses' now loads 5.

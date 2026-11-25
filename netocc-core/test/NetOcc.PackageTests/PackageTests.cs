@@ -140,6 +140,20 @@ public class PackageTests
     // Assert
     Assert.That(libraries, Is.EquivalentTo(modules.Append("Runtime")));
   }
+
+  [Test]
+  public void Natives_LeaveOutWhatOnlyModulesLeftOutLoad()
+  {
+    // Arrange: Visualization's OpenGL driver and mesh presentations, which build.py's selection
+    // leaves out and none of its modules loads
+    var visualization = new Regex(@"^(?:lib)?TK(?:OpenGl|MeshVS)\.");
+
+    // Act
+    var files = Directory.GetFiles(NativeDirectory()).Select(Path.GetFileName).ToList();
+
+    // Assert
+    Assert.That(files, Has.None.Matches(visualization));
+  }
 #endif
 
   // where the natives are: x64\ or x86\ on .NET Framework, next to the app on .NET (a RID)

@@ -197,6 +197,7 @@ Redirect logs into `log/` (gitignored), never the repo root: `python build.py te
   - `XCAFApp_Application` is a process-wide singleton, so tests close only their own documents.
 - **Shipped natives:**
   - **macOS deployment target:** 14.0, set in `vcpkg/triplets/arm64-osx-dynamic.cmake`, which `build.py native` reads for the NetOcc libraries. Without it every dylib gets `minos` = the SDK version.
+  - **macOS load commands:** ld64 records every dylib a library links, used or not, and `loads.py` reads them all. The NetOcc libraries (NetOccVtk too) link with `-dead_strip_dylibs`, which keeps those a symbol comes from, as MSVC and Ubuntu's GCC do: the modules load what they load on Linux. A library needed only for its static initializers would be dropped silently (`-Wl,-needed_library` keeps one). vcpkg's builds get it from the macOS triplet (`VCPKG_LINKER_FLAGS`, NetVtk's copy): OCCT's unused ones all loaded through others anyway, TKIVtk's didn't (44 load commands, 18 used).
   - **Staging:** `build.py native` flattens the Linux/macOS stage to one file per library, named by its SONAME or install name. The symlink chains would otherwise be copied (and packed) in full: 237 MB instead of 82 MB on macOS. It also drops `pkgconfig/`.
   - **Linux:** CI builds on ubuntu-22.04, so glibc 2.35 is the floor. **Windows:** the natives need the Visual C++ 2015-2022 runtime.
 - **Packing:**
