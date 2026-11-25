@@ -1,1 +1,0 @@
-NetOcc.Vtk's natives are laid out like NetOcc's: a .NET Framework app gets its architecture's only, in `x86\` or `x64\`, and none next to the app for a RuntimeIdentifier. With `NetOccModules` or NetVtk's `NetVtkModules`, the libraries of OCCT and VTK that NetOccVtk and TKIVtk load are kept with all they load, whether their modules are selected or not.

@@ -1,1 +1,0 @@
-NetOcc.Vtk builds on NetVtk 9.7.1.1, its first release (VTK build `9.7.1#2`): on macOS, a render timer's `FrameReady()` before its window's first render no longer crashes the process, and NetVtk's libraries load only the VTK libraries they use.

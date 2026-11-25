@@ -4,6 +4,19 @@ Notable changes to the NetOcc packages (`NetOcc`, `NetOcc.runtime.<rid>`), in th
 
 Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), until the release PR writes them here (`python build.py release`). Each release's section becomes its GitHub release notes and the packages' release notes.
 
+## [8.0.1.1-next.7] - 2026-11-25
+
+### Added
+
+- `NetOccModules` names the NetOcc modules an app uses (`FoundationClasses;ModelingData;ModelingAlgorithms;DataExchange`): the build copies their libraries, NetOccRuntime and what these load only, on .NET Framework and .NET. A STEP read with geometry needs 62 of the 69 files on Windows and 62 of the 68 on macOS; geometry alone 26 of the 68 there. Each runtime package lists what its natives load, read from the files at pack time.
+
+### Changed
+
+- On macOS, the NetOcc libraries, NetOccVtk and TKIVtk load only the OCCT and VTK libraries they use, as on Windows and Linux, not all of them: each module's library loaded 60 of NetOcc.runtime.osx-arm64's 68 files, FoundationClasses' now loads 5.
+- A .NET Framework app gets the natives of the architecture it runs as only: `x86\` for PlatformTarget x86 or an AnyCPU exe with Prefer32Bit, `x64\` for x64, the RuntimeIdentifier's without a PlatformTarget, both for AnyCPU; so do the natives a referenced AnyCPU library hands on. With a RuntimeIdentifier, NuGet's second copy of the natives next to the app is left out, which Windows searched first for every library the process loads. A win-x86 app gets a third of the natives it got.
+- NetOcc.Vtk builds on NetVtk 9.7.1.1, its first release (VTK build `9.7.1#2`): on macOS, a render timer's `FrameReady()` before its window's first render no longer crashes the process, and NetVtk's libraries load only the VTK libraries they use.
+- NetOcc.Vtk's natives are laid out like NetOcc's: a .NET Framework app gets its architecture's only, in `x86\` or `x64\`, and none next to the app for a RuntimeIdentifier. With `NetOccModules` or NetVtk's `NetVtkModules`, the libraries of OCCT and VTK that NetOccVtk and TKIVtk load are kept with all they load, whether their modules are selected or not.
+
 ## [8.0.1.1-next.6] - 2026-10-28
 
 ### Added
@@ -107,6 +120,7 @@ Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), 
 - One AnyCPU assembly for .NET Framework 3.5 to 4.8, .NET 6, 8 and 10, and netstandard2.0.
 - Natives for win-x64, win-x86, linux-x64 and osx-arm64, one package each (`NetOcc.runtime.<rid>`).
 
+[8.0.1.1-next.7]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.7
 [8.0.1.1-next.6]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.6
 [8.0.1.1-next.5]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.5
 [8.0.1.1-next.4]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.4
