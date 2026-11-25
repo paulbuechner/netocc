@@ -1,6 +1,6 @@
 # netocc-vtk
 
-NetOcc.Vtk: OCCT shapes in [VTK](https://vtk.org) scenes, next to simulation results. C# bindings for OCCT 8.0.1's TKIVtk (`IVtk`, `IVtkOCC`, `IVtkVTK`, `IVtkTools`) on [NetOcc](../netocc-core) and [NetVtk](https://github.com/paulbuechner/netvtk), the C# bindings for VTK 9.7.1. OCCT's names unchanged, VTK's classes NetVtk's (`Vtk`); NetOcc's frameworks and RIDs.
+NetOcc.Vtk: OCCT shapes in [VTK](https://vtk.org) scenes, next to simulation results. C# bindings for OCCT 8.0.1's TKIVtk (`IVtk`, `IVtkOCC`, `IVtkVTK`, `IVtkTools`) on [NetOcc](../netocc-core) and [NetVtk](https://github.com/paulbuechner/netvtk), the C# bindings for VTK. OCCT's names unchanged, VTK's classes NetVtk's (`Vtk`); NetOcc's frameworks and RIDs.
 
 Tests green on win-x64 and win-x86 (net10.0, net8.0, net48) and on linux-x64 (net10.0, net8.0, in Docker); CI runs them on all four RIDs, osx-arm64 included (the rendering ones on Linux only).
 
@@ -41,7 +41,7 @@ TKIVtk is compiled against VTK's headers and runs on NetVtk's VTK libraries, so 
 - **Registry:** netocc-core's `vcpkg-configuration.json` takes `vtk` from NetVtk's vcpkg registry, its `baseline` a NetVtk release's commit, its `reference` that release's branch (vcpkg reads the version database there: `next` for a prerelease); `vcpkg.json` asks for NetVtk's VTK features (`cgns`, `exodus`, `volume`).
 - **Triplets:** netocc-core's are NetVtk's, byte for byte: vcpkg computes the same ABI hash, and either repository's binary cache restores the other's VTK.
 - **`NetVtk.props`** names the NetVtk release of the registry's commit, and `vcpkg.json`'s `vtk` override its VTK version and port-version: move all three together.
-- **At run time** NetOcc.Vtk has NetVtk load VTK first, then loads NetOccVtk through NetOcc's loader and checks that the VTK build it was compiled against (`9.7.1#2`: VTK's version and NetVtk's port-version) is the one NetVtk carries (`Vtk.VtkBuild.Require`, which throws where it isn't).
+- **At run time** NetOcc.Vtk has NetVtk load VTK first, then loads NetOccVtk through NetOcc's loader and checks that the VTK build it was compiled against (`<VTK version>#<port-version>`: VTK's version and NetVtk's port-version) is the one NetVtk carries (`Vtk.VtkBuild.Require`, which throws where it isn't).
 
 ## Build
 

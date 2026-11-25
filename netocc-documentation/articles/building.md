@@ -26,7 +26,7 @@ Needs Python 3.10+, a vcpkg clone (`VCPKG_ROOT`), CMake with Ninja, the .NET 10 
 ```bash
 cd netocc-core
 python build.py tools                        # SWIG from conda-forge into .tools/
-python build.py occt --triplet x64-windows   # OCCT 8.0.1 and NetVtk's VTK 9.7.1 through vcpkg, about an hour and a half the first time
+python build.py occt --triplet x64-windows   # OCCT 8.0.1 and NetVtk's VTK through vcpkg, about an hour and a half the first time
 python build.py generate                     # SWIG over the interface files
 python build.py native --triplet x64-windows # native libraries into artifacts/runtimes/win-x64/native
 python build.py test --arch x64              # every framework

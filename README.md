@@ -94,7 +94,7 @@ All 362 packages of OCCT's FoundationClasses, ModelingData, ModelingAlgorithms, 
 
 ## VTK scenes
 
-NetOcc.Vtk puts OCCT shapes into [VTK](https://vtk.org) scenes, next to simulation results: OCCT's TKIVtk on NetOcc and [NetVtk](https://github.com/paulbuechner/netvtk), the C# bindings for VTK 9.7.1.
+NetOcc.Vtk puts OCCT shapes into [VTK](https://vtk.org) scenes, next to simulation results: OCCT's TKIVtk on NetOcc and [NetVtk](https://github.com/paulbuechner/netvtk), the C# bindings for VTK.
 
 ```bash
 dotnet add package NetOcc.Vtk
