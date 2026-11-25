@@ -41,7 +41,7 @@ TKIVtk is compiled against VTK's headers and runs on NetVtk's VTK libraries, so 
 - **Registry:** netocc-core's `vcpkg-configuration.json` takes `vtk` from NetVtk's vcpkg registry, its `baseline` a NetVtk release's commit, its `reference` that release's branch (vcpkg reads the version database there: `next` for a prerelease); `vcpkg.json` asks for NetVtk's VTK features (`cgns`, `exodus`, `volume`).
 - **Triplets:** netocc-core's are NetVtk's, byte for byte: vcpkg computes the same ABI hash, and either repository's binary cache restores the other's VTK.
 - **`NetVtk.props`** names the NetVtk release of the registry's commit, and `vcpkg.json`'s `vtk` override its VTK version and port-version: move all three together.
-- **At run time** NetOcc.Vtk has NetVtk load VTK first, then loads NetOccVtk through NetOcc's loader and checks that the VTK build it was compiled against (`9.7.1#1`: VTK's version and NetVtk's port-version) is the one NetVtk carries (`Vtk.VtkBuild.Require`, which throws where it isn't).
+- **At run time** NetOcc.Vtk has NetVtk load VTK first, then loads NetOccVtk through NetOcc's loader and checks that the VTK build it was compiled against (`9.7.1#2`: VTK's version and NetVtk's port-version) is the one NetVtk carries (`Vtk.VtkBuild.Require`, which throws where it isn't).
 
 ## Build
 

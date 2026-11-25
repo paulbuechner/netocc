@@ -9,8 +9,8 @@
     {
       "kind": "git",
       "repository": "https://github.com/paulbuechner/netvtk",
-      "reference": "next",
-      "baseline": "429a143bdfc6c25da4b9e2c7fc1cb052dacaa109",
+      "reference": "main",
+      "baseline": "8a4060a01939e7475acd3983b7589870b12af2e5",
       "packages": ["vtk"]
     }
   ],
