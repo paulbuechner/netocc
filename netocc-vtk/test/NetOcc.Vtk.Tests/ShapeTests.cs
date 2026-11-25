@@ -89,7 +89,7 @@ public class ShapeTests
   }
 
   [Test]
-  [Category("Rendering")]
+  [Rendering]
   public void ShapePicker_PicksAFaceOfTheShape()
   {
     // Arrange (the part from above, filling the view: the window's centre is on its top face)

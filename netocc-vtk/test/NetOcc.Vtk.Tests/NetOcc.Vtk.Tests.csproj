@@ -12,6 +12,8 @@
     <RootNamespace>NetOcc.Vtk.Tests</RootNamespace>
     <NetOccArtifacts>$(MSBuildThisFileDirectory)..\..\..\netocc-core\artifacts\runtimes</NetOccArtifacts>
     <NetOccVtkArtifacts>$(MSBuildThisFileDirectory)..\..\artifacts\runtimes</NetOccVtkArtifacts>
+    <!-- .NET: the assembly runs as an app too, with its own Main (Program.cs: a rendering test on macOS's main thread) -->
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>
