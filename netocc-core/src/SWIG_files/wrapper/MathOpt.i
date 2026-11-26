@@ -12,13 +12,16 @@
 
 #ifndef SWIGIMPORTED
 %import "Standard.i"
-%import "NCollection.i"
 %import "TCollection.i"
 %import "TColStd.i"
+%import "NCollection.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "MathUtils.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.math; using OCC.Core.MathUtils;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.MathUtils;)
 
 %occt_valuetype(MathOpt_PSOStats)
 %occt_valuetype(MathOpt_UzawaConfig)

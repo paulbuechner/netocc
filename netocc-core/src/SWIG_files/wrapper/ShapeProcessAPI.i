@@ -11,11 +11,14 @@
 %}
 
 #ifndef SWIGIMPORTED
-%import "GeomAbs.i"
 %import "Standard.i"
-%import "NCollection.i"
 %import "TCollection.i"
 %import "TColStd.i"
+%import "NCollection.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
+%import "GeomAbs.i"
 %import "gp.i"
 %import "TColgp.i"
 %import "Geom.i"
@@ -28,9 +31,6 @@
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -69,7 +69,7 @@
 %import "ShapeBuild.i"
 %import "ShapeProcess.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.Resource; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.GeomAbs; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.Resource; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess;)
 
 %occt_valueclass(ShapeProcessAPI_ApplySequence)
 %nodefaultctor ShapeProcessAPI_ApplySequence;
@@ -79,7 +79,7 @@ class ShapeProcessAPI_ApplySequence {
 public:
   ShapeProcessAPI_ApplySequence(const char* rscName, const char* seqName = "");
   opencascade::handle<ShapeProcess_ShapeContext>& Context();
-  TopoDS_Shape PrepareShape(const TopoDS_Shape& shape, bool fillmap = false, TopAbs_ShapeEnum until = TopAbs_SHAPE);
+  TopoDS_Shape PrepareShape(const TopoDS_Shape& shape, bool fillmap = false, TopAbs_ShapeEnum until = TopAbs_SHAPE, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void ClearMap();
   const NCollection_DataMap<TopoDS_Shape, TopoDS_Shape, TopTools_ShapeMapHasher>& Map() const;
   void PrintPreparationResult() const;

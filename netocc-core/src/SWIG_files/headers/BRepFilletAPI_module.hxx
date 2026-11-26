@@ -12,6 +12,7 @@
 #include <GeomAbs_Shape.hxx>
 #include <Geom_Surface.hxx>
 #include <Law_Function.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_Array1.hxx>
 #include <NCollection_HArray1.hxx>
 #include <NCollection_List.hxx>

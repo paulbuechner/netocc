@@ -11,5 +11,6 @@ packages:
     exclude_methods: [Standard_Transient::IncrementRefCounter]
   Demo:
     value_types: [Demo_Vec]
+    directors: [Demo_Presentable]
     exclude_classes: [Demo_Allocator]
     exclude_namespaces: [Demo::detail]

@@ -1,6 +1,6 @@
-# A pull request that changes what the packages hold (netocc-core/src/, netocc-core/pack/) adds a changelog entry: a file
-# in netocc-core/changes/ (python build.py change <type> "what changed"). The label "no changelog" skips the check for
-# changes users don't see; adding or removing a label runs it again.
+# A pull request that changes what the packages hold (netocc-core/src/, netocc-core/pack/, the same in netocc-vtk/) adds a
+# changelog entry: a file in netocc-core/changes/ (python build.py change <type> "what changed"). The label "no changelog"
+# skips the check for changes users don't see; adding or removing a label runs it again.
 name: changelog
 
 on:

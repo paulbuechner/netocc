@@ -17,7 +17,13 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <RootNamespace>NetOcc.PackageTests</RootNamespace>
+    <!-- with NetOccModules (build.py test-package's second run), a test checks the selection -->
+    <DefineConstants Condition="'$(NetOccModules)' != ''">$(DefineConstants);NETOCC_MODULES</DefineConstants>
   </PropertyGroup>
+
+  <ItemGroup Condition="'$(NetOccModules)' != ''">
+    <AssemblyMetadata Include="NetOccModules" Value="$(NetOccModules)" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NetOcc" Version="$(NetOccPackageVersion)" />

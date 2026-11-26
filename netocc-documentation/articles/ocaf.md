@@ -2,18 +2,8 @@
 
 OCAF (the Open CASCADE Application Framework) stores application data in a tree of labels carrying attributes, with undo, redo and files for free. [XCAF](xcaf.md) is built on it.
 
-```mermaid
-flowchart TD
-    app["TDocStd_Application<br/><i>formats, open documents</i>"] --> doc["TDocStd_Document<br/><i>undo, redo, file</i>"]
-    doc --> root["0 root label"]
-    root --> main["0:1 main label"]
-    main --> l1["0:1:1"]
-    main --> l2["0:1:2"]
-    l1 --- a1(["TDataStd_Name: width"])
-    l1 --- a2(["TDataStd_Real: 40.0"])
-    l2 --- a3(["TDataStd_Name: part"])
-    l2 --- a4(["TNaming_NamedShape: a box"])
-```
+<img class="diagram-light" src="../assets/ocaf-labels.svg" width="800" height="548" alt="An OCAF document's label tree" loading="lazy">
+<img class="diagram-dark" src="../assets/ocaf-labels-dark.svg" width="800" height="548" alt="An OCAF document's label tree" loading="lazy">
 
 A label is a place in the tree, named by its path of tags (its entry, `0:1:2`). An attribute is data on a label, at most one per attribute class (per GUID).
 
@@ -39,19 +29,8 @@ A label is a place in the tree, named by its path of tags (its entry, `0:1:2`). 
 
 Changes between `OpenCommand` and `CommitCommand` form one undoable step:
 
-```mermaid
-sequenceDiagram
-    participant App as your code
-    participant Doc as TDocStd_Document
-    App->>Doc: SetUndoLimit(10)
-    App->>Doc: OpenCommand()
-    App->>Doc: TDataStd_Real.Set(width, 55)
-    Note over Doc: attributes back up<br/>their old values
-    App->>Doc: CommitCommand()
-    App->>Doc: Undo()
-    Note over Doc: width is 40 again
-    App->>Doc: Redo()
-```
+<img class="diagram-light" src="../assets/ocaf-undo.svg" width="800" height="412" alt="Undo and redo" loading="lazy">
+<img class="diagram-dark" src="../assets/ocaf-undo-dark.svg" width="800" height="412" alt="Undo and redo" loading="lazy">
 
 [!code-csharp[](../samples/Ocaf.cs#undo)]
 

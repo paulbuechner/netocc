@@ -85,6 +85,20 @@ namespace opencascade { template <class T> class handle; }
          cshin="ref $csinput")
          opencascade::handle< TYPE >&, TYPE *& "ref slot$csinput"
 
+// Director callbacks (Directors.i): a handle parameter reaches the C# override with a reference for its proxy. A handle
+// the override returns stays in Directors.Keep until the C++ side has taken its reference.
+%typemap(directorin) opencascade::handle< TYPE >, const opencascade::handle< TYPE >& %{
+  { TYPE* p = $1.get(); if (p) p->IncrementRefCounter(); $input = (void*)p; }
+%}
+%typemap(csdirectorin) opencascade::handle< TYPE >, const opencascade::handle< TYPE >&
+  "(($iminput == global::System.IntPtr.Zero) ? null : new CSTYPE($iminput, true))"
+%typemap(csdirectorout) opencascade::handle< TYPE >
+  "CSTYPE.getCPtr(global::OCC.Core.Directors.Keep(global::OCC.Core.Directors.Call(() => $cscall, $imclassname.netoccDirectorFailed))).Handle"
+%typemap(directorout) opencascade::handle< TYPE > %{
+  NetOcc_DirectorCheck();
+  $result = opencascade::handle< TYPE >(static_cast< TYPE* >($input));
+%}
+
 // A returned TYPE* is the object, like a returned handle: the proxy owns a reference (References.i's borrowing
 // proxies are for classes without a reference count). OCCT holds transients by handle, so the count is live.
 // netocc-gen spells these returns TYPE* const: SWIG applies the out typemap of TYPE* to constructors too, whose

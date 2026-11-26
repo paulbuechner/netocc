@@ -51,8 +51,8 @@ public:
 class XmlLDrivers_DocumentRetrievalDriver : public PCDM_RetrievalDriver {
 public:
   XmlLDrivers_DocumentRetrievalDriver();
-  void Read(const TCollection_ExtendedString& theFileName, const opencascade::handle<CDM_Document>& theNewDocument, const opencascade::handle<CDM_Application>& theApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>());
-  void Read(std::istream& theIStream, const opencascade::handle<Storage_Data>& theStorageData, const opencascade::handle<CDM_Document>& theDoc, const opencascade::handle<CDM_Application>& theApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>());
+  void Read(const TCollection_ExtendedString& theFileName, const opencascade::handle<CDM_Document>& theNewDocument, const opencascade::handle<CDM_Application>& theApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>(), const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Read(std::istream& theIStream, const opencascade::handle<Storage_Data>& theStorageData, const opencascade::handle<CDM_Document>& theDoc, const opencascade::handle<CDM_Application>& theApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>(), const Message_ProgressRange& theRange = Message_ProgressRange());
   opencascade::handle<XmlMDF_ADriverTable> AttributeDrivers(const opencascade::handle<Message_Messenger>& theMsgDriver);
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
@@ -70,8 +70,8 @@ public:
 class XmlLDrivers_DocumentStorageDriver : public PCDM_StorageDriver {
 public:
   XmlLDrivers_DocumentStorageDriver(const TCollection_ExtendedString& theCopyright);
-  void Write(const opencascade::handle<CDM_Document>& theDocument, const TCollection_ExtendedString& theFileName);
-  void Write(const opencascade::handle<CDM_Document>& theDocument, std::ostream& theOStream);
+  void Write(const opencascade::handle<CDM_Document>& theDocument, const TCollection_ExtendedString& theFileName, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Write(const opencascade::handle<CDM_Document>& theDocument, std::ostream& theOStream, const Message_ProgressRange& theRange = Message_ProgressRange());
   opencascade::handle<XmlMDF_ADriverTable> AttributeDrivers(const opencascade::handle<Message_Messenger>& theMsgDriver);
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();

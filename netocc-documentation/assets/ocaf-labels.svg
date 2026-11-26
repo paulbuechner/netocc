@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 548" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ocaf-labels-title ocaf-labels-desc" width="800" height="548">
+        <title id="ocaf-labels-title">An OCAF document's label tree</title>
+        <desc id="ocaf-labels-desc">A TDocStd_Application holds a TDocStd_Document, whose root label 0 has the main label 0:1 with children 0:1:1 and 0:1:2; 0:1:1 carries a TDataStd_Name and a TDataStd_Real, 0:1:2 a TDataStd_Name and a TNaming_NamedShape.</desc>
+        <defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="548" rx="12"/></clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+        </defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zone: the document's labels (top band) and their attributes (bottom band). -->
+        <rect x="40" y="124" width="720" height="356" rx="8" fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.12)"/>
+        <path d="M40,372 H760 V472 A8,8 0 0 1 752,480 H48 A8,8 0 0 1 40,472 Z" fill="rgba(45,49,66,0.03)"/>
+        <line x1="40" y1="372" x2="760" y2="372" stroke="rgba(45,49,66,0.12)"/>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#4f5d75" letter-spacing="0.14em">
+          <text x="56" y="144">LABELS</text>
+          <text x="56" y="392">ATTRIBUTES</text>
+        </g>
+
+        <!-- Connectors first. Parent to child labels: arrows; label to attribute: plain lines. -->
+        <path d="M248,66 H304" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M400,92 V140" fill="none" stroke="#bf4520" stroke-width="1.2" marker-end="url(#arrow-accent)"/>
+        <path d="M400,184 V212" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M372,256 V272 A8,8 0 0 1 364,280 H226 A8,8 0 0 0 218,288 V304" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <path d="M428,256 V272 A8,8 0 0 0 436,280 H574 A8,8 0 0 1 582,288 V304" fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+
+        <g fill="none" stroke="#4f5d75" stroke-width="1">
+          <path d="M198,348 V356 A8,8 0 0 1 190,364 H142 A8,8 0 0 0 134,372 V416"/>
+          <path d="M238,348 V356 A8,8 0 0 0 246,364 H294 A8,8 0 0 1 302,372 V416"/>
+          <path d="M562,348 V356 A8,8 0 0 1 554,364 H506 A8,8 0 0 0 498,372 V416"/>
+          <path d="M602,348 V356 A8,8 0 0 0 610,364 H658 A8,8 0 0 1 666,372 V416"/>
+        </g>
+
+        <!-- Framework: the application and its document (focal). -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="56" y="40" width="192" height="52" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="152" y="62" fill="#2d3142" font-size="12" font-weight="600">TDocStd_Application</text>
+          <text x="152" y="78" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">formats, open documents</text>
+
+          <rect x="304" y="40" width="192" height="52" rx="6" fill="#f5f5f5"/>
+          <rect x="304" y="40" width="192" height="52" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="400" y="62" fill="#2d3142" font-size="12" font-weight="600">TDocStd_Document</text>
+          <text x="400" y="78" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">undo, redo, file</text>
+        </g>
+
+        <!-- Labels, named by their entries. -->
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142" text-anchor="middle">
+          <rect x="320" y="140" width="160" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="166">0 root label</text>
+          <rect x="320" y="212" width="160" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="400" y="238">0:1 main label</text>
+          <rect x="158" y="304" width="120" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="218" y="330">0:1:1</text>
+          <rect x="522" y="304" width="120" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="582" y="330">0:1:2</text>
+        </g>
+
+        <!-- Attributes: class, then the value it holds. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="56" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="134" y="434" fill="#2d3142" font-size="12" font-weight="600">TDataStd_Name</text>
+          <text x="134" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">width</text>
+
+          <rect x="224" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="224" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="302" y="434" fill="#2d3142" font-size="12" font-weight="600">TDataStd_Real</text>
+          <text x="302" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">40.0</text>
+
+          <rect x="420" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="420" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="498" y="434" fill="#2d3142" font-size="12" font-weight="600">TDataStd_Name</text>
+          <text x="498" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">part</text>
+
+          <rect x="588" y="416" width="156" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="588" y="416" width="156" height="44" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="666" y="434" fill="#2d3142" font-size="12" font-weight="600">TNaming_NamedShape</text>
+          <text x="666" y="450" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">a box</text>
+        </g>
+
+        <text x="40" y="508" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">A LABEL CARRIES AT MOST ONE ATTRIBUTE PER CLASS (GUID)</text>
+      </g></svg>

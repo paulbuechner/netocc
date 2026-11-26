@@ -4,6 +4,9 @@
 # The named volume keeps vcpkg's state (binary cache, installed OCCT) between runs, so
 # OCCT builds once. A named volume, not a bind mount: building OCCT on a Windows path is slow.
 # A local check: CI builds the shipped natives on ubuntu-22.04 (glibc 2.35, GCC 11); this image's need glibc 2.39.
+# OCCT's vtk feature fetches NetVtk's vcpkg registry from GitHub; a netvtk checkout stands in for it with
+#   -v <netvtk>:/netvtk:ro -e GIT_CONFIG_COUNT=2 -e GIT_CONFIG_KEY_0=url./netvtk.insteadOf
+#   -e GIT_CONFIG_VALUE_0=https://github.com/paulbuechner/netvtk -e GIT_CONFIG_KEY_1=safe.directory -e GIT_CONFIG_VALUE_1='*'
 FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -12,7 +15,7 @@ RUN sed -i 's/^Components: .*/Components: main universe/' /etc/apt/sources.list.
  && apt-get -o Acquire::Retries=5 update && apt-get install -y --no-install-recommends \
       build-essential cmake ninja-build git curl zip unzip tar pkg-config \
       python3 ca-certificates autoconf autoconf-archive automake libtool \
-      libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxext-dev libxi-dev \
+      libgl1-mesa-dev libglu1-mesa-dev libegl-dev libx11-dev libxext-dev libxi-dev libxt-dev libxcursor-dev \
       libicu74 \
     && rm -rf /var/lib/apt/lists/*
 

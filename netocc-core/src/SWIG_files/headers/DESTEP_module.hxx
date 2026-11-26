@@ -9,6 +9,7 @@
 #include <DE_ShapeFixConfigurationNode.hxx>
 #include <DE_ShapeFixParameters.hxx>
 #include <DE_nested.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_Buffer.hxx>
 #include <NCollection_List.hxx>
 #include <Standard_Type.hxx>

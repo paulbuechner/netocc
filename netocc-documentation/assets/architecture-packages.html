@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packages</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Tree · architecture.md</p>
+    <h1>Packages</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 416" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="architecture-packages-title architecture-packages-desc">
+        <title id="architecture-packages-title">Packages</title>
+        <desc id="architecture-packages-desc">Your app references NetOcc, which holds NetOcc.dll for net35 to net10.0 and NetOcc.xml and depends on four runtime packages, win-x64, win-x86, linux-x64 and osx-arm64; each carries runtimes/&lt;rid&gt;/native/ with the NetOcc* and TK* libraries and OCCT's dependencies.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Connectors, before the boxes. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2">
+          <path d="M400,88 V118" marker-end="url(#arrow)"/>
+          <path d="M280,152 H132 Q124,152 124,160 V230" marker-end="url(#arrow)"/>
+          <path d="M308,184 V230" marker-end="url(#arrow)"/>
+          <path d="M492,184 V230" marker-end="url(#arrow)"/>
+          <path d="M520,152 H668 Q676,152 676,160 V230" marker-end="url(#arrow)"/>
+          <path d="M124,288 V318" marker-end="url(#arrow)"/>
+          <path d="M308,288 V318" marker-end="url(#arrow)"/>
+          <path d="M492,288 V318" marker-end="url(#arrow)"/>
+          <path d="M676,288 V318" marker-end="url(#arrow)"/>
+        </g>
+
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142" text-anchor="middle">
+          <!-- The app: input. -->
+          <rect x="320" y="40" width="160" height="48" rx="6" fill="#e4e6e8" stroke="#5a6580"/>
+          <text x="400" y="68">your app</text>
+
+          <!-- NetOcc: focal, the one package an app references. -->
+          <rect x="280" y="120" width="240" height="64" rx="6" fill="#f1e7e4" stroke="#bf4520"/>
+          <text x="400" y="142">NetOcc</text>
+
+          <!-- The four runtime packages. -->
+          <rect x="44" y="232" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="124" y="256">NetOcc.runtime.</text>
+          <text x="124" y="272">win-x64</text>
+          <rect x="228" y="232" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="308" y="256">NetOcc.runtime.</text>
+          <text x="308" y="272">win-x86</text>
+          <rect x="412" y="232" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="492" y="256">NetOcc.runtime.</text>
+          <text x="492" y="272">linux-x64</text>
+          <rect x="596" y="232" width="160" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="676" y="256">NetOcc.runtime.</text>
+          <text x="676" y="272">osx-arm64</text>
+
+          <!-- What each runtime package holds. -->
+          <rect x="44" y="320" width="712" height="56" rx="6" fill="#ebebec" stroke="#4f5d75"/>
+          <text x="400" y="344">runtimes/&lt;rid&gt;/native/</text>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="9" fill="#4f5d75" text-anchor="middle">
+          <text x="400" y="158">NetOcc.dll for net35 ... net10.0</text>
+          <text x="400" y="171">NetOcc.xml</text>
+          <text x="400" y="360">NetOcc* and TK* libraries, OCCT's dependencies</text>
+        </g>
+        <rect x="52" y="328" width="32" height="12" rx="2" fill="none" stroke="rgba(79,93,117,0.40)" stroke-width="0.8"/>
+        <text x="68" y="337" fill="#4f5d75" font-size="8" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing="0.08em">EACH</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

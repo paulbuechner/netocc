@@ -196,3 +196,12 @@
 
 // SWIG falls back from const T& to T& for typemaps missing on const T&: keep argout off const strings.
 %typemap(argout) const TCollection_AsciiString&, const TCollection_ExtendedString& ""
+
+// director callbacks (Directors.i): a string parameter reaches the C# override decoded
+%typemap(directorin) TCollection_AsciiString, const TCollection_AsciiString& "$input = (void*)$1.ToCString();"
+%typemap(csdirectorin) TCollection_AsciiString, const TCollection_AsciiString& "global::OCC.Core.Utf8.Decode($iminput)"
+%typemap(directorin) TCollection_ExtendedString, const TCollection_ExtendedString& "$input = (void*)$1.ToExtString();"
+%typemap(csdirectorin) TCollection_ExtendedString, const TCollection_ExtendedString&
+  "global::System.Runtime.InteropServices.Marshal.PtrToStringUni($iminput)"
+%typemap(directorin) const char*, const char* const "$input = (void*)$1;"
+%typemap(csdirectorin) const char*, const char* const "global::OCC.Core.Utf8.Decode($iminput)"

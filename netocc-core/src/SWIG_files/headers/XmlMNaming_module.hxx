@@ -6,6 +6,7 @@
 #include <LDOM_Document.hxx>
 #include <LDOM_Element.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <Standard_Type.hxx>
 #include <TDF_Attribute.hxx>
 #include <TDocStd_FormatVersion.hxx>

@@ -20,9 +20,12 @@
 %import "TColgp.i"
 %import "Geom.i"
 %import "GeomEval.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "Plate.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Plate;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.Plate;)
 
 %occt_transient(NLPlate_HGPPConstraint)
 %nodefaultctor NLPlate_HGPPConstraint;

@@ -24,13 +24,13 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -67,7 +67,7 @@
 %import "BOPAlgo.i"
 %import "BRepBuilderAPI.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.BOPDS; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BOPAlgo; using OCC.Core.BRepBuilderAPI;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.BOPDS; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BOPAlgo; using OCC.Core.BRepBuilderAPI;)
 
 %nodefaultdtor BRepAlgoAPI_Algo;
 %nodefaultctor BRepAlgoAPI_Algo;
@@ -115,7 +115,7 @@ public:
   BOPAlgo_GlueEnum Glue() const;
   void SetCheckInverted(bool theCheck);
   bool CheckInverted() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   void SimplifyResult(bool theUnifyEdges = true, bool theUnifyFaces = true, double theAngularTol = Precision::Angular());
   const NCollection_List<TopoDS_Shape>& Modified(const TopoDS_Shape& theS);
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& theS);
@@ -143,17 +143,17 @@ public:
   const NCollection_List<TopoDS_Shape>& Tools() const;
   void SetOperation(BOPAlgo_Operation theBOP);
   BOPAlgo_Operation Operation() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
 };
 
 class BRepAlgoAPI_Check : public BOPAlgo_Options {
 public:
   BRepAlgoAPI_Check();
-  BRepAlgoAPI_Check(const TopoDS_Shape& theS, bool bTestSE = true, bool bTestSI = true);
-  BRepAlgoAPI_Check(const TopoDS_Shape& theS1, const TopoDS_Shape& theS2, BOPAlgo_Operation theOp = BOPAlgo_UNKNOWN, bool bTestSE = true, bool bTestSI = true);
+  BRepAlgoAPI_Check(const TopoDS_Shape& theS, bool bTestSE = true, bool bTestSI = true, const Message_ProgressRange& theRange = Message_ProgressRange());
+  BRepAlgoAPI_Check(const TopoDS_Shape& theS1, const TopoDS_Shape& theS2, BOPAlgo_Operation theOp = BOPAlgo_UNKNOWN, bool bTestSE = true, bool bTestSI = true, const Message_ProgressRange& theRange = Message_ProgressRange());
   void SetData(const TopoDS_Shape& theS, bool bTestSE = true, bool bTestSI = true);
   void SetData(const TopoDS_Shape& theS1, const TopoDS_Shape& theS2, BOPAlgo_Operation theOp = BOPAlgo_UNKNOWN, bool bTestSE = true, bool bTestSI = true);
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsValid();
   const NCollection_List<BOPAlgo_CheckResult>& Result();
 };
@@ -164,9 +164,9 @@ public:
   %apply SWIGTYPE & NETOCC_KEEP { const BOPAlgo_PaveFiller& PF };
   BRepAlgoAPI_Common(const BOPAlgo_PaveFiller& PF);
   %clear const BOPAlgo_PaveFiller& PF;
-  BRepAlgoAPI_Common(const TopoDS_Shape& S1, const TopoDS_Shape& S2);
+  BRepAlgoAPI_Common(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const Message_ProgressRange& theRange = Message_ProgressRange());
   %apply SWIGTYPE & NETOCC_KEEP { const BOPAlgo_PaveFiller& PF };
-  BRepAlgoAPI_Common(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const BOPAlgo_PaveFiller& PF);
+  BRepAlgoAPI_Common(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const BOPAlgo_PaveFiller& PF, const Message_ProgressRange& theRange = Message_ProgressRange());
   %clear const BOPAlgo_PaveFiller& PF;
 };
 
@@ -176,9 +176,9 @@ public:
   %apply SWIGTYPE & NETOCC_KEEP { const BOPAlgo_PaveFiller& PF };
   BRepAlgoAPI_Cut(const BOPAlgo_PaveFiller& PF);
   %clear const BOPAlgo_PaveFiller& PF;
-  BRepAlgoAPI_Cut(const TopoDS_Shape& S1, const TopoDS_Shape& S2);
+  BRepAlgoAPI_Cut(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const Message_ProgressRange& theRange = Message_ProgressRange());
   %apply SWIGTYPE & NETOCC_KEEP { const BOPAlgo_PaveFiller& aDSF };
-  BRepAlgoAPI_Cut(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const BOPAlgo_PaveFiller& aDSF, bool bFWD = true);
+  BRepAlgoAPI_Cut(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const BOPAlgo_PaveFiller& aDSF, bool bFWD = true, const Message_ProgressRange& theRange = Message_ProgressRange());
   %clear const BOPAlgo_PaveFiller& aDSF;
 };
 
@@ -190,7 +190,7 @@ public:
   void AddFaceToRemove(const TopoDS_Shape& theFace);
   void AddFacesToRemove(const NCollection_List<TopoDS_Shape>& theFaces);
   const NCollection_List<TopoDS_Shape>& FacesToRemove() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   void SetToFillHistory(bool theFlag);
   bool HasHistory() const;
   const NCollection_List<TopoDS_Shape>& Modified(const TopoDS_Shape& theS);
@@ -208,9 +208,9 @@ public:
   %apply SWIGTYPE & NETOCC_KEEP { const BOPAlgo_PaveFiller& PF };
   BRepAlgoAPI_Fuse(const BOPAlgo_PaveFiller& PF);
   %clear const BOPAlgo_PaveFiller& PF;
-  BRepAlgoAPI_Fuse(const TopoDS_Shape& S1, const TopoDS_Shape& S2);
+  BRepAlgoAPI_Fuse(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const Message_ProgressRange& theRange = Message_ProgressRange());
   %apply SWIGTYPE & NETOCC_KEEP { const BOPAlgo_PaveFiller& aDSF };
-  BRepAlgoAPI_Fuse(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const BOPAlgo_PaveFiller& aDSF);
+  BRepAlgoAPI_Fuse(const TopoDS_Shape& S1, const TopoDS_Shape& S2, const BOPAlgo_PaveFiller& aDSF, const Message_ProgressRange& theRange = Message_ProgressRange());
   %clear const BOPAlgo_PaveFiller& aDSF;
 };
 
@@ -237,7 +237,7 @@ public:
   void Approximation(bool B);
   void ComputePCurveOn1(bool B);
   void ComputePCurveOn2(bool B);
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool HasAncestorFaceOn1(const TopoDS_Shape& E, TopoDS_Shape& F) const;
   bool HasAncestorFaceOn2(const TopoDS_Shape& E, TopoDS_Shape& F) const;
 };
@@ -250,5 +250,5 @@ public:
   %clear const BOPAlgo_PaveFiller& thePF;
   void SetTools(const NCollection_List<TopoDS_Shape>& theLS);
   const NCollection_List<TopoDS_Shape>& Tools() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
 };

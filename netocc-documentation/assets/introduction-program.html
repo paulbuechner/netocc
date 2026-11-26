@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A typical program</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · introduction.md</p>
+    <h1>A typical program</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 296" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="introduction-program-title introduction-program-desc">
+        <title id="introduction-program-title">A typical program</title>
+        <desc id="introduction-program-desc">A program builds a shape from primitives and combines it, or reads it from a file; checks and repairs it; then measures it, writes it, or meshes it to export the triangles as STL, glTF or OBJ or to show them in a 3D view.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Connectors first. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)">
+          <path d="M108,96 V120"/>
+          <path d="M172,148 H236"/>
+          <path d="M172,228 H300 Q308,228 308,220 V176"/>
+          <path d="M380,134 H404 Q412,134 412,126 V76 Q412,68 420,68 H444"/>
+          <path d="M380,148 H444"/>
+          <path d="M380,162 H404 Q412,162 412,170 V220 Q412,228 420,228 H444"/>
+          <path d="M564,140 H588 Q596,140 596,132 V116 Q596,108 604,108 H628"/>
+          <path d="M564,156 H588 Q596,156 596,164 V180 Q596,188 604,188 H628"/>
+        </g>
+
+        <!-- Getting a shape: build and combine, or read. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="44" y="40" width="128" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="108" y="64" fill="#2d3142" font-size="12" font-weight="600">Build</text>
+          <text x="108" y="80" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">primitives, sweeps</text>
+
+          <rect x="44" y="120" width="128" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="108" y="144" fill="#2d3142" font-size="12" font-weight="600">Combine</text>
+          <text x="108" y="160" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">booleans, fillets</text>
+
+          <rect x="44" y="200" width="128" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="108" y="224" fill="#2d3142" font-size="12" font-weight="600">Read</text>
+          <text x="108" y="240" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">STEP, IGES, BRep</text>
+
+          <!-- Focal: every path passes the check. -->
+          <rect x="236" y="120" width="144" height="56" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="308" y="144" fill="#2d3142" font-size="12" font-weight="600">Check and repair</text>
+          <text x="308" y="160" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">BRepCheck, ShapeFix</text>
+
+          <!-- Using it. -->
+          <rect x="444" y="40" width="120" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="504" y="64" fill="#2d3142" font-size="12" font-weight="600">Measure</text>
+          <text x="504" y="80" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">volume, distances</text>
+
+          <rect x="444" y="120" width="120" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="504" y="144" fill="#2d3142" font-size="12" font-weight="600">Mesh</text>
+          <text x="504" y="160" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">BRepMesh</text>
+
+          <rect x="444" y="200" width="120" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="504" y="224" fill="#2d3142" font-size="12" font-weight="600">Write</text>
+          <text x="504" y="240" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">STEP, IGES, BRep</text>
+
+          <!-- The mesh's two uses: files (store treatment) and the view. -->
+          <rect x="628" y="80" width="128" height="56" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="692" y="112" fill="#2d3142" font-size="12" font-weight="600">STL, glTF, OBJ</text>
+
+          <rect x="628" y="160" width="128" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="692" y="184" fill="#2d3142" font-size="12" font-weight="600">Show</text>
+          <text x="692" y="200" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">AIS, V3d</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

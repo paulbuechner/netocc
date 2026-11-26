@@ -17,18 +17,10 @@ Status:
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    src["OCCT 8.0.1 source<br/>(vcpkg buildtree)"] -->|bootstrap| toolkits["config/toolkits.yaml<br/>generated"]
-    toolkits --> parse["Parse<br/>ClangSharp/libclang"]
-    headers["OCCT headers + DLLs<br/>(vcpkg install)"] --> parse
-    modules["config/modules.yaml"] --> parse
-    handwritten["netocc-core<br/>hand-written .i"] -->|types they provide| map
-    parse --> map["Map<br/>TypeRegistry, SignatureMapper"] --> emit["Emit<br/>InterfaceWriter"]
-    emit --> wrapper["netocc-core<br/>src/SWIG_files/wrapper/*.i"]
-    emit --> hxx["netocc-core<br/>src/SWIG_files/headers/*_module.hxx"]
-    emit --> skips["log/skips/*.txt"]
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-architecture-dark.svg">
+  <img alt="netocc-gen's passes" src="assets/readme-architecture.svg">
+</picture>
 
 | Pass | Does |
 |---|---|

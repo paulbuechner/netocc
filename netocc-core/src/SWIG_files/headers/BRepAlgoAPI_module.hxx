@@ -12,6 +12,7 @@
 #include <BRepBuilderAPI_MakeShape.hxx>
 #include <BRepTools_History.hxx>
 #include <Geom_Surface.hxx>
+#include <Message_ProgressRange.hxx>
 #include <Message_Report.hxx>
 #include <NCollection_List.hxx>
 #include <Standard_Type.hxx>

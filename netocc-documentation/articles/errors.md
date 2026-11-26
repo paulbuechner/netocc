@@ -6,19 +6,8 @@ OCCT reports failure two ways: exceptions (`Standard_Failure` and its subclasses
 
 C++ exceptions never cross into .NET on their own. Every wrapper catches them and NetOcc throws an `OcctException` when the call returns:
 
-```mermaid
-sequenceDiagram
-    participant App as your code
-    participant Proxy as C# proxy
-    participant Wrapper as native wrapper
-    participant OCCT
-    App->>Proxy: new gp_Dir(0, 0, 0)
-    Proxy->>Wrapper: P/Invoke
-    Wrapper->>OCCT: gp_Dir(0, 0, 0)
-    OCCT-->>Wrapper: throw Standard_ConstructionError
-    Wrapper-->>Proxy: type and message, via a callback
-    Proxy-->>App: throw OcctException
-```
+<img class="diagram-light" src="../assets/errors-exceptions.svg" width="800" height="480" alt="A C++ exception becomes an OcctException" loading="lazy">
+<img class="diagram-dark" src="../assets/errors-exceptions-dark.svg" width="800" height="480" alt="A C++ exception becomes an OcctException" loading="lazy">
 
 [!code-csharp[](../samples/Errors.cs#catch)]
 
@@ -32,25 +21,8 @@ sequenceDiagram
 
 [!code-csharp[](../samples/Errors.cs#hierarchy)]
 
-```mermaid
-flowchart LR
-    failure[Standard_Failure] --- domain[Standard_DomainError]
-    failure --- numeric[Standard_NumericError]
-    failure --- program[Standard_ProgramError]
-    failure --- notDone[StdFail_NotDone]
-    domain --- construction[Standard_ConstructionError]
-    domain --- nullObject[Standard_NullObject]
-    domain --- noSuchObject[Standard_NoSuchObject]
-    domain --- typeMismatch[Standard_TypeMismatch]
-    domain --- dimension[Standard_DimensionError]
-    domain --- range[Standard_RangeError]
-    range --- outOfRange[Standard_OutOfRange]
-    range --- negative[Standard_NegativeValue]
-    range --- nullValue[Standard_NullValue]
-    numeric --- divide[Standard_DivideByZero]
-    numeric --- overflow[Standard_Overflow]
-    program --- notImplemented[Standard_NotImplemented]
-```
+<img class="diagram-light" src="../assets/errors-hierarchy.svg" width="800" height="780" alt="OCCT's exception hierarchy" loading="lazy">
+<img class="diagram-dark" src="../assets/errors-hierarchy-dark.svg" width="800" height="780" alt="OCCT's exception hierarchy" loading="lazy">
 
 | Thrown for | Usually |
 |---|---|
@@ -60,6 +32,14 @@ flowchart LR
 | `Standard_TypeMismatch` | a wrong cast: `TopoDS.Face` of an edge |
 | `Standard_NoSuchObject` | a key a map doesn't have |
 | `StdFail_NotDone` | the result of an algorithm that failed |
+
+## Exceptions in overrides
+
+A C# override OCCT calls ([Subclassing OCCT classes](subclassing.md)) can't unwind through C++. What it throws is caught at the boundary and rethrown in C++ right after the callback, as `NetOcc_ManagedException`: OCCT unwinds as from any `Standard_Failure`, and the `OcctException` of the outer call carries the override's exception as its `InnerException`.
+
+[!code-csharp[](../samples/Subclassing.cs#exception)]
+
+An exception OCCT catches itself goes no further, as in C++.
 
 ## Builders that fail
 

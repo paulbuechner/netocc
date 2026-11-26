@@ -2,17 +2,8 @@
 
 OCCT separates exact geometry from topology: `gp` has the math values (points, vectors, axes, transformations), `Geom` the curves and surfaces shapes are made of. Everything here is independent of shapes; [Topology](topology.md) builds on it.
 
-```mermaid
-flowchart LR
-    gp["gp: values<br/>gp_Pnt, gp_Vec, gp_Dir, gp_Ax2, gp_Trsf"]
-    geom["Geom / Geom2d: handles<br/>Geom_Circle, Geom_BSplineCurve, Geom_Plane"]
-    adaptor["Adaptors<br/>GeomAdaptor_Curve, BRepAdaptor_Surface"]
-    algo["Algorithms<br/>GeomAPI, GCPnts, Extrema"]
-    gp -->|define| geom
-    geom -->|wrapped by| adaptor
-    adaptor -->|evaluated by| algo
-    geom --> algo
-```
+<img class="diagram-light" src="../assets/geometry-packages.svg" width="800" height="256" alt="Geometry packages" loading="lazy">
+<img class="diagram-dark" src="../assets/geometry-packages-dark.svg" width="800" height="256" alt="Geometry packages" loading="lazy">
 
 ## Values: gp
 
@@ -48,29 +39,8 @@ Shapes take transformations through locations, see [Modeling](modeling.md#transf
 
 `Geom` types are OCCT transients: reference-counted, shared, and referred to through `Handle(T)`, which is just `T` in C#. Each is a parametric function: `Value(u)` for curves, `Value(u, v)` for surfaces.
 
-```mermaid
-flowchart LR
-    geometry[Geom_Geometry] --- curve[Geom_Curve]
-    geometry --- surface[Geom_Surface]
-    curve --- line[Geom_Line]
-    curve --- conic[Geom_Conic]
-    conic --- circle[Geom_Circle]
-    conic --- ellipse["Geom_Ellipse<br/>Geom_Hyperbola, Geom_Parabola"]
-    curve --- bounded[Geom_BoundedCurve]
-    bounded --- bspline[Geom_BSplineCurve]
-    bounded --- bezier[Geom_BezierCurve]
-    bounded --- trimmed[Geom_TrimmedCurve]
-    curve --- offset[Geom_OffsetCurve]
-    surface --- elementary[Geom_ElementarySurface]
-    elementary --- plane[Geom_Plane]
-    elementary --- revolution["Geom_CylindricalSurface<br/>Geom_ConicalSurface<br/>Geom_SphericalSurface<br/>Geom_ToroidalSurface"]
-    surface --- swept["Geom_SweptSurface<br/>Geom_SurfaceOfLinearExtrusion<br/>Geom_SurfaceOfRevolution"]
-    surface --- offsetSurface[Geom_OffsetSurface]
-    surface --- boundedSurface[Geom_BoundedSurface]
-    boundedSurface --- bsplineSurface[Geom_BSplineSurface]
-    boundedSurface --- bezierSurface[Geom_BezierSurface]
-    boundedSurface --- rectangular[Geom_RectangularTrimmedSurface]
-```
+<img class="diagram-light" src="../assets/geometry-hierarchy.svg" width="800" height="776" alt="Geom's class hierarchy" loading="lazy">
+<img class="diagram-dark" src="../assets/geometry-hierarchy-dark.svg" width="800" height="776" alt="Geom's class hierarchy" loading="lazy">
 
 [!code-csharp[](../samples/Geometry.cs#curves)]
 

@@ -2,15 +2,8 @@
 
 Renderers, STL and glTF files, and FEM need triangles. `BRepMesh_IncrementalMesh` triangulates each face and stores the result in the shape; `BRep_Tool.Triangulation` reads it back.
 
-```mermaid
-flowchart LR
-    shape[TopoDS_Shape] -->|BRepMesh_IncrementalMesh| stored["a Poly_Triangulation<br/>on each face"]
-    stored -->|"BRep_Tool.Triangulation(face, location)"| read["nodes + triangles<br/>in the face's coordinates"]
-    read -->|"location, orientation"| buffers["vertex and index buffers"]
-    stored --> stl["StlAPI_Writer"]
-    stored --> gltf["RWGltf_CafWriter"]
-    stored --> view["AIS_Shape<br/><i>shows it, meshes if missing</i>"]
-```
+<img class="diagram-light" src="../assets/meshing-triangulation.svg" width="800" height="440" alt="Triangulating a shape" loading="lazy">
+<img class="diagram-dark" src="../assets/meshing-triangulation-dark.svg" width="800" height="440" alt="Triangulating a shape" loading="lazy">
 
 ## Triangulating
 

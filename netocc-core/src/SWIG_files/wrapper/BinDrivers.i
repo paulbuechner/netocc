@@ -53,7 +53,7 @@ class BinDrivers_DocumentRetrievalDriver : public BinLDrivers_DocumentRetrievalD
 public:
   BinDrivers_DocumentRetrievalDriver();
   opencascade::handle<BinMDF_ADriverTable> AttributeDrivers(const opencascade::handle<Message_Messenger>& theMsgDriver);
-  void ReadShapeSection(BinLDrivers_DocumentSection& theSection, std::istream& theIS, bool isMess = false);
+  void ReadShapeSection(BinLDrivers_DocumentSection& theSection, std::istream& theIS, bool isMess = false, const Message_ProgressRange& theRange = Message_ProgressRange());
   void CheckShapeSection(const long& thePos, std::istream& theIS);
   void Clear();
   void EnableQuickPartReading(const opencascade::handle<Message_Messenger>& theMessageDriver, bool theValue);
@@ -66,7 +66,7 @@ class BinDrivers_DocumentStorageDriver : public BinLDrivers_DocumentStorageDrive
 public:
   BinDrivers_DocumentStorageDriver();
   opencascade::handle<BinMDF_ADriverTable> AttributeDrivers(const opencascade::handle<Message_Messenger>& theMsgDriver);
-  void WriteShapeSection(BinLDrivers_DocumentSection& theDocSection, std::ostream& theOS, TDocStd_FormatVersion theDocVer);
+  void WriteShapeSection(BinLDrivers_DocumentSection& theDocSection, std::ostream& theOS, TDocStd_FormatVersion theDocVer, const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsWithTriangles() const;
   bool IsWithNormals() const;
   void SetWithTriangles(const opencascade::handle<Message_Messenger>& theMessageDriver, bool theWithTriangulation);

@@ -68,6 +68,27 @@ public class VisualizationTests
   }
 
   [Test]
+  public void OpenGlRenderer_IsThereBeforeAnyContext()
+  {
+    // Arrange (the classes a view renders into an application's own OpenGL surface with)
+    var driver = new OpenGl_GraphicDriver(null, false);
+
+    // Act
+    var context = new OpenGl_Context();
+    var frameBuffer = new OpenGl_FrameBuffer();
+    var texture = new OpenGl_Texture();
+
+    // Assert (none initialized: no GL context yet)
+    using (Assert.EnterMultipleScope())
+    {
+      Assert.That(driver.GetSharedContext(), Is.Null);
+      Assert.That(context.IsValid(), Is.False);
+      Assert.That(frameBuffer.IsValid(), Is.False);
+      Assert.That(texture.IsValid(), Is.False);
+    }
+  }
+
+  [Test]
   public void Camera_LooksFromItsEyeToItsCenter()
   {
     // Arrange

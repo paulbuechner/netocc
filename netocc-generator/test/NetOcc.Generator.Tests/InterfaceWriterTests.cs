@@ -84,9 +84,10 @@ public class InterfaceWriterTests
   }
 
   [Test]
-  public void Write_DropsTrailingProgressRangeDefaults()
+  public void Write_KeepsTrailingProgressRangeDefaults()
   {
-    // Arrange
+    // Arrange (a C# Message_ProgressIndicator makes the ranges it starts)
+    _registry.AddClass(new KnownClass("Message_ProgressRange", "Message", WrapKind.ValueClass));
     var perform = Method("Perform", Builtin("void"),
                          new ParameterModel("theShape", Ref(Const(Class("TopoDS_Shape"))), null),
                          new ParameterModel("theRange", Ref(Const(Class("Message_ProgressRange"))),
@@ -96,7 +97,9 @@ public class InterfaceWriterTests
     var module = Write(Package(classes: [ValueClass("Demo_Algo", perform)]));
 
     // Assert
-    Assert.That(module.Interface, Does.Contain("  void Perform(const TopoDS_Shape& theShape);"));
+    Assert.That(module.Interface,
+                Does.Contain(
+                  "  void Perform(const TopoDS_Shape& theShape, const Message_ProgressRange& theRange = Message_ProgressRange());"));
   }
 
   [Test]
@@ -1056,12 +1059,181 @@ public class InterfaceWriterTests
                              + "  Demo_Walker(const Demo_SubGraph& theGraph);\n  %clear const Demo_SubGraph& theGraph;"));
   }
 
+  [Test]
+  public void Write_DeclaresTheVirtualMembersADirectorOverrides()
+  {
+    // Arrange (Demo_Object, a director, inherits a pure ComputeSelection and a parameterless
+    // Clear; its own Compute is protected and pure, its constructor protected)
+    var (presentation, selectable, director) = DirectorHierarchy();
+
+    // Act
+    var module = Write(Package(classes: [presentation, selectable, director]),
+                       directors: ["Demo_Object"]);
+
+    // Assert
+    using (Assert.EnterMultipleScope())
+    {
+      Assert.That(module.Interface,
+                  Does.Contain("%module(directors=\"1\", dirprot=\"1\") DemoModule"));
+      Assert.That(module.Interface, Does.Contain("%netocc_director(Demo_Object)"));
+      Assert.That(module.Interface,
+                  Does.Contain("class Demo_Object : public Demo_Selectable {\npublic:\n"
+                               + "  virtual bool Accepts(int theMode) const;\n"
+                               + "  virtual void ComputeSelection(int theMode) = 0;\n"
+                               + "  virtual ~Demo_Object();\n"
+                               + "protected:\n"
+                               + "  Demo_Object();\n"
+                               + "  virtual void Compute(const opencascade::handle<Demo_Presentation>& thePrs, int theMode) = 0;\n"
+                               + "};"));
+      Assert.That(module.Skipped,
+                  Has.One.StartsWith(
+                    "Demo_Object::Clear: C# can't override it: SWIG runs no code after a callback"));
+    }
+  }
+
+  [Test]
+  public void Write_LeavesTheBasesOfADirectorAsDeclared()
+  {
+    // Arrange
+    var (presentation, selectable, director) = DirectorHierarchy();
+
+    // Act
+    var module = Write(Package(classes: [presentation, selectable, director]),
+                       directors: ["Demo_Object"]);
+
+    // Assert (their handles may be the director's objects: Directors.i gives those back as
+    // themselves)
+    using (Assert.EnterMultipleScope())
+    {
+      Assert.That(module.Interface,
+                  Does.Contain("class Demo_Selectable : public Standard_Transient {\npublic:\n"
+                               + "  void ComputeSelection(int theMode);\n"
+                               + "  void Clear();\n"
+                               + "};"));
+      Assert.That(module.Interface, Does.Contain("%netocc_directed(Demo_Selectable)"));
+      Assert.That(module.Interface, Does.Contain("%netocc_directed(Demo_Object)"));
+      Assert.That(module.Interface, Does.Not.Contain("%netocc_directed(Demo_Presentation)"));
+    }
+  }
+
+  [Test]
+  public void Write_MarksAConcreteClassDerivingFromADirectorNotAbstract()
+  {
+    // Arrange (SWIG would count the director's pure Compute, which Demo_Shape overrides where the
+    // .i doesn't show it, against Demo_Shape)
+    var (presentation, selectable, director) = DirectorHierarchy();
+    var shape = new ClassModel("Demo_Shape", "Demo_Shape.hxx",
+                               ["Demo_Object", "Demo_Selectable", "Standard_Transient"],
+                               TransientTraits, [new ConstructorModel([], false)], []);
+
+    // Act
+    var module = Write(Package(classes: [presentation, selectable, director, shape]),
+                       directors: ["Demo_Object"]);
+
+    // Assert
+    using (Assert.EnterMultipleScope())
+    {
+      Assert.That(module.Interface, Does.Contain("%feature(\"notabstract\") Demo_Shape;"));
+      Assert.That(module.Interface, Does.Contain("  Demo_Shape();"));
+      Assert.That(module.Interface, Does.Not.Contain("%feature(\"notabstract\") Demo_Object;"));
+    }
+  }
+
+  [Test]
+  public void Write_DeclaresADirectorItsProxyOwns()
+  {
+    // Arrange (not a transient, as AIS_ViewController: its proxy owns it, no registry)
+    var controller = new ClassModel("Demo_Controller", "Demo_Controller.hxx", [], ValueTraits,
+                                    [new ConstructorModel([], false)], [
+                                      Method("Zoom", Builtin("bool"),
+                                             new ParameterModel("theDelta", Builtin("double"),
+                                                                null)) with
+                                      {
+                                        IsVirtual = true
+                                      }
+                                    ]);
+
+    // Act
+    var module = Write(Package(classes: [controller]), directors: ["Demo_Controller"]);
+
+    // Assert
+    using (Assert.EnterMultipleScope())
+    {
+      Assert.That(module.Interface, Does.Contain("%netocc_director_owned(Demo_Controller)"));
+      Assert.That(module.Interface, Does.Not.Contain("%netocc_director(Demo_Controller)"));
+      Assert.That(module.Interface, Does.Not.Contain("%netocc_directed(Demo_Controller)"));
+      Assert.That(module.Interface, Does.Contain("  virtual bool Zoom(double theDelta);"));
+    }
+  }
+
+  [Test]
+  public void Write_RejectsADirectorWhosePureVirtualMemberCSharpCantOverride()
+  {
+    // Arrange (a stream parameter doesn't reach a C# override)
+    var director = new ClassModel("Demo_Writer", "Demo_Writer.hxx", ["Standard_Transient"],
+                                  TransientTraits with { IsAbstract = true },
+                                  [new ConstructorModel([], false)], [
+                                    Method("Write", Builtin("void"),
+                                           new ParameterModel("theStream", OStream, null)) with
+                                    {
+                                      IsVirtual = true, IsPure = true
+                                    }
+                                  ]);
+
+    // Act
+    Action write = () => Write(Package(classes: [director]), directors: ["Demo_Writer"]);
+
+    // Assert
+    Assert.That(
+      write,
+      Throws.InvalidOperationException.With.Message.Contains("Demo_Writer can't be a director"));
+  }
+
+  // Demo_Object (a director) : Demo_Selectable : Standard_Transient, and the Demo_Presentation its
+  // Compute takes
+  private static (ClassModel Presentation, ClassModel Selectable, ClassModel Director)
+    DirectorHierarchy()
+  {
+    var abstractTransient = TransientTraits with { IsAbstract = true };
+    var mode = new ParameterModel("theMode", Builtin("int"), null);
+    var presentation = new ClassModel("Demo_Presentation", "Demo_Presentation.hxx",
+                                      ["Standard_Transient"], TransientTraits, [], []);
+    var selectable = new ClassModel("Demo_Selectable", "Demo_Selectable.hxx",
+                                    ["Standard_Transient"], abstractTransient, [], [
+                                      Method("ComputeSelection", Builtin("void"), mode) with
+                                      {
+                                        IsVirtual = true, IsPure = true
+                                      },
+                                      Method("Clear", Builtin("void")) with { IsVirtual = true },
+                                    ]);
+    var director = new ClassModel("Demo_Object", "Demo_Object.hxx",
+                                  ["Demo_Selectable", "Standard_Transient"], abstractTransient, [],
+                                  [
+                                    Method("Accepts", Builtin("bool"), mode) with
+                                    {
+                                      IsVirtual = true, IsConst = true
+                                    },
+                                  ], Hidden:
+                                  [
+                                    Method("", Builtin("void")) with { IsProtected = true },
+                                    Method("Compute", Builtin("void"),
+                                           new ParameterModel(
+                                             "thePrs", Ref(Const(Handle("Demo_Presentation"))),
+                                             null), mode) with
+                                    {
+                                      IsVirtual = true, IsPure = true, IsProtected = true
+                                    },
+                                  ]);
+    return (presentation, selectable, director);
+  }
+
   // the package's classes registered as Generate registers them
   private GeneratedModule Write(PackageModel package,
                                 Dictionary<string, IReadOnlyList<string>>? imports = null,
                                 Dictionary<string, IReadOnlyCollection<string>>? bases = null,
                                 PackageConfig? config = null,
-                                Dictionary<string, IReadOnlyList<string>>? preludes = null)
+                                Dictionary<string, IReadOnlyList<string>>? preludes = null,
+                                IReadOnlyCollection<string>? directors = null)
   {
     foreach (var c in package.Classes)
     {
@@ -1072,7 +1244,8 @@ public class InterfaceWriterTests
     var writer = new InterfaceWriter(_registry, new SignatureMapper(_registry), "8.0.1",
                                      preludeOf: p => preludes?.GetValueOrDefault(p) ?? [],
                                      classOf: name =>
-                                       package.Classes.FirstOrDefault(c => c.Name == name));
+                                       package.Classes.FirstOrDefault(c => c.Name == name),
+                                     directorClasses: directors);
     return writer.Write(package, config ?? new PackageConfig(),
                         p => imports?.GetValueOrDefault(p) ?? [],
                         basesOf: bases is null ? null : p => bases.GetValueOrDefault(p) ?? []);

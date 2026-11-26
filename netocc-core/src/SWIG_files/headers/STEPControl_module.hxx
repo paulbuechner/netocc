@@ -7,6 +7,7 @@
 #include <DE_ShapeFixParameters.hxx>
 #include <IFSelect_ReturnStatus.hxx>
 #include <Interface_InterfaceModel.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <NCollection_HSequence.hxx>
 #include <NCollection_Sequence.hxx>

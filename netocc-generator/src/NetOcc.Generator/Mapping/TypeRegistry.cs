@@ -29,6 +29,18 @@ internal enum WrapKind
 
   /// <summary>Other classes (not copyable, or abstract): plain proxies.</summary>
   Plain,
+
+  /// <summary>
+  /// NetVtk's VTK object (global::Vtk.T, NetVtkInterop.i's %netvtk_object): another assembly's
+  /// proxy, which counts the object's references; no module to import.
+  /// </summary>
+  Vtk,
+
+  /// <summary>
+  /// A class of this run deriving from a VTK class (IVtkTools_ShapeDataSource): its proxy derives
+  /// from NetVtk's (NetVtkInterop.i's %netvtk_derived), which holds the reference.
+  /// </summary>
+  VtkDerived,
 }
 
 /// <param name="Header">The header that declares the class; null: the one named after it.</param>
@@ -54,8 +66,12 @@ internal sealed record KnownClass(string Name, string Package, WrapKind Kind, st
 /// <param name="QualifiedName">
 /// C++'s name of a nested or namespace enum, whose flat name is an alias.
 /// </param>
+/// <param name="IsTypedefName">
+/// A typedef's name for an anonymous enum (<c>typedef enum { ... } IVtk_SelectionMode;</c>).
+/// </param>
 internal sealed record KnownEnum(string Name, string Package, string? Header = null,
-                                 string? Underlying = null, string? QualifiedName = null)
+                                 string? Underlying = null, string? QualifiedName = null,
+                                 bool IsTypedefName = false)
 {
   public string DeclaringHeader => Header ?? $"{Name}.hxx";
 
@@ -69,6 +85,11 @@ internal sealed record KnownEnum(string Name, string Package, string? Header = n
 /// </summary>
 internal sealed partial class TypeRegistry
 {
+  /// <summary>
+  /// The package of NetVtk's classes (<see cref="WrapKind.Vtk"/>): nothing to import.
+  /// </summary>
+  public const string NetVtkPackage = "NetVtk";
+
   /// <summary>
   /// Types the common typemap library maps to .NET types (Strings.i, Guid.i): no proxy, no import.
   /// </summary>
@@ -90,8 +111,8 @@ internal sealed partial class TypeRegistry
   public void AddClass(KnownClass known) => _classes[known.Name] = known;
 
   public void AddEnum(string name, string package, string? header = null, string? underlying = null,
-                      string? qualifiedName = null) =>
-    _enums[name] = new KnownEnum(name, package, header, underlying, qualifiedName);
+                      string? qualifiedName = null, bool isTypedefName = false) =>
+    _enums[name] = new KnownEnum(name, package, header, underlying, qualifiedName, isTypedefName);
 
   /// <summary>
   /// Registers a class template instance as the class of that name (<see cref="ClassInstance"/>).

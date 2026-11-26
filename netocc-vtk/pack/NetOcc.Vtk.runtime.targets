@@ -1,0 +1,75 @@
+<Project>
+
+  <!--
+    Which natives of the NetOcc.Vtk.runtime packages an app gets. build.py pack packs this file into each runtime package
+    as NetOcc.Vtk.runtime.<rid>.targets, beside NetOcc.Vtk.runtime.<rid>.natives.targets: what the package's natives load
+    that it doesn't hold (loads.py), as NetOccRequiredNative and NetVtkRequiredNative items, which NetOcc's and NetVtk's
+    targets keep with all they load when NetOccModules or NetVtkModules select modules. The targets are the same in every
+    runtime package, the last import's stand.
+
+    .NET Framework ignores runtimes\: the Windows packages copy their natives into x64\ or x86\ next to the app, beside
+    NetOcc's and NetVtk's, for the architecture the app runs as only, which NetOcc's and NetVtk's targets decide alike:
+    x86 for PlatformTarget x86 or an AnyCPU exe with Prefer32Bit, x64 for x64, the RuntimeIdentifier's without a
+    PlatformTarget, both for AnyCPU. NuGet's copies of a RuntimeIdentifier's natives next to the app are dropped.
+  -->
+
+  <Import Project="$(MSBuildThisFileDirectory)$(MSBuildThisFileName).natives.targets"
+          Condition="Exists('$(MSBuildThisFileDirectory)$(MSBuildThisFileName).natives.targets')" />
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework' and $(MSBuildThisFileName.StartsWith('NetOcc.Vtk.runtime.win-'))">
+    <_NetOccVtkFrameworkNative Include="$(MSBuildThisFileDirectory)..\..\runtimes\$(MSBuildThisFileName.Substring(19))\native\*"
+                               Arch="$(MSBuildThisFileName.Substring(23))" />
+  </ItemGroup>
+
+  <!-- the architectures a .NET Framework app runs as: ;x86; ;x64; or both -->
+  <Target Name="_NetOccVtkFrameworkArchitectures">
+    <PropertyGroup>
+      <_NetOccVtkPlatform>$(PlatformTarget.ToLowerInvariant())</_NetOccVtkPlatform>
+      <_NetOccVtkPlatform Condition="'$(_NetOccVtkPlatform)' == '' and $(RuntimeIdentifier.ToLowerInvariant().EndsWith('-x86'))">x86</_NetOccVtkPlatform>
+      <_NetOccVtkPlatform Condition="'$(_NetOccVtkPlatform)' == '' and $(RuntimeIdentifier.ToLowerInvariant().EndsWith('-x64'))">x64</_NetOccVtkPlatform>
+      <_NetOccVtkPlatform Condition="('$(_NetOccVtkPlatform)' == '' or '$(_NetOccVtkPlatform)' == 'anycpu') and '$(Prefer32Bit)' == 'true' and ('$(OutputType)' == 'Exe' or '$(OutputType)' == 'WinExe' or '$(OutputType)' == 'AppContainerExe')">x86</_NetOccVtkPlatform>
+      <_NetOccVtkArchitectures>;$(_NetOccVtkPlatform);</_NetOccVtkArchitectures>
+      <_NetOccVtkArchitectures Condition="'$(_NetOccVtkPlatform)' == '' or '$(_NetOccVtkPlatform)' == 'anycpu'">;x86;x64;</_NetOccVtkArchitectures>
+    </PropertyGroup>
+  </Target>
+
+  <!-- .NET Framework: the natives of the app's architectures into x64\ and x86\ -->
+  <Target Name="_NetOccVtkFrameworkNatives" BeforeTargets="AssignTargetPaths" DependsOnTargets="_NetOccVtkFrameworkArchitectures"
+          Condition="'@(_NetOccVtkFrameworkNative)' != ''">
+    <ItemGroup>
+      <None Include="@(_NetOccVtkFrameworkNative)" Link="%(_NetOccVtkFrameworkNative.Arch)\%(_NetOccVtkFrameworkNative.Filename)%(_NetOccVtkFrameworkNative.Extension)"
+            CopyToOutputDirectory="PreserveNewest" Visible="false"
+            Condition="$(_NetOccVtkArchitectures.Contains(';%(_NetOccVtkFrameworkNative.Arch);'))" />
+    </ItemGroup>
+  </Target>
+
+  <!-- NuGet's copies: none next to a .NET Framework app (an exe's default platform ignores natives in runtimes\) -->
+  <Target Name="_NetOccVtkPackageNatives" AfterTargets="ResolvePackageAssets" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <ItemGroup>
+      <NativeCopyLocalItems Remove="@(NativeCopyLocalItems)"
+                            Condition="$([System.String]::Copy('%(NativeCopyLocalItems.NuGetPackageId)').ToLowerInvariant().StartsWith('netocc.vtk.runtime.'))" />
+    </ItemGroup>
+  </Target>
+
+  <!-- .NET Framework: the same for the natives a referenced project hands on (an AnyCPU library's x64\ and x86\) -->
+  <Target Name="_NetOccVtkReferencedNatives" AfterTargets="GetCopyToOutputDirectoryItems"
+          DependsOnTargets="_NetOccVtkFrameworkArchitectures" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <ItemGroup>
+      <_NetOccVtkCopied Include="@(_SourceItemsToCopyToOutputDirectory);@(_SourceItemsToCopyToOutputDirectoryAlways);@(_SourceItemsToCopyToOutputDirectoryIfDifferent)" />
+      <_NetOccVtkCopied Condition="$([System.String]::Copy('%(_NetOccVtkCopied.FullPath)').ToLowerInvariant().Contains('\netocc.vtk.runtime.win-x64')) and $([System.String]::Copy('%(_NetOccVtkCopied.FullPath)').ToLowerInvariant().Contains('\runtimes\win-x64\native\'))">
+        <_NetOccVtkArch>x64</_NetOccVtkArch>
+      </_NetOccVtkCopied>
+      <_NetOccVtkCopied Condition="$([System.String]::Copy('%(_NetOccVtkCopied.FullPath)').ToLowerInvariant().Contains('\netocc.vtk.runtime.win-x86')) and $([System.String]::Copy('%(_NetOccVtkCopied.FullPath)').ToLowerInvariant().Contains('\runtimes\win-x86\native\'))">
+        <_NetOccVtkArch>x86</_NetOccVtkArch>
+      </_NetOccVtkCopied>
+      <_NetOccVtkUnwanted Include="@(_NetOccVtkCopied)"
+                          Condition="'%(_NetOccVtkCopied._NetOccVtkArch)' != '' and !$(_NetOccVtkArchitectures.Contains(';%(_NetOccVtkCopied._NetOccVtkArch);'))" />
+      <_SourceItemsToCopyToOutputDirectory Remove="@(_NetOccVtkUnwanted)" />
+      <_SourceItemsToCopyToOutputDirectoryAlways Remove="@(_NetOccVtkUnwanted)" />
+      <_SourceItemsToCopyToOutputDirectoryIfDifferent Remove="@(_NetOccVtkUnwanted)" />
+      <AllItemsFullPathWithTargetPath Remove="@(_NetOccVtkUnwanted)" />
+      <_NetOccVtkCopied Remove="@(_NetOccVtkCopied)" />
+    </ItemGroup>
+  </Target>
+
+</Project>

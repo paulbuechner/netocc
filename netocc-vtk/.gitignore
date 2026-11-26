@@ -1,0 +1,3 @@
+# build outputs: generated SWIG sources, CMake build dirs, native artifacts, packages
+build/
+artifacts/

@@ -40,30 +40,17 @@ var fused = new BRepAlgoAPI_Fuse(box, cyl).Shape();
 
 Build pipeline:
 
-```mermaid
-flowchart LR
-    gen["netocc-generator"] -->|writes, committed| wrapper["src/SWIG_files/wrapper/*.i<br/>headers/*_module.hxx, modules.json"]
-    common["src/SWIG_files/common/*.i typemap library<br/>src/SWIG_files/extras/*.i companions"] --> swig
-    wrapper --> swig["SWIG 4.5.1 -csharp<br/>build.py generate"]
-    swig --> cxx["build/generated/cxx<br/>*_wrap.cxx"]
-    swig --> cs["build/generated/cs<br/>*.cs proxies"]
-    vcpkg["vcpkg manifest<br/>OCCT 8.0.1 per triplet"] --> native
-    cxx --> native["CMake: NetOcc&lt;Module&gt;, NetOccRuntime<br/>build.py native"]
-    native --> runtimes["artifacts/runtimes/{rid}/native<br/>NetOcc libraries + OCCT TK libs"]
-    cs --> managed["NetOcc.dll<br/>net35, net45, net452, net462<br/>net6.0, net8.0, net10.0 + netstandard2.0"]
-    hand["src/NetOcc<br/>runtime + gp_* structs"] --> managed
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-build-pipeline-dark.svg">
+  <img alt="Build pipeline" src="assets/readme-build-pipeline.svg">
+</picture>
 
 Runtime layers:
 
-```mermaid
-flowchart TB
-    app["C# app: net35 / net45+ / net6.0+, AnyCPU"] --> proxies["NetOcc.dll<br/>OCC.Core.{Package} proxies, gp_* structs"]
-    proxies -->|"P/Invoke: in/ref structs, UTF-8 strings, handles as raw T* (+1 ref)"| shim["NetOcc&lt;Module&gt;<br/>SWIG wrappers + value-type thunks"]
-    shim --> occt["OCCT TK libraries"]
-    shim -.->|"Standard_Failure, std::exception become OcctException"| proxies
-    loader["NativeLibraryLoader<br/>(module initializer)"] -.->|"loads x86/, x64/ or runtimes/{rid}/native"| shim
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme-runtime-layers-dark.svg">
+  <img alt="Runtime layers" src="assets/readme-runtime-layers.svg">
+</picture>
 
 ## Build
 
@@ -71,7 +58,7 @@ Needs Python 3.10+, vcpkg (`VCPKG_ROOT`), CMake + Ninja, the .NET 10 SDK with th
 
 ```bash
 python build.py tools                        # SWIG 4.5.1 from conda-forge into .tools/ (micromamba)
-python build.py occt --triplet x64-windows   # OCCT 8.0.1 via vcpkg manifest, all state in .vcpkg/
+python build.py occt --triplet x64-windows   # OCCT 8.0.1 via vcpkg manifest (TKIVtk on NetVtk's VTK too), all state in .vcpkg/
 python build.py generate                     # SWIG -> build/generated/{cxx,cs}
 python build.py native --triplet x64-windows # NetOcc libraries + OCCT libs -> artifacts/runtimes/win-x64/native
 python build.py test --arch x64              # NUnit on every framework + net35 on CLR 2
@@ -80,7 +67,7 @@ python build.py pack --rids win-x64          # NuGet packages, version <OCCT ver
 python build.py change fixed "..."           # a changelog entry for the next release, in changes/
 ```
 
-Triplets: `x64-windows`, `x86-windows`, `x64-linux-dynamic`, `arm64-osx-dynamic` (overlays in `vcpkg/triplets`: release-only, OCCT built with its precondition checks enabled). Linux locally: `docker/linux-x64.Dockerfile`.
+Triplets: `x64-windows`, `x86-windows`, `x64-linux-dynamic`, `arm64-osx-dynamic` (overlays in `vcpkg/triplets`, NetVtk's copied: release-only). OCCT's options, its precondition checks among them, are in the overlay port `vcpkg/ports/opencascade`; VTK comes from NetVtk's vcpkg registry, the same build as NetVtk's. NetOcc's packages hold neither TKIVtk nor VTK: NetOcc.Vtk ([netocc-vtk](../netocc-vtk)) ships TKIVtk, NetVtk ships VTK. Linux locally: `docker/linux-x64.Dockerfile`.
 
 ## Layout
 

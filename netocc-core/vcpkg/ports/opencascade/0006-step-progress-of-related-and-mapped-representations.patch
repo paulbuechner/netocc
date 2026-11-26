@@ -1,0 +1,159 @@
+From 978b88fe4c6a5537201035c982e9fd38b9966232 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Paul=20B=C3=BCchner?= <45827409+paulbuechner@users.noreply.github.com>
+Date: Sat, 3 Oct 2026 21:16:47 +0200
+Subject: [PATCH] Data Exchange, STEP - Progress of related and mapped
+ representations
+
+STEPControl_ActorRead gave the shape of a product a scope of two steps, one
+for its own representation and one for the representations related to it,
+but TransferRelatedSRR took a step of that scope for each relationship. With
+two or more relationships, every representation after the first was
+translated with an empty range: no progress, and UserBreak() never asked.
+A hybrid model as CATIA V6 writes it, solids and curves in two related
+representations, translated its solids for 11 s without either.
+
+The mapped item path opened a scope on its range and then passed the same
+range on to the mapped representation, which Message_ProgressScope asserts
+against in debug builds; the representation's translation reported nothing.
+
+TransferRelatedSRR takes a range and gives each relationship a share of it;
+the mapped representation and the representations related to it each get a
+step of the mapped item's scope.
+---
+ .../STEPControl/STEPControl_ActorRead.cxx     | 55 +++++++++++--------
+ .../STEPControl/STEPControl_ActorRead.hxx     |  2 +-
+ 2 files changed, 34 insertions(+), 23 deletions(-)
+
+diff --git a/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.cxx b/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.cxx
+index c6cde3191d..1ff6021d5f 100644
+--- a/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.cxx
++++ b/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.cxx
+@@ -824,8 +824,13 @@ occ::handle<TransferBRep_ShapeBinder> STEPControl_ActorRead::TransferEntity(
+     // Note that both AP203 and AP209 allow main representation to be non-empty
+     if (readSRR && /*theResult.IsNull() &&*/ i <= nbNotAspect)
+     {
+-      TopoDS_Shape aNewResult =
+-        TransferRelatedSRR(TP, rep, useTrsf, readConstructiveGeomRR, theLocalFactors, Cund, aPS1);
++      TopoDS_Shape aNewResult = TransferRelatedSRR(TP,
++                                                   rep,
++                                                   useTrsf,
++                                                   readConstructiveGeomRR,
++                                                   theLocalFactors,
++                                                   Cund,
++                                                   aPS1.Next());
+       if (!aNewResult.IsNull())
+       {
+         Result1 = aNewResult;
+@@ -1993,7 +1998,7 @@ occ::handle<TransferBRep_ShapeBinder> STEPControl_ActorRead::TransferEntity(
+   occ::handle<Transfer_Binder> binder = TP->Find(maprep);
+   if (binder.IsNull())
+   {
+-    binder = TransferEntity(maprep, TP, theLocalFactors, isBound, false, theProgress);
++    binder = TransferEntity(maprep, TP, theLocalFactors, isBound, false, aPSRoot.Next());
+   }
+   shbinder = occ::down_cast<TransferBRep_ShapeBinder>(binder);
+   if (shbinder.IsNull())
+@@ -2060,20 +2065,13 @@ occ::handle<TransferBRep_ShapeBinder> STEPControl_ActorRead::TransferEntity(
+   occ::handle<StepData_StepModel> aStepModel = occ::down_cast<StepData_StepModel>(TP->Model());
+   if (aStepModel->InternalParameters.ReadRelationship)
+   {
+-    const Interface_Graph& aGraph  = TP->Graph();
+-    int                    aSRRnum = 0;
+-    for (Interface_EntityIterator aSubsIt(aGraph.Sharings(maprep)); aSubsIt.More(); aSubsIt.Next())
+-    {
+-      ++aSRRnum;
+-    }
+-    Message_ProgressScope aPS(aPSRoot.Next(), "Part", aSRRnum);
+-    TopoDS_Shape          aNewResult = TransferRelatedSRR(TP,
++    TopoDS_Shape aNewResult = TransferRelatedSRR(TP,
+                                                  maprep,
+                                                  false,
+                                                  aStepModel->InternalParameters.ReadConstrRelation,
+                                                  theLocalFactors,
+                                                  aCund,
+-                                                 aPS);
++                                                 aPSRoot.Next());
+     if (!aNewResult.IsNull())
+     {
+       aResult = aNewResult;
+@@ -2674,7 +2672,8 @@ void STEPControl_ActorRead::SetModel(const occ::handle<Interface_InterfaceModel>
+ 
+ //=======================================================================
+ // Method  : TransferRelatedSRR
+-// Purpose : Helper method to transfer SRR related to the representation
++// Purpose : Helper method to transfer SRR related to the representation;
++//           each relationship gets its share of the progress range
+ //=======================================================================
+ TopoDS_Shape STEPControl_ActorRead::TransferRelatedSRR(
+   const occ::handle<Transfer_TransientProcess>&     theTP,
+@@ -2683,33 +2682,45 @@ TopoDS_Shape STEPControl_ActorRead::TransferRelatedSRR(
+   const bool                                        theReadConstructiveGeomRR,
+   const StepData_Factors&                           theLocalFactors,
+   TopoDS_Compound&                                  theCund,
+-  Message_ProgressScope&                            thePS)
++  const Message_ProgressRange&                      theProgress)
+ {
+   BRep_Builder           aBuilder;
+   TopoDS_Shape           aResult;
+   const Interface_Graph& aGraph = theTP->Graph();
+-  for (Interface_EntityIterator aSubsIt(aGraph.Sharings(theRep)); aSubsIt.More() && thePS.More();
+-       aSubsIt.Next())
++
++  NCollection_Sequence<occ::handle<StepRepr_RepresentationRelationship>> aRelationships;
++  for (Interface_EntityIterator aSubsIt(aGraph.Sharings(theRep)); aSubsIt.More(); aSubsIt.Next())
+   {
+-    occ::handle<Standard_Transient> anItem = aSubsIt.Value();
+-    if (!anItem->IsKind(STANDARD_TYPE(StepRepr_RepresentationRelationship)))
++    occ::handle<StepRepr_RepresentationRelationship> aRelationship =
++      occ::down_cast<StepRepr_RepresentationRelationship>(aSubsIt.Value());
++    if (!aRelationship.IsNull())
+     {
+-      continue;
++      aRelationships.Append(aRelationship);
+     }
+-    occ::handle<Transfer_Binder> aBinder;
++  }
++
++  Message_ProgressScope aPS(theProgress, "Part", aRelationships.Length());
++  for (NCollection_Sequence<occ::handle<StepRepr_RepresentationRelationship>>::Iterator anIter(
++         aRelationships);
++       anIter.More() && aPS.More();
++       anIter.Next())
++  {
++    const occ::handle<StepRepr_RepresentationRelationship>& anItem = anIter.Value();
++    Message_ProgressRange                                   aRange = aPS.Next();
++    occ::handle<Transfer_Binder>                            aBinder;
+     if (anItem->DynamicType() == STANDARD_TYPE(StepRepr_ShapeRepresentationRelationship))
+     {
+       occ::handle<StepRepr_ShapeRepresentationRelationship> aSRR =
+         occ::down_cast<StepRepr_ShapeRepresentationRelationship>(anItem);
+       int aNbRep = (theRep == aSRR->Rep1() ? 2 : 1);
+-      aBinder    = TransferEntity(aSRR, theTP, theLocalFactors, aNbRep, theUseTrsf, thePS.Next());
++      aBinder    = TransferEntity(aSRR, theTP, theLocalFactors, aNbRep, theUseTrsf, aRange);
+     }
+     else if (anItem->DynamicType()
+              == STANDARD_TYPE(StepRepr_MechanicalDesignAndDraughtingRelationship))
+     {
+       occ::handle<StepRepr_MechanicalDesignAndDraughtingRelationship> aMDADR =
+         occ::down_cast<StepRepr_MechanicalDesignAndDraughtingRelationship>(anItem);
+-      aBinder = TransferEntity(aMDADR, theTP, theLocalFactors, thePS.Next());
++      aBinder = TransferEntity(aMDADR, theTP, theLocalFactors, aRange);
+     }
+     else if (theReadConstructiveGeomRR
+              && anItem->DynamicType()
+diff --git a/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.hxx b/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.hxx
+index d579d50f67..cb6a0c90e3 100644
+--- a/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.hxx
++++ b/src/DataExchange/TKDESTEP/STEPControl/STEPControl_ActorRead.hxx
+@@ -221,7 +221,7 @@ private:
+                        const bool                                        theReadConstructiveGeomRR,
+                        const StepData_Factors&                           theLocalFactors,
+                        TopoDS_Compound&                                  theCund,
+-                       Message_ProgressScope&                            thePS);
++                       const Message_ProgressRange&                      theProgress);
+ 
+ private:
+   StepToTopoDS_NMTool                   myNMTool;
+-- 
+2.55.0.windows.3
+

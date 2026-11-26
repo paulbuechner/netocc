@@ -37,8 +37,13 @@ internal sealed record PackageModel(string Name, IReadOnlyList<string> Headers,
 /// The underlying type when it isn't int (<c>enum class Domain : uint8_t</c>: unsigned char),
 /// otherwise null.
 /// </param>
+/// <param name="IsTypedefName">
+/// The name is a typedef's for an anonymous enum (<c>typedef enum { ... } IVtk_SelectionMode;</c>):
+/// C++ has no <c>enum IVtk_SelectionMode</c>, so the .i declares it the same way.
+/// </param>
 internal sealed record EnumModel(string Name, string Header, IReadOnlyList<EnumConstant> Constants,
-                                 string? QualifiedName = null, string? Underlying = null);
+                                 string? QualifiedName = null, string? Underlying = null,
+                                 bool IsTypedefName = false);
 
 internal sealed record EnumConstant(string Name, long Value);
 
@@ -186,11 +191,17 @@ internal sealed record ConstructorModel(IReadOnlyList<ParameterModel> Parameters
 
 /// <param name="IsCallable">See <see cref="ConstructorModel"/>.</param>
 /// <param name="Broken">See <see cref="ConstructorModel"/>.</param>
+/// <param name="IsPure">Pure virtual (<c>= 0</c>).</param>
+/// <param name="IsProtected">
+/// Declared protected (<see cref="ClassModel.Hidden"/> holds private members too): a C# subclass
+/// of a director class overrides the virtual ones, and calls the constructors.
+/// </param>
 internal sealed record MethodModel(string Name, CppType Return,
                                    IReadOnlyList<ParameterModel> Parameters, bool IsStatic,
                                    bool IsConst, bool IsVirtual, bool IsDeprecated,
                                    bool IsCallable = true, string? Unlinked = null,
-                                   string? Broken = null);
+                                   string? Broken = null, bool IsPure = false,
+                                   bool IsProtected = false);
 
 /// <summary>A function in a C++ namespace (OCCT 8: <c>TopoDS::Face()</c> and friends).</summary>
 /// <param name="IsCallable">See <see cref="ConstructorModel"/>.</param>

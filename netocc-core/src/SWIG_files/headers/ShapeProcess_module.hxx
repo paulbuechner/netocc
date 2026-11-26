@@ -9,6 +9,7 @@
 #include <Message_Gravity.hxx>
 #include <Message_Messenger.hxx>
 #include <Message_Msg.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <Resource_Manager.hxx>
 #include <ShapeBuild_ReShape.hxx>

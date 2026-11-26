@@ -24,13 +24,13 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -65,7 +65,7 @@
 %import "BRep.i"
 %import "BRepTools.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.BOPDS; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.BOPDS; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools;)
 
 %occt_valuetype(BOPAlgo_MakePeriodic_PeriodicityParams)
 %occt_transient(BOPAlgo_AlertUserBreak)
@@ -597,7 +597,7 @@ public:
 
 class BOPAlgo_Algo : public BOPAlgo_Options {
 public:
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
 };
 
 class BOPAlgo_ParallelAlgo : public BOPAlgo_Algo {
@@ -655,7 +655,7 @@ public:
   bool& MergeEdgeMode();
   bool& ContinuityMode();
   bool& CurveOnSurfaceMode();
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool HasFaulty() const;
   const NCollection_List<BOPAlgo_CheckResult>& GetCheckResult() const;
 };
@@ -691,9 +691,9 @@ public:
   BOPAlgo_GlueEnum Glue() const;
   void SetCheckInverted(bool theCheck);
   bool CheckInverted() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   %netocc_keep_argument(PerformWithFiller.0, const BOPAlgo_PaveFiller& theFiller)
-  void PerformWithFiller(const BOPAlgo_PaveFiller& theFiller);
+  void PerformWithFiller(const BOPAlgo_PaveFiller& theFiller, const Message_ProgressRange& theRange = Message_ProgressRange());
   %clear const BOPAlgo_PaveFiller& theFiller;
   void BuildBOP(const NCollection_List<TopoDS_Shape>& theObjects, TopAbs_State theObjState, const NCollection_List<TopoDS_Shape>& theTools, TopAbs_State theToolsState, const Message_ProgressRange& theRange, opencascade::handle<Message_Report> theReport = nullptr);
   void BuildBOP(const NCollection_List<TopoDS_Shape>& theObjects, const NCollection_List<TopoDS_Shape>& theTools, BOPAlgo_Operation theOperation, const Message_ProgressRange& theRange, opencascade::handle<Message_Report> theReport = nullptr);
@@ -719,7 +719,7 @@ public:
   void Clear();
   void SetOperation(BOPAlgo_Operation theOperation);
   BOPAlgo_Operation Operation() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
 };
 
 class BOPAlgo_BuilderArea : public BOPAlgo_Algo {
@@ -739,7 +739,7 @@ public:
   BOPAlgo_BuilderFace(const opencascade::handle<NCollection_BaseAllocator>& theAllocator);
   void SetFace(const TopoDS_Face& theFace);
   const TopoDS_Face& Face() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   TopAbs_Orientation Orientation() const;
 };
 
@@ -747,7 +747,7 @@ class BOPAlgo_BuilderSolid : public BOPAlgo_BuilderArea {
 public:
   BOPAlgo_BuilderSolid();
   BOPAlgo_BuilderSolid(const opencascade::handle<NCollection_BaseAllocator>& theAllocator);
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   const NCollection_DataMap<TopoDS_Shape, Bnd_Box, TopTools_ShapeMapHasher>& GetBoxesMap() const;
 };
 
@@ -790,7 +790,7 @@ public:
   void SetSectionAttribute(const BOPAlgo_SectionAttribute& theSecAttr);
   void SetNonDestructive(bool theFlag);
   bool NonDestructive() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   void SetGlue(BOPAlgo_GlueEnum theGlue);
   BOPAlgo_GlueEnum Glue() const;
   void SetAvoidBuildPCurve(bool theValue);
@@ -800,7 +800,7 @@ public:
 class BOPAlgo_CheckerSI : public BOPAlgo_PaveFiller {
 public:
   BOPAlgo_CheckerSI();
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   void SetLevelOfCheck(int theLevel);
 };
 
@@ -880,7 +880,7 @@ public:
   const NCollection_List<TopoDS_Shape>& Faces() const;
   void SetAvoidInternalShapes(bool theAvoidInternal);
   bool IsAvoidInternalShapes() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
 };
 
 class BOPAlgo_RemoveFeatures : public BOPAlgo_BuilderShape {
@@ -891,7 +891,7 @@ public:
   void AddFaceToRemove(const TopoDS_Shape& theFace);
   void AddFacesToRemove(const NCollection_List<TopoDS_Shape>& theFaces);
   const NCollection_List<TopoDS_Shape>& FacesToRemove() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   void Clear();
 };
 
@@ -907,7 +907,7 @@ public:
   BOPAlgo_ShellSplitter(const opencascade::handle<NCollection_BaseAllocator>& theAllocator);
   void AddStartElement(const TopoDS_Shape& theS);
   const NCollection_List<TopoDS_Shape>& StartElements() const;
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   const NCollection_List<TopoDS_Shape>& Shells() const;
   static void SplitBlock(BOPTools_ConnexityBlock& theCB);
 };
@@ -916,7 +916,7 @@ class BOPAlgo_Splitter : public BOPAlgo_ToolsProvider {
 public:
   BOPAlgo_Splitter();
   BOPAlgo_Splitter(const opencascade::handle<NCollection_BaseAllocator>& theAllocator);
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
 };
 
 class BOPAlgo_Tools {
@@ -929,7 +929,7 @@ public:
   static int EdgesToWires(const TopoDS_Shape& theEdges, TopoDS_Shape& theWires, bool theShared = false, double theAngTol = 1.e-8);
   static bool WiresToFaces(const TopoDS_Shape& theWires, TopoDS_Shape& theFaces, double theAngTol = 1.e-8);
   static void IntersectVertices(const NCollection_IndexedDataMap<TopoDS_Shape, double, TopTools_ShapeMapHasher>& theVertices, double theFuzzyValue, NCollection_List<NCollection_List<TopoDS_Shape>>& theChains);
-  static void ClassifyFaces(const NCollection_List<TopoDS_Shape>& theFaces, const NCollection_List<TopoDS_Shape>& theSolids, bool theRunParallel, opencascade::handle<IntTools_Context>& theContext, NCollection_IndexedDataMap<TopoDS_Shape, NCollection_List<TopoDS_Shape>, TopTools_ShapeMapHasher>& theInParts, const NCollection_DataMap<TopoDS_Shape, Bnd_Box, TopTools_ShapeMapHasher>& theShapeBoxMap = NCollection_DataMap<TopoDS_Shape,Bnd_Box,TopTools_ShapeMapHasher>(), const NCollection_DataMap<TopoDS_Shape, NCollection_List<TopoDS_Shape>, TopTools_ShapeMapHasher>& theSolidsIF = NCollection_DataMap<TopoDS_Shape,NCollection_List<TopoDS_Shape>,TopTools_ShapeMapHasher>());
+  static void ClassifyFaces(const NCollection_List<TopoDS_Shape>& theFaces, const NCollection_List<TopoDS_Shape>& theSolids, bool theRunParallel, opencascade::handle<IntTools_Context>& theContext, NCollection_IndexedDataMap<TopoDS_Shape, NCollection_List<TopoDS_Shape>, TopTools_ShapeMapHasher>& theInParts, const NCollection_DataMap<TopoDS_Shape, Bnd_Box, TopTools_ShapeMapHasher>& theShapeBoxMap = NCollection_DataMap<TopoDS_Shape,Bnd_Box,TopTools_ShapeMapHasher>(), const NCollection_DataMap<TopoDS_Shape, NCollection_List<TopoDS_Shape>, TopTools_ShapeMapHasher>& theSolidsIF = NCollection_DataMap<TopoDS_Shape,NCollection_List<TopoDS_Shape>,TopTools_ShapeMapHasher>(), const Message_ProgressRange& theRange = Message_ProgressRange());
   static void FillInternals(const NCollection_List<TopoDS_Shape>& theSolids, const NCollection_List<TopoDS_Shape>& theParts, const NCollection_DataMap<TopoDS_Shape, NCollection_List<TopoDS_Shape>, TopTools_ShapeMapHasher>& theImages, const opencascade::handle<IntTools_Context>& theContext);
   static bool TrsfToPoint(const Bnd_Box& theBox1, const Bnd_Box& theBox2, gp_Trsf& theTrsf, const gp_Pnt& thePoint = gp_Pnt(0.0,0.0,0.0), double theCriteria = 1.e+5);
 };
@@ -957,7 +957,7 @@ public:
   BOPAlgo_WireEdgeSet& WES();
   void SetContext(const opencascade::handle<IntTools_Context>& theContext);
   const opencascade::handle<IntTools_Context>& Context();
-  void Perform();
+  void Perform(const Message_ProgressRange& theRange = Message_ProgressRange());
   static void MakeWire(NCollection_List<TopoDS_Shape>& theLE, TopoDS_Wire& theW);
   static void SplitBlock(const TopoDS_Face& theF, BOPTools_ConnexityBlock& theCB, const opencascade::handle<IntTools_Context>& theContext);
 };

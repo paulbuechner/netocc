@@ -1656,6 +1656,12 @@
       "instance": true
     },
     {
+      "name": "NCollection_Vec4_bool",
+      "kind": "class",
+      "cpp": "NCollection_Vec4",
+      "instance": true
+    },
+    {
       "name": "NCollection_WinHeapAllocator",
       "kind": "class",
       "cpp": "NCollection_WinHeapAllocator"
@@ -21100,15 +21106,37 @@
   ],
   "OpenGl": [
     {
+      "name": "NCollection_Sequence_Handle_OpenGl_Texture",
+      "kind": "class",
+      "cpp": "NCollection_Sequence",
+      "instance": true
+    },
+    {
       "name": "OpenGl_Caps",
       "kind": "class",
       "cpp": "OpenGl_Caps"
+    },
+    {
+      "name": "OpenGl_Context",
+      "kind": "class",
+      "cpp": "OpenGl_Context"
+    },
+    {
+      "name": "OpenGl_Context_OpenGl_ResourcesMap",
+      "kind": "class",
+      "cpp": "NCollection_Shared",
+      "instance": true
     },
     {
       "name": "OpenGl_FeatureFlag",
       "kind": "enum",
       "cpp": "OpenGl_FeatureFlag",
       "header": "OpenGl_Context.hxx"
+    },
+    {
+      "name": "OpenGl_FrameBuffer",
+      "kind": "class",
+      "cpp": "OpenGl_FrameBuffer"
     },
     {
       "name": "OpenGl_GraphicDriver",
@@ -21144,6 +21172,11 @@
       "kind": "enum",
       "cpp": "OpenGl_StateVariable",
       "header": "OpenGl_ShaderProgram.hxx"
+    },
+    {
+      "name": "OpenGl_Texture",
+      "kind": "class",
+      "cpp": "OpenGl_Texture"
     },
     {
       "name": "OpenGl_UniformStateType",

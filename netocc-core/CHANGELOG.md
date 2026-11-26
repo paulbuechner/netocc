@@ -4,7 +4,68 @@ Notable changes to the NetOcc packages (`NetOcc`, `NetOcc.runtime.<rid>`), in th
 
 Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), until the release PR writes them here (`python build.py release`). Each release's section becomes its GitHub release notes and the packages' release notes.
 
-## [Unreleased]
+## [8.0.1.1-next.7] - 2026-11-25
+
+### Added
+
+- `NetOccModules` names the NetOcc modules an app uses (`FoundationClasses;ModelingData;ModelingAlgorithms;DataExchange`): the build copies their libraries, NetOccRuntime and what these load only, on .NET Framework and .NET. A STEP read with geometry needs 62 of the 69 files on Windows and 62 of the 68 on macOS; geometry alone 26 of the 68 there. Each runtime package lists what its natives load, read from the files at pack time.
+
+### Changed
+
+- On macOS, the NetOcc libraries, NetOccVtk and TKIVtk load only the OCCT and VTK libraries they use, as on Windows and Linux, not all of them: each module's library loaded 60 of NetOcc.runtime.osx-arm64's 68 files, FoundationClasses' now loads 5.
+- A .NET Framework app gets the natives of the architecture it runs as only: `x86\` for PlatformTarget x86 or an AnyCPU exe with Prefer32Bit, `x64\` for x64, the RuntimeIdentifier's without a PlatformTarget, both for AnyCPU; so do the natives a referenced AnyCPU library hands on. With a RuntimeIdentifier, NuGet's second copy of the natives next to the app is left out, which Windows searched first for every library the process loads. A win-x86 app gets a third of the natives it got.
+- NetOcc.Vtk builds on NetVtk 9.7.1.1, its first release (VTK build `9.7.1#2`): on macOS, a render timer's `FrameReady()` before its window's first render no longer crashes the process, and NetVtk's libraries load only the VTK libraries they use.
+- NetOcc.Vtk's natives are laid out like NetOcc's: a .NET Framework app gets its architecture's only, in `x86\` or `x64\`, and none next to the app for a RuntimeIdentifier. With `NetOccModules` or NetVtk's `NetVtkModules`, the libraries of OCCT and VTK that NetOccVtk and TKIVtk load are kept with all they load, whether their modules are selected or not.
+
+## [8.0.1.1-next.6] - 2026-10-28
+
+### Added
+
+- Each runtime package carries sbom/sbom.cdx.json, a CycloneDX SBOM with the data fields of BSI TR-03183-2: every file of the package with its SHA-512, under NetOcc or the vcpkg port it comes from, each with its creator, version, license and its texts, copyright, source, patches and what it needs of the others, for an application's own SBOM, where NuGet lists the package alone; NetOcc.Vtk's lists VTK's compiled-in headers too.
+
+### Changed
+
+- NetOcc.Vtk builds on NetVtk 9.7.1.1-next.4, whose runtime packages carry their CycloneDX SBOM too.
+
+## [8.0.1.1-next.5] - 2026-10-22
+
+### Changed
+
+- NetOcc.Vtk builds on NetVtk 9.7.1.1-next.3, with its reverse Z and Windows' render windows (one renders into a texture a Direct3D 11 device shares). When it loads, NetOcc.Vtk checks that NetVtk's natives are the VTK build TKIVtk was compiled against (`Vtk.VtkBuild`), and throws an `InvalidOperationException` naming both builds where they are not.
+
+### Fixed
+
+- win-x86: NetOcc.Vtk shows shapes where they are. MSVC's x86 code at /O2 computed VTK's actor bounds wrong, so VTK culled actors and reset cameras off the scene; NetVtk's VTK is built at /O2 /Os now, and OCCT with it (the same triplet).
+
+## [8.0.1.1-next.4] - 2026-10-13
+
+### Added
+
+- NetOcc.Vtk and NetOcc.Vtk.runtime.<rid>: OCCT's TKIVtk (IVtk, IVtkOCC, IVtkVTK, IVtkTools) on NetVtk, for OCCT shapes in VTK scenes next to simulation results. IVtkTools_ShapeDataSource is a NetVtk vtkPolyDataAlgorithm, IVtkTools_ShapePicker picks shapes and their faces, edges and vertices. It depends on NetOcc of the same version and on exactly one NetVtk release, whose VTK build TKIVtk is compiled against; NetOcc's own packages hold neither TKIVtk nor VTK.
+
+## [8.0.1.1-next.3] - 2026-10-05
+
+### Fixed
+
+- Reading STEP reports progress, and can be cancelled, while it translates every representation that the shape of a product relates and every representation a mapped item places: OCCT 8.0.1 is built with a fix of `STEPControl_ActorRead` (an overlay port, until OCCT has it), which gave the second and later of them no progress range. A CATIA V6 hybrid model translated its solids for 11 s without either.
+
+## [8.0.1.1-next.2] - 2026-09-28
+
+### Added
+
+- C# subclasses of the classes OCCT is meant to be derived from (SWIG directors): `Message_ProgressIndicator`, `Message_Printer`, `AIS_InteractiveObject`, `SelectMgr_EntityOwner` and `AIS_ViewController`. OCCT calls their overrides, protected members and constructors included; a subclass's object lives while OCCT holds it and comes back as itself, and an exception its override throws unwinds OCCT and is the `InnerException` of the `OcctException` the call throws.
+- `OpenGl_Context`, `OpenGl_FrameBuffer` and `OpenGl_Texture`, and `OpenGl_GraphicDriver.GetSharedContext`: a view renders into an application's own OpenGL surface.
+
+### Changed
+
+- A trailing `Message_ProgressRange` parameter is an overload like other defaults, no longer left out: a C# `Message_ProgressIndicator` reports and cancels booleans, meshing and file reading through it.
+- OCCT allocates through oneTBB's scalable allocator and runs its parallel algorithms on oneTBB, whose libraries the runtime packages now hold (with hwloc on Windows and Linux): BRepMesh took blocks of 1 MB per face from the system allocator, which maps and unmaps each. Meshing is 2 to 3.5 times as fast, 3 to 4 times in parallel.
+
+### Fixed
+
+- `TDF_Delta`, `TDF_AttributeDelta`, `TDF_RelocationTable`, `TDF_DataSet` and a performed `TDF_CopyLabel` keep their documents' data alive, as labels and attributes do: releasing one after its document was closed read freed memory and could crash the process.
+
+## [8.0.1.1-next.1] - 2026-09-27
 
 ### Added
 
@@ -59,4 +120,10 @@ Changes wait in `changes/`, a file each (`python build.py change fixed "..."`), 
 - One AnyCPU assembly for .NET Framework 3.5 to 4.8, .NET 6, 8 and 10, and netstandard2.0.
 - Natives for win-x64, win-x86, linux-x64 and osx-arm64, one package each (`NetOcc.runtime.<rid>`).
 
-[Unreleased]: https://github.com/paulbuechner/netocc/commits/main
+[8.0.1.1-next.7]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.7
+[8.0.1.1-next.6]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.6
+[8.0.1.1-next.5]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.5
+[8.0.1.1-next.4]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.4
+[8.0.1.1-next.3]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.3
+[8.0.1.1-next.2]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.2
+[8.0.1.1-next.1]: https://github.com/paulbuechner/netocc/releases/tag/v8.0.1.1-next.1

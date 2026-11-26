@@ -235,8 +235,8 @@ public:
   TopoDS_Shape SingleShape() const;
   const NCollection_IndexedMap<TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& ExternalFiles() const;
   const NCollection_IndexedDataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& Metadata() const;
-  bool ProbeHeader(const TCollection_AsciiString& theFile);
-  bool ProbeHeader(std::istream& theStream, const TCollection_AsciiString& theFile = "");
+  bool ProbeHeader(const TCollection_AsciiString& theFile, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool ProbeHeader(std::istream& theStream, const TCollection_AsciiString& theFile = "", const Message_ProgressRange& theProgress = Message_ProgressRange());
 };
 
 class RWMesh_CafReader_CafDocumentTools {

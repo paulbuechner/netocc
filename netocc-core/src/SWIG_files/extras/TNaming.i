@@ -17,4 +17,4 @@ extern "C" SWIGEXPORT void* SWIGSTDCALL NetOcc_TDF_AcquireBuilderData(void* theB
 }
 %}
 
-%occt_tdf_proxy(TNaming_Builder, global::OCC.Core.TDF.DataReference.AcquireFromBuilder(cPtr))
+%occt_tdf_proxy(TNaming_Builder, global::OCC.Core.TDF.DataReference.AcquireFromBuilder(cPtr), Release)

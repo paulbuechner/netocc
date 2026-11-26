@@ -101,10 +101,16 @@ internal sealed partial class SignatureMapper
   {
     switch (registry.Resolve(type))
     {
-      case BuiltinType b when PlatformSpelledBuiltins.Contains(b.Name):
+      case BuiltinType b when PlatformSpelledBuiltins.Contains(b.Name)
+                              && !(fixedLongLong && b.Name is "long long" or "unsigned long long"):
         return (null, $"element {b.Name}: spelled differently per platform");
       case BuiltinType b when Builtins.TryGetValue(b.Name, out var cs):
         return (new CollectionElement(cs, BlittableBuiltins.Contains(b.Name), []), null);
+      // SWIG spells it "enum X" in a template's wrappers, which C++ hasn't
+      case NamedType { Kind: NamedKind.Enum } e
+        when registry.Enum(e.Name) is { IsTypedefName: true }:
+        return (null,
+          $"element {e.Name}: a typedef's name for an anonymous enum, which SWIG spells enum {e.Name}");
       case NamedType { Kind: NamedKind.Enum } e:
         return registry.Enum(e.Name) is { } known
           ? (new CollectionElement(e.Name, false, [known.Use]), null)

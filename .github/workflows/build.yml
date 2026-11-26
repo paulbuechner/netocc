@@ -1,23 +1,28 @@
-# netocc-core: build, test and pack NetOcc on all four RIDs. A push to main whose CHANGELOG.md has a release without its tag
-# yet (the merge of the release PR, see release.yml) also publishes it: nuget.org, then the GitHub release, which tags the
-# commit; a push to next publishes its prereleases so. Keep this file's name: nuget.org's Trusted Publishing policy names it.
+# netocc-core and netocc-vtk: build, test and pack NetOcc and NetOcc.Vtk on all four RIDs. A push to main whose CHANGELOG.md
+# has a release without its tag yet (the merge of the release PR, see release.yml) also publishes it: nuget.org, then the
+# GitHub release, which tags the commit; a push to next publishes its prereleases so. Keep this file's name: nuget.org's
+# Trusted Publishing policy names it.
+#
+# NetOcc.Vtk needs NetVtk: OCCT's vtk feature takes VTK from NetVtk's vcpkg registry (github.com/paulbuechner/netvtk,
+# public), and netocc-vtk restores the NetVtk release its NetVtk.props names from nuget.org.
 #
 # One-time setup for publishing:
 #   - nuget.org > Trusted Publishing: owner paulbuechner, repository netocc, workflow build.yml, environment release
 #   - repository variable NUGET_USER: the nuget.org profile name that owns the policy
 name: build
 
-# every push to main or next; pull requests that change netocc-core, the demos, the documentation's samples or the README
-# they check. Pushes carry no path filter while main is amended into its initial commit: a force-pushed root commit gives
+# every push to main or next; pull requests that change netocc-core, netocc-vtk, the demos, the documentation's samples or
+# the README they check. Pushes carry no path filter while main is amended into its initial commit: a force-pushed root commit gives
 # GitHub no diff, and it skips every path-filtered workflow then.
 on:
   push:
     branches: [main, next]
   pull_request:
-    paths: ["netocc-core/**", "netocc-demos/**", "netocc-documentation/samples/**", "README.md", ".github/workflows/build.yml"]
+    paths: ["netocc-core/**", "netocc-vtk/**", "netocc-demos/**", "netocc-documentation/samples/**", "README.md", ".github/workflows/build.yml"]
   workflow_dispatch:
-  # keeps the vcpkg caches: GitHub evicts caches unused for 7 days, and scheduled runs can start late or be dropped,
-  # so twice a week (off the full hour). GitHub disables this after 60 days without activity in the repository.
+  # keeps the vcpkg caches, main's and (job next) next's: GitHub evicts caches unused for 7 days, and scheduled runs can
+  # start late or be dropped, so twice a week (off the full hour). GitHub disables this after 60 days without activity
+  # in the repository.
   schedule:
     - cron: "17 4 * * 1,4"
 
@@ -42,6 +47,29 @@ defaults:
     working-directory: netocc-core
 
 jobs:
+  # The schedule runs on main only, and a run restores only its own branch's caches and main's: next's would expire
+  # after 7 days without a push, and next would then restore main's, which its vcpkg inputs don't match (no package
+  # restored). So each scheduled run starts this workflow on next too.
+  next:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: this workflow on next
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/$GITHUB_REPOSITORY/branches/next" --silent; then
+            gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref next
+          else
+            echo "no branch next"
+          fi
+
   # the version: OCCT's and NetOcc's revision (build.py version). On main, the newest release in CHANGELOG.md is published
   # unless it has its tag already or is on nuget.org, on next the newest if it's a prerelease (a release there is main's,
   # merged); everything else packs <OCCT>.<next revision>-ci.<run>
@@ -56,9 +84,12 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
-      # the version and release rules this job publishes by
-      - name: build.py's tests
-        run: python test/test_build.py
+      # the version and release rules this job publishes by, the runtime packages' SBOM and what their natives load
+      - name: build.py's, sbom.py's and loads.py's tests
+        run: |
+          python test/test_build.py
+          python test/test_sbom.py
+          python test/test_loads.py
       - id: version
         name: version and release notes
         shell: bash
@@ -115,12 +146,15 @@ jobs:
             8.0.x
             10.0.x
 
+      # VTK (OCCT's vtk feature) builds against the X, GL and EGL headers; Xvfb and Mesa's llvmpipe run NetOcc.Vtk's tests
+      # that render
       - name: build tools (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get -o Acquire::Retries=5 update
           sudo apt-get install -y --no-install-recommends autoconf autoconf-archive automake libtool pkg-config \
-            libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxext-dev libxi-dev
+            libgl1-mesa-dev libglu1-mesa-dev libegl-dev libx11-dev libxext-dev libxi-dev libxt-dev libxcursor-dev \
+            libgl1-mesa-dri xvfb xauth
       - name: build tools (macOS)
         if: runner.os == 'macOS'
         env:
@@ -169,42 +203,49 @@ jobs:
           path: netocc-core/artifacts/runtimes/${{ matrix.rid }}
           if-no-files-found: error
 
-  # OCCT's documentation comments as NetOcc's XML documentation (build.py docs), which pack ships: the same for every
-  # platform, so made once, beside the natives. On Windows, where libclang parses OCCT's headers with the Windows SDK's C
-  # headers; on Linux it lacks its own stddef.h.
-  documentation:
-    needs: version
-    # x64-windows's vcpkg cache is the win-x64 natives' (same image); a cold one builds OCCT here too
-    runs-on: windows-2025
-    timeout-minutes: 350
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: "3.12"
-      - uses: actions/setup-dotnet@v6
-        with:
-          dotnet-version: 10.0.x
-      - name: OCCT
-        uses: ./.github/actions/occt
-        with:
-          triplet: x64-windows
-      - uses: ./.github/actions/swig
-
-      # SWIG's C# for the net10.0 assembly, whose members netocc-gen docs documents
-      - name: SWIG and documentation
+      # OCCT's documentation comments as NetOcc's XML documentation (build.py docs), which pack ships: the same for
+      # every platform, so made once, on Windows, where libclang parses OCCT's headers with the Windows SDK's C headers;
+      # on Linux it lacks its own stddef.h. Here, on this job's install, rather than in a job of its own, which would
+      # restore the vcpkg cache again and, on another runner image, miss it and build OCCT a second time.
+      - name: documentation
+        if: matrix.rid == 'win-x64'
         shell: bash
-        run: |
-          python build.py generate
-          python build.py docs --triplet x64-windows
-      - uses: actions/upload-artifact@v7
+        run: python build.py docs --triplet x64-windows
+      - if: matrix.rid == 'win-x64'
+        uses: actions/upload-artifact@v7
         with:
           name: documentation
           path: netocc-core/artifacts/docs
           if-no-files-found: error
 
+      # NetOcc.Vtk on the same OCCT install: TKIVtk's wrappers on NetVtk (from nuget.org). The tests that render need OpenGL
+      # 3.2: Linux has Mesa's llvmpipe under Xvfb, the Windows and macOS runners none.
+      - name: NetOcc.Vtk
+        shell: bash
+        working-directory: netocc-vtk
+        run: |
+          python build.py generate
+          python build.py native --triplet ${{ matrix.triplet }}
+          if [ "${{ matrix.arch }}" = "x86" ]; then
+            python build.py test --arch x86 --framework net48 --no-rendering
+          elif [ "$RUNNER_OS" = "Linux" ]; then
+            xvfb-run -a python build.py test --arch x64
+          else
+            python build.py test --arch ${{ matrix.arch }} --no-rendering
+          fi
+      # its demo (WPF) builds on the projects
+      - name: NetOcc.Vtk's demo
+        if: matrix.rid == 'win-x64'
+        working-directory: netocc-vtk
+        run: dotnet build demo/NetOcc.Vtk.Viewer.Wpf -c Release
+      - uses: actions/upload-artifact@v7
+        with:
+          name: vtk-${{ matrix.rid }}
+          path: netocc-vtk/artifacts/runtimes/${{ matrix.rid }}
+          if-no-files-found: error
+
   pack:
-    needs: [version, natives, documentation]
+    needs: [version, natives]
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -235,6 +276,15 @@ jobs:
         with:
           name: documentation
           path: netocc-core/artifacts/docs
+      # NetOcc.Vtk's natives: vtk-<rid> into netocc-vtk/artifacts/runtimes/<rid>
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: vtk-*
+          path: netocc-vtk/artifacts/runtimes
+      - name: NetOcc.Vtk's natives
+        shell: bash
+        working-directory: netocc-vtk/artifacts/runtimes
+        run: for d in vtk-*; do mv "$d" "${d#vtk-}"; done
       - uses: ./.github/actions/swig
 
       - name: pack
@@ -242,10 +292,22 @@ jobs:
         run: |
           python build.py generate
           python build.py pack --version "${{ needs.version.outputs.version }}"
+      # on the NetOcc packed above, of the same version
+      - name: pack NetOcc.Vtk
+        shell: bash
+        working-directory: netocc-vtk
+        run: |
+          python build.py generate
+          python build.py pack --version "${{ needs.version.outputs.version }}"
       - uses: actions/upload-artifact@v7
         with:
           name: packages
           path: netocc-core/artifacts/packages
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v7
+        with:
+          name: vtk-packages
+          path: netocc-vtk/artifacts/packages
           if-no-files-found: error
 
   package-tests:
@@ -273,8 +335,16 @@ jobs:
         with:
           name: packages
           path: netocc-core/artifacts/packages
+      - uses: actions/download-artifact@v8
+        with:
+          name: vtk-packages
+          path: netocc-vtk/artifacts/packages
       - name: test the packages
         shell: bash
+        run: python build.py test-package --arch ${{ matrix.arch }}
+      - name: test NetOcc.Vtk's packages
+        shell: bash
+        working-directory: netocc-vtk
         run: python build.py test-package --arch ${{ matrix.arch }}
 
   # netocc-demos on the packed NetOcc: both viewers build (WPF needs Windows), the viewer library's tests run
@@ -294,6 +364,10 @@ jobs:
         with:
           name: packages
           path: netocc-core/artifacts/packages
+      - uses: actions/download-artifact@v8
+        with:
+          name: vtk-packages
+          path: netocc-vtk/artifacts/packages
       # dotnet test builds only the test projects and what they reference: build the viewers first
       - name: build and test the demos
         run: |
@@ -303,6 +377,10 @@ jobs:
       - name: run the documentation's samples
         working-directory: netocc-documentation/samples
         run: dotnet test -c Release
+      # the VTK article's, on the packed NetOcc.Vtk; the one that renders needs OpenGL 3.2, which the runner lacks
+      - name: run the documentation's VTK samples
+        working-directory: netocc-documentation/samples-vtk
+        run: dotnet test -c Release --filter "TestCategory!=Rendering"
 
   publish:
     if: needs.version.outputs.release == 'true'
@@ -327,6 +405,10 @@ jobs:
           path: artifacts/packages
       - uses: actions/download-artifact@v8
         with:
+          name: vtk-packages
+          path: artifacts/packages
+      - uses: actions/download-artifact@v8
+        with:
           name: release-notes
           path: .
       # the temporary API key lives for an hour: log in right before the push
@@ -334,15 +416,16 @@ jobs:
         uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
         with:
           user: ${{ vars.NUGET_USER }}
-      # the runtime packages first: NetOcc depends on them, so no restore finds NetOcc without them. A run that fails here
-      # can be rerun (--skip-duplicate skips what's there); a new push publishes too while NetOcc itself isn't there.
-      # dotnet nuget push takes the .snupkg next to a package along.
+      # the runtime packages first: NetOcc depends on them, so no restore finds NetOcc without them; NetOcc.Vtk's after
+      # NetOcc, which it depends on. A run that fails here can be rerun (--skip-duplicate skips what's there); a new push
+      # publishes too while NetOcc itself isn't there. dotnet nuget push takes the .snupkg next to a package along.
       - name: push to nuget.org
         shell: bash
         env:
           NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         run: |
-          for package in artifacts/packages/NetOcc.runtime.*.nupkg artifacts/packages/NetOcc.[0-9]*.nupkg; do
+          for package in artifacts/packages/NetOcc.runtime.*.nupkg artifacts/packages/NetOcc.[0-9]*.nupkg \
+                         artifacts/packages/NetOcc.Vtk.runtime.*.nupkg artifacts/packages/NetOcc.Vtk.[0-9]*.nupkg; do
             dotnet nuget push "$package" --api-key "$NUGET_API_KEY" --source https://api.nuget.org/v3/index.json --skip-duplicate
           done
       # the release tags the commit this run built, v<version>

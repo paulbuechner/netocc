@@ -110,10 +110,19 @@ internal sealed partial class SignatureMapper
         : TypeMapping.Of(spelling, instantiation.Alias, instantiation.Alias, uses);
     }
 
-    return registry.Class(n.Name) is { } known
-      ? TypeMapping.Of(spelling, n.Name, n.Name, known.Use)
-      : TypeMapping.Skipped($"class {n.Name} is not wrapped");
+    return registry.Class(n.Name) switch
+    {
+      { Kind: WrapKind.Vtk } vtk => VtkObject(n.Name, spelling, vtk),
+      { } known => TypeMapping.Of(spelling, n.Name, n.Name, known.Use),
+      _ => TypeMapping.Skipped($"class {n.Name} is not wrapped"),
+    };
   }
+
+  // NetVtk's object (global::Vtk.T): NetVtkInterop.i's typemaps for it, VTK's header
+  private static TypeMapping VtkObject(string name, string spelling, KnownClass vtk) =>
+    new(
+      new MappedType(spelling, [vtk.Use], $"global::Vtk.{name}", $"global::Vtk.{name}",
+                     $"%netvtk_object({name})"), null);
 
   // T*& (the callee may replace the pointer): a class is ref of its proxy (References.i,
   // Handles.i), const char* a ref string, anything else a ref IntPtr through NetOcc_AddressRef<T>
@@ -165,7 +174,8 @@ internal sealed partial class SignatureMapper
   {
     var owned =
       p.Pointee is NamedType { TemplateArguments.Count: 0 } target
-      && registry.Class(target.Name) is { Kind: WrapKind.Transient }
+      && registry.Class(target.Name) is
+        { Kind: WrapKind.Transient or WrapKind.Vtk or WrapKind.VtkDerived }
       || p.Pointee is NamedType { TemplateArguments.Count: > 0 } collection
       && CollectionTemplate.Named(collection.Name) is { IsTransient: true };
     var pointer = p with { Const = !member || owned };

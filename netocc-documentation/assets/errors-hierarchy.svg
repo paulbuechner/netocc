@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 780" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="errors-hierarchy-title errors-hierarchy-desc" width="800" height="780">
+        <title id="errors-hierarchy-title">OCCT's exception hierarchy</title>
+        <desc id="errors-hierarchy-desc">Standard_Failure is the base of Standard_DomainError, Standard_NumericError, Standard_ProgramError and StdFail_NotDone; Standard_DomainError's subclasses include Standard_ConstructionError and Standard_RangeError, which Standard_OutOfRange, Standard_NegativeValue and Standard_NullValue derive from.</desc><defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="780" rx="12"/></clipPath></defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zones: one per subtree of Standard_Failure. -->
+        <g fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8">
+          <rect x="40" y="112" width="312" height="628" rx="8"/>
+          <rect x="480" y="152" width="280" height="208" rx="8"/>
+          <rect x="480" y="380" width="280" height="148" rx="8"/>
+          <rect x="480" y="548" width="280" height="88" rx="8"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.14em" fill="#5a6580">
+          <text x="56" y="125">DOMAIN ERRORS</text>
+          <text x="496" y="165">NUMERIC ERRORS</text>
+          <text x="496" y="393">PROGRAM ERRORS</text>
+          <text x="496" y="561">STDFAIL</text>
+        </g>
+
+        <!-- Connectors, before the boxes: the trunk from the root, then each parent's spine. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1">
+          <path d="M416,80 V592 Q416,600 424,600 H496"/>
+          <path d="M416,164 H240"/>
+          <path d="M416,204 H496"/>
+          <path d="M416,432 H496"/>
+
+          <path d="M72,184 V516 Q72,524 80,524 H88"/>
+          <path d="M72,224 H88"/>
+          <path d="M72,284 H88"/>
+          <path d="M72,344 H88"/>
+          <path d="M72,404 H88"/>
+          <path d="M72,464 H88"/>
+
+          <path d="M104,544 V696 Q104,704 112,704 H120"/>
+          <path d="M104,584 H120"/>
+          <path d="M104,644 H120"/>
+
+          <path d="M512,224 V316 Q512,324 520,324 H528"/>
+          <path d="M512,264 H528"/>
+
+          <path d="M512,452 V484 Q512,492 520,492 H528"/>
+        </g>
+
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142" text-anchor="middle">
+          <!-- Root. -->
+          <rect x="324" y="40" width="184" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="416" y="64">Standard_Failure</text>
+
+          <!-- Standard_DomainError and its subtree; it and Standard_ConstructionError are focal. -->
+          <rect x="56" y="144" width="184" height="40" rx="6" fill="#f5f5f5" stroke="none"/>
+          <rect x="56" y="144" width="184" height="40" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="148" y="168">Standard_DomainError</text>
+          <rect x="88" y="204" width="216" height="40" rx="6" fill="#f5f5f5" stroke="none"/>
+          <rect x="88" y="204" width="216" height="40" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="196" y="228">Standard_ConstructionError</text>
+          <rect x="88" y="264" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="196" y="288">Standard_NullObject</text>
+          <rect x="88" y="324" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="196" y="348">Standard_NoSuchObject</text>
+          <rect x="88" y="384" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="196" y="408">Standard_TypeMismatch</text>
+          <rect x="88" y="444" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="196" y="468">Standard_DimensionError</text>
+          <rect x="88" y="504" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="196" y="528">Standard_RangeError</text>
+          <rect x="120" y="564" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="228" y="588">Standard_OutOfRange</text>
+          <rect x="120" y="624" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="228" y="648">Standard_NegativeValue</text>
+          <rect x="120" y="684" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="228" y="708">Standard_NullValue</text>
+
+          <!-- Standard_NumericError. -->
+          <rect x="496" y="184" width="184" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="588" y="208">Standard_NumericError</text>
+          <rect x="528" y="244" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="636" y="268">Standard_DivideByZero</text>
+          <rect x="528" y="304" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="636" y="328">Standard_Overflow</text>
+
+          <!-- Standard_ProgramError. -->
+          <rect x="496" y="412" width="184" height="40" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="588" y="436">Standard_ProgramError</text>
+          <rect x="528" y="472" width="216" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="636" y="496">Standard_NotImplemented</text>
+
+          <!-- StdFail_NotDone. -->
+          <rect x="496" y="580" width="184" height="40" rx="6" fill="#ffffff" stroke="#2d3142" stroke-width="0.8"/>
+          <text x="588" y="604">StdFail_NotDone</text>
+        </g>
+
+        <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.14em" fill="#5a6580">
+          <text x="480" y="720">CATCHING A BASE CLASS</text>
+          <text x="480" y="736">CATCHES ITS SUBCLASSES</text>
+        </g>
+      </g></svg>

@@ -24,13 +24,13 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -69,7 +69,7 @@
 %import "TColGeom.i"
 %import "LocOpe.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.BOPDS; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BOPAlgo; using OCC.Core.BRepBuilderAPI; using OCC.Core.TColGeom; using OCC.Core.LocOpe;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.BOPDS; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BOPAlgo; using OCC.Core.BRepBuilderAPI; using OCC.Core.TColGeom; using OCC.Core.LocOpe;)
 
 %occt_valueclass(BRepFeat)
 %occt_valueclass(BRepFeat_Builder)
@@ -157,7 +157,7 @@ public:
   void PartsOfTool(NCollection_List<TopoDS_Shape>& theLT);
   void KeepParts(const NCollection_List<TopoDS_Shape>& theIm);
   void KeepPart(const TopoDS_Shape& theS);
-  void PerformResult();
+  void PerformResult(const Message_ProgressRange& theRange = Message_ProgressRange());
   void RebuildFaces();
   void RebuildEdge(const TopoDS_Shape& theE, const TopoDS_Face& theF, const NCollection_Map<TopoDS_Shape, TopTools_ShapeMapHasher>& theME, NCollection_List<TopoDS_Shape>& aLEIm);
   void CheckSolidImages();
@@ -196,7 +196,7 @@ public:
   LocOpe_Operation OpeType() const;
   const TopoDS_Shape& BasisShape() const;
   const TopoDS_Shape& GluedShape() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsDeleted(const TopoDS_Shape& F);
   const NCollection_List<TopoDS_Shape>& Modified(const TopoDS_Shape& F);
 };
@@ -329,7 +329,7 @@ public:
   const NCollection_List<TopoDS_Shape>& DirectLeft() const;
   const NCollection_List<TopoDS_Shape>& Left() const;
   const NCollection_List<TopoDS_Shape>& Right() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsDeleted(const TopoDS_Shape& S);
   const NCollection_List<TopoDS_Shape>& Modified(const TopoDS_Shape& F);
 };

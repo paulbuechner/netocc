@@ -34,6 +34,30 @@ internal sealed class GeneratorConfig
   /// </summary>
   public Dictionary<string, string> AliasPackages { get; set; } = [];
 
+  /// <summary>
+  /// The native library every generated module goes into, in place of one per OCCT module
+  /// (<c>NetOcc&lt;Module&gt;</c>); null: one per OCCT module. NetOcc.Vtk's modules are
+  /// <c>NetOccVtk</c>'s.
+  /// </summary>
+  public string? Library { get; set; }
+
+  /// <summary>
+  /// Another run's wrapper directory, relative to the config's: the modules these import (NetOcc's,
+  /// for NetOcc.Vtk), scanned for their types and never written.
+  /// </summary>
+  public string? Import { get; set; }
+
+  /// <summary>
+  /// <c>long long</c> is the same type on every platform in these packages' collections: VTK's
+  /// vtkIdType (TKIVtk's IVtk_IdType), not <c>int64_t</c>. Otherwise such collections stay out.
+  /// </summary>
+  public bool FixedLongLong { get; set; }
+
+  /// <summary>
+  /// Where the skip logs go, relative to the config's directory; null: ../log/skips.
+  /// </summary>
+  public string? Skips { get; set; }
+
   public Dictionary<string, PackageConfig> Packages { get; set; } = [];
 
   public PackageConfig For(string package) =>
@@ -86,4 +110,11 @@ internal sealed class PackageConfig
   /// hand-written partial may add managed members): %occt_valuetype and layout guards, no proxy.
   /// </summary>
   public List<string> ValueTypes { get; set; } = [];
+
+  /// <summary>
+  /// Transient classes C# may subclass (SWIG directors): OCCT calls a C# override of their virtual
+  /// members, inherited and protected ones too, and their constructors are wrapped, protected ones
+  /// and those of an abstract class too.
+  /// </summary>
+  public List<string> Directors { get; set; } = [];
 }

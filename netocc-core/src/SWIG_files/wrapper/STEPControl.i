@@ -15,10 +15,10 @@
 %import "TCollection.i"
 %import "TColStd.i"
 %import "NCollection.i"
-%import "Resource.i"
 %import "Quantity.i"
 %import "OSD.i"
 %import "Message.i"
+%import "Resource.i"
 %import "CDM.i"
 %import "LDOM.i"
 %import "Storage.i"
@@ -90,7 +90,7 @@
 %import "StepGeom.i"
 %import "StepShape.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Resource; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.DESTEP; using OCC.Core.StepData; using OCC.Core.StepBasic; using OCC.Core.StepRepr; using OCC.Core.StepGeom; using OCC.Core.StepShape;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.Resource; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.DESTEP; using OCC.Core.StepData; using OCC.Core.StepBasic; using OCC.Core.StepRepr; using OCC.Core.StepGeom; using OCC.Core.StepShape;)
 
 %occt_transient(STEPControl_ActorRead)
 %nodefaultctor STEPControl_ActorRead;
@@ -116,8 +116,8 @@ class STEPControl_ActorRead : public Transfer_ActorOfTransientProcess {
 public:
   STEPControl_ActorRead(const opencascade::handle<Interface_InterfaceModel>& theModel);
   bool Recognize(const opencascade::handle<Standard_Transient>& start);
-  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP);
-  opencascade::handle<Transfer_Binder> TransferShape(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors(), bool isManifold = true, bool theUseTrsf = false);
+  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Transfer_Binder> TransferShape(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP, const StepData_Factors& theLocalFactors = StepData_Factors(), bool isManifold = true, bool theUseTrsf = false, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void PrepareUnits(const opencascade::handle<StepRepr_Representation>& rep, const opencascade::handle<Transfer_TransientProcess>& TP, StepData_Factors& theLocalFactors);
   void ResetUnits(const opencascade::handle<StepData_StepModel>& theModel, StepData_Factors& theLocalFactors);
   void SetModel(const opencascade::handle<Interface_InterfaceModel>& theModel);
@@ -132,10 +132,10 @@ class STEPControl_ActorWrite : public Transfer_ActorOfFinderProcess {
 public:
   STEPControl_ActorWrite();
   bool Recognize(const opencascade::handle<Transfer_Finder>& start);
-  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_FinderProcess>& FP);
-  opencascade::handle<Transfer_Binder> TransferSubShape(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<StepShape_ShapeDefinitionRepresentation>& SDR, opencascade::handle<StepGeom_GeometricRepresentationItem>& AX1, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const opencascade::handle<NCollection_HSequence<TopoDS_Shape>>& shapeGroup = nullptr, bool isManifold = true);
-  opencascade::handle<Transfer_Binder> TransferShape(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<StepShape_ShapeDefinitionRepresentation>& SDR, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const opencascade::handle<NCollection_HSequence<TopoDS_Shape>>& shapeGroup = nullptr, bool isManifold = true);
-  opencascade::handle<Transfer_Binder> TransferCompound(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<StepShape_ShapeDefinitionRepresentation>& SDR, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
+  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<Transfer_FinderProcess>& FP, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Transfer_Binder> TransferSubShape(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<StepShape_ShapeDefinitionRepresentation>& SDR, opencascade::handle<StepGeom_GeometricRepresentationItem>& AX1, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const opencascade::handle<NCollection_HSequence<TopoDS_Shape>>& shapeGroup = nullptr, bool isManifold = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Transfer_Binder> TransferShape(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<StepShape_ShapeDefinitionRepresentation>& SDR, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const opencascade::handle<NCollection_HSequence<TopoDS_Shape>>& shapeGroup = nullptr, bool isManifold = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  opencascade::handle<Transfer_Binder> TransferCompound(const opencascade::handle<Transfer_Finder>& start, const opencascade::handle<StepShape_ShapeDefinitionRepresentation>& SDR, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SetMode(STEPControl_StepModelType M);
   STEPControl_StepModelType Mode() const;
   void SetGroupMode(int mode);
@@ -153,7 +153,7 @@ public:
   opencascade::handle<Interface_InterfaceModel> NewModel() const;
   opencascade::handle<Transfer_ActorOfTransientProcess> ActorRead(const opencascade::handle<Interface_InterfaceModel>& theModel) const;
   void Customise(opencascade::handle<XSControl_WorkSession>& WS);
-  IFSelect_ReturnStatus TransferWriteShape(const TopoDS_Shape& shape, const opencascade::handle<Transfer_FinderProcess>& FP, const opencascade::handle<Interface_InterfaceModel>& model, int modetrans = 0) const;
+  IFSelect_ReturnStatus TransferWriteShape(const TopoDS_Shape& shape, const opencascade::handle<Transfer_FinderProcess>& FP, const opencascade::handle<Interface_InterfaceModel>& model, int modetrans = 0, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
   static bool Init();
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
@@ -169,7 +169,7 @@ public:
   IFSelect_ReturnStatus ReadStream(const char* theName, std::istream& theIStream);
   IFSelect_ReturnStatus ReadFile(const char* filename, const DESTEP_Parameters& theParams);
   IFSelect_ReturnStatus ReadStream(const char* theName, const DESTEP_Parameters& theParams, std::istream& theIStream);
-  bool TransferRoot(int num = 1);
+  bool TransferRoot(int num = 1, const Message_ProgressRange& theProgress = Message_ProgressRange());
   int NbRootsForTransfer();
   void FileUnits(NCollection_Sequence<TCollection_AsciiString>& theUnitLengthNames, NCollection_Sequence<TCollection_AsciiString>& theUnitAngleNames, NCollection_Sequence<TCollection_AsciiString>& theUnitSolidAngleNames);
   void SetSystemLengthUnit(double theLengthUnit);
@@ -185,8 +185,8 @@ public:
   void SetWS(const opencascade::handle<XSControl_WorkSession>& WS, bool scratch = true);
   opencascade::handle<XSControl_WorkSession> WS() const;
   opencascade::handle<StepData_StepModel> Model(bool newone = false);
-  IFSelect_ReturnStatus Transfer(const TopoDS_Shape& sh, STEPControl_StepModelType mode, bool compgraph = true);
-  IFSelect_ReturnStatus Transfer(const TopoDS_Shape& sh, STEPControl_StepModelType mode, const DESTEP_Parameters& theParams, bool compgraph = true);
+  IFSelect_ReturnStatus Transfer(const TopoDS_Shape& sh, STEPControl_StepModelType mode, bool compgraph = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  IFSelect_ReturnStatus Transfer(const TopoDS_Shape& sh, STEPControl_StepModelType mode, const DESTEP_Parameters& theParams, bool compgraph = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
   IFSelect_ReturnStatus Write(const char* theFileName);
   IFSelect_ReturnStatus WriteStream(std::ostream& theOStream);
   void PrintStatsTransfer(int what, int mode = 0) const;

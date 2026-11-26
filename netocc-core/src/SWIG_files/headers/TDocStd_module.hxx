@@ -5,6 +5,7 @@
 #pragma once
 #include <CDF_Application.hxx>
 #include <CDM_Document.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_List.hxx>
 #include <NCollection_Map.hxx>
 #include <NCollection_Sequence.hxx>

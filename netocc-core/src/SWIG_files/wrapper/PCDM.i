@@ -177,8 +177,8 @@ public:
 
 class PCDM_Reader : public Standard_Transient {
 public:
-  void Read(const TCollection_ExtendedString& aFileName, const opencascade::handle<CDM_Document>& aNewDocument, const opencascade::handle<CDM_Application>& anApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>());
-  void Read(std::istream& theIStream, const opencascade::handle<Storage_Data>& theStorageData, const opencascade::handle<CDM_Document>& theDoc, const opencascade::handle<CDM_Application>& theApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>());
+  void Read(const TCollection_ExtendedString& aFileName, const opencascade::handle<CDM_Document>& aNewDocument, const opencascade::handle<CDM_Application>& anApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Read(std::istream& theIStream, const opencascade::handle<Storage_Data>& theStorageData, const opencascade::handle<CDM_Document>& theDoc, const opencascade::handle<CDM_Application>& theApplication, const opencascade::handle<PCDM_ReaderFilter>& theFilter = occ::handle<PCDM_ReaderFilter>(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   PCDM_ReaderStatus GetStatus() const;
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
@@ -237,8 +237,8 @@ public:
 
 class PCDM_Writer : public Standard_Transient {
 public:
-  void Write(const opencascade::handle<CDM_Document>& aDocument, const TCollection_ExtendedString& aFileName);
-  void Write(const opencascade::handle<CDM_Document>& theDocument, std::ostream& theOStream);
+  void Write(const opencascade::handle<CDM_Document>& aDocument, const TCollection_ExtendedString& aFileName, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Write(const opencascade::handle<CDM_Document>& theDocument, std::ostream& theOStream, const Message_ProgressRange& theRange = Message_ProgressRange());
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
   const opencascade::handle<Standard_Type>& DynamicType() const;
@@ -249,8 +249,8 @@ public:
   PCDM_StorageDriver();
   opencascade::handle<PCDM_Document> Make(const opencascade::handle<CDM_Document>& aDocument);
   void Make(const opencascade::handle<CDM_Document>& aDocument, NCollection_Sequence<opencascade::handle<PCDM_Document>>& Documents);
-  void Write(const opencascade::handle<CDM_Document>& aDocument, const TCollection_ExtendedString& aFileName);
-  void Write(const opencascade::handle<CDM_Document>& theDocument, std::ostream& theOStream);
+  void Write(const opencascade::handle<CDM_Document>& aDocument, const TCollection_ExtendedString& aFileName, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Write(const opencascade::handle<CDM_Document>& theDocument, std::ostream& theOStream, const Message_ProgressRange& theRange = Message_ProgressRange());
   void SetFormat(const TCollection_ExtendedString& aformat);
   TCollection_ExtendedString GetFormat() const;
   bool IsError() const;

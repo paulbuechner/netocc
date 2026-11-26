@@ -40,7 +40,7 @@ static void NetOcc_SetPendingException(const char* theType, const char* theMessa
     public static extern void NetOccRegisterExceptionCallback(ExceptionDelegate theCallback);
 
     static void SetPending(global::System.IntPtr theType, global::System.IntPtr theMessage) {
-      SWIGPendingException.Set(new global::OCC.Core.OcctException(
+      SWIGPendingException.Set(global::OCC.Core.OcctException.FromNative(
         global::OCC.Core.Utf8.Decode(theType), global::OCC.Core.Utf8.Decode(theMessage)));
     }
 

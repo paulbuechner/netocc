@@ -31,6 +31,11 @@ internal static class NativeKeep
   // a finalizer after each full collection sweeps the table, also when no new object keeps anything
   static NativeKeep() => new Sweeper();
 
+  /// <summary>Starts the sweeps after full collections, which Directors needs too.</summary>
+  public static void Start()
+  {
+  }
+
   /// <summary>
   /// Before a constructor's native call: drops what an earlier one left pending, whose proxy never
   /// took it (a managed exception in its call, which skips the constructor body).
@@ -145,6 +150,8 @@ internal static class NativeKeep
         }
       }
 
+      // director objects only their proxy holds become collectable again
+      Directors.Sweep();
       global::System.GC.ReRegisterForFinalize(this);
     }
   }

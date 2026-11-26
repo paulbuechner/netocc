@@ -53,6 +53,7 @@
 #include <IGESSolid_VertexList.hxx>
 #include <Interface_InterfaceModel.hxx>
 #include <Message_Msg.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_DataMap.hxx>
 #include <NCollection_HArray1.hxx>
 #include <NCollection_HSequence.hxx>

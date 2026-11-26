@@ -5,6 +5,7 @@
 #pragma once
 #include <IGESControl_Reader.hxx>
 #include <IGESControl_Writer.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_Sequence.hxx>
 #include <Quantity_Color.hxx>
 #include <TDF_Label.hxx>

@@ -24,6 +24,9 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "PLib.i"
@@ -35,7 +38,7 @@
 %import "Plate.i"
 %import "TColGeom2d.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.PLib; using OCC.Core.AdvApprox; using OCC.Core.AdvApp2Var; using OCC.Core.LProp; using OCC.Core.GeomLProp; using OCC.Core.Law; using OCC.Core.Plate; using OCC.Core.TColGeom2d;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.PLib; using OCC.Core.AdvApprox; using OCC.Core.AdvApp2Var; using OCC.Core.LProp; using OCC.Core.GeomLProp; using OCC.Core.Law; using OCC.Core.Plate; using OCC.Core.TColGeom2d;)
 
 %occt_valueclass(GeomPlate_Aij)
 %occt_valueclass(GeomPlate_BuildAveragePlane)
@@ -145,7 +148,7 @@ public:
   void Add(const opencascade::handle<GeomPlate_CurveConstraint>& Cont);
   void SetNbBounds(int NbBounds);
   void Add(const opencascade::handle<GeomPlate_PointConstraint>& Cont);
-  void Perform();
+  void Perform(const Message_ProgressRange& theProgress = Message_ProgressRange());
   opencascade::handle<GeomPlate_CurveConstraint> CurveConstraint(int order) const;
   opencascade::handle<GeomPlate_PointConstraint> PointConstraint(int order) const;
   void Disc2dContour(int nbp, NCollection_Sequence<gp_XY>& Seq2d);

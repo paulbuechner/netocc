@@ -53,4 +53,5 @@ using NCollection_UtfString_char16_t = NCollection_UtfString<char16_t>;
 using NCollection_UtfString_char32_t = NCollection_UtfString<char32_t>;
 using NCollection_UtfIterator_char16_t = NCollection_UtfIterator<char16_t>;
 using NCollection_UtfIterator_char32_t = NCollection_UtfIterator<char32_t>;
+using NCollection_Vec4_bool = NCollection_Vec4<bool>;
 using NCollection_SparseArray_int = NCollection_SparseArray<int>;

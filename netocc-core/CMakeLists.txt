@@ -36,6 +36,9 @@ function(netocc_library name)
     target_compile_options(${name} PRIVATE -fvisibility=hidden -Wno-deprecated-declarations)
     if(APPLE)
       set_target_properties(${name} PROPERTIES BUILD_RPATH "@loader_path" INSTALL_RPATH "@loader_path")
+      # ld64 records every dylib it links, used or not: each module's library would load all of OCCT (NetOccModules).
+      # Drops those no symbol comes from, as MSVC and Ubuntu's GCC (--as-needed) do.
+      target_link_options(${name} PRIVATE "LINKER:-dead_strip_dylibs")
     else()
       set_target_properties(${name} PROPERTIES BUILD_RPATH "$ORIGIN" INSTALL_RPATH "$ORIGIN")
       # GNU ld allows undefined symbols in a shared library; a member OCCT lacks here would fail at its first call
@@ -45,6 +48,10 @@ function(netocc_library name)
   # Stage layout = runtimes/<rid>/native: the NetOcc libraries plus every OCCT/third-party shared library.
   install(TARGETS ${name} RUNTIME DESTINATION . LIBRARY DESTINATION .)
 endfunction()
+
+# OCCT built with its vtk feature for NetOcc.Vtk (../netocc-vtk): TKIVtk and VTK are NetOcc.Vtk's and NetVtk's, not NetOcc's
+set(netocc_visualization ${OpenCASCADE_Visualization_LIBRARIES})
+list(FILTER netocc_visualization EXCLUDE REGEX "^TKIVtk")
 
 foreach(dir ${NETOCC_LIBRARY_DIRS})
   get_filename_component(library ${dir} NAME)
@@ -59,7 +66,7 @@ foreach(dir ${NETOCC_LIBRARY_DIRS})
     ${OpenCASCADE_FoundationClasses_LIBRARIES}
     ${OpenCASCADE_ModelingData_LIBRARIES}
     ${OpenCASCADE_ModelingAlgorithms_LIBRARIES}
-    ${OpenCASCADE_Visualization_LIBRARIES}
+    ${netocc_visualization}
     ${OpenCASCADE_ApplicationFramework_LIBRARIES}
     ${OpenCASCADE_DataExchange_LIBRARIES})
 endforeach()
@@ -67,11 +74,15 @@ endforeach()
 # no OCCT: the memory streams of src/SWIG_files/common/Streams.i
 netocc_library(NetOccRuntime ${CMAKE_SOURCE_DIR}/src/Native/NetOccStreams.cxx)
 if(NETOCC_OCCT_RUNTIME_DIR)
+  # not TKIVtk (NetOcc.Vtk.runtime's) nor VTK (NetVtk.runtime's)
   if(WIN32)
-    install(DIRECTORY "${NETOCC_OCCT_RUNTIME_DIR}/" DESTINATION . FILES_MATCHING PATTERN "*.dll")
+    install(DIRECTORY "${NETOCC_OCCT_RUNTIME_DIR}/" DESTINATION . FILES_MATCHING PATTERN "*.dll"
+            PATTERN "TKIVtk*" EXCLUDE PATTERN "vtk*" EXCLUDE)
   elseif(APPLE)
-    install(DIRECTORY "${NETOCC_OCCT_RUNTIME_DIR}/" DESTINATION . FILES_MATCHING PATTERN "*.dylib")
+    install(DIRECTORY "${NETOCC_OCCT_RUNTIME_DIR}/" DESTINATION . FILES_MATCHING PATTERN "*.dylib"
+            PATTERN "libTKIVtk*" EXCLUDE PATTERN "libvtk*" EXCLUDE)
   else()
-    install(DIRECTORY "${NETOCC_OCCT_RUNTIME_DIR}/" DESTINATION . FILES_MATCHING PATTERN "*.so*")
+    install(DIRECTORY "${NETOCC_OCCT_RUNTIME_DIR}/" DESTINATION . FILES_MATCHING PATTERN "*.so*"
+            PATTERN "libTKIVtk*" EXCLUDE PATTERN "libvtk*" EXCLUDE)
   endif()
 endif()

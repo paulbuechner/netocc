@@ -7,7 +7,8 @@
 - Windows: install the [Visual C++ 2015-2022 runtime](https://learn.microsoft.com/cpp/windows/latest-supported-vc-redist) for the process's architecture.
 - Check that the platform has natives: win-x64, win-x86, linux-x64, osx-arm64. There are none for other platforms yet.
 - Linux: glibc 2.35 or newer (`ldd --version`); `ldd runtimes/linux-x64/native/libNetOccFoundationClasses.so` lists missing system libraries.
-- .NET Framework: the build copies the natives into `x64\` and `x86\` next to the app; check they're there.
+- .NET Framework: the build copies the natives into `x86\` or `x64\` next to the app, for the architecture it builds for ([Platforms](platforms.md#natives)); check the process's folder is there. A host that loads the app as a plugin in a process of the other architecture needs `PlatformTarget` set to the host's.
+- With `NetOccModules`, a module it doesn't list has no natives: add the module of the class whose call failed ([Platforms](platforms.md#modules)).
 
 **`BadImageFormatException`**
 

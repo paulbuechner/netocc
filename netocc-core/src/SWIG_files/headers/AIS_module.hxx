@@ -26,11 +26,13 @@
 #include <Graphic3d_ArrayOfTriangles.hxx>
 #include <Graphic3d_CLight.hxx>
 #include <Graphic3d_Camera.hxx>
+#include <Graphic3d_ClipPlane.hxx>
 #include <Graphic3d_DisplayPriority.hxx>
 #include <Graphic3d_HorizontalTextAlignment.hxx>
 #include <Graphic3d_MarkerImage.hxx>
 #include <Graphic3d_MaterialAspect.hxx>
 #include <Graphic3d_NameOfMaterial.hxx>
+#include <Graphic3d_SequenceOfHClipPlane.hxx>
 #include <Graphic3d_Structure.hxx>
 #include <Graphic3d_TransformPers.hxx>
 #include <Graphic3d_VerticalTextAlignment.hxx>
@@ -53,6 +55,8 @@
 #include <Prs3d_TypeOfHLR.hxx>
 #include <Prs3d_TypeOfHighlight.hxx>
 #include <PrsMgr_DisplayStatus.hxx>
+#include <PrsMgr_PresentableObject.hxx>
+#include <PrsMgr_Presentation.hxx>
 #include <PrsMgr_PresentationManager.hxx>
 #include <PrsMgr_TypeOfPresentation3d.hxx>
 #include <Quantity_Color.hxx>

@@ -24,13 +24,13 @@
 %import "Geom2dEval.i"
 %import "Adaptor2d.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -74,7 +74,7 @@
 %import "TopOpeBRepBuild.i"
 %import "ChFi3d.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepBuilderAPI; using OCC.Core.ChFi2d; using OCC.Core.Law; using OCC.Core.ChFiDS; using OCC.Core.TopExp; using OCC.Core.TopOpeBRepTool; using OCC.Core.TopOpeBRep; using OCC.Core.TopOpeBRepDS; using OCC.Core.TopOpeBRepBuild; using OCC.Core.ChFi3d;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepBuilderAPI; using OCC.Core.ChFi2d; using OCC.Core.Law; using OCC.Core.ChFiDS; using OCC.Core.TopExp; using OCC.Core.TopOpeBRepTool; using OCC.Core.TopOpeBRep; using OCC.Core.TopOpeBRepDS; using OCC.Core.TopOpeBRepBuild; using OCC.Core.ChFi3d;)
 
 %nodefaultctor BRepFilletAPI_LocalOperation;
 %feature("valuewrapper") BRepFilletAPI_LocalOperation;
@@ -138,7 +138,7 @@ public:
   double RelativeAbscissa(int IC, const TopoDS_Vertex& V) const;
   bool ClosedAndTangent(int IC) const;
   bool Closed(int IC) const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   void Reset();
   opencascade::handle<TopOpeBRepBuild_HBuilder> Builder() const;
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& EorV);
@@ -187,7 +187,7 @@ public:
   double RelativeAbscissa(int IC, const TopoDS_Vertex& V) const;
   bool ClosedAndTangent(int IC) const;
   bool Closed(int IC) const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   void Reset();
   opencascade::handle<TopOpeBRepBuild_HBuilder> Builder() const;
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& EorV);
@@ -235,5 +235,5 @@ public:
   const TopoDS_Edge& DescendantEdge(const TopoDS_Edge& E) const;
   const TopoDS_Edge& BasisEdge(const TopoDS_Edge& E) const;
   ChFi2d_ConstructionError Status() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
 };

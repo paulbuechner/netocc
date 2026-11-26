@@ -3,20 +3,27 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 // NUnit
 using NUnit.Framework;
 
 //
+using OCC.Core.BinXCAFDrivers;
+using OCC.Core.BRep;
+using OCC.Core.BRepGProp;
 using OCC.Core.BRepPrimAPI;
 using OCC.Core.gp;
+using OCC.Core.GProp;
 using OCC.Core.IFSelect;
+using OCC.Core.PCDM;
 using OCC.Core.Quantity;
 using OCC.Core.STEPCAFControl;
 using OCC.Core.STEPControl;
 using OCC.Core.TDataStd;
 using OCC.Core.TDF;
 using OCC.Core.TDocStd;
+using OCC.Core.TNaming;
 using OCC.Core.TopLoc;
 using OCC.Core.TopoDS;
 using OCC.Core.XCAFApp;
@@ -156,6 +163,151 @@ public class Xcaf : Files
       : "";
   }
   #endregion
+
+  #region own-application
+  /// <summary>
+  /// An XDE document on an application of its own, with undo, saved to a stream as BinXCAF: the
+  /// format that keeps the assembly structure, names and colors.
+  /// </summary>
+  public static byte[] SaveOwnDocument()
+  {
+    var application = new TDocStd_Application();
+    BinXCAFDrivers.DefineFormat(application);
+    TDocStd_Document? document = null;
+    application.NewDocument("BinXCAF", ref document);
+    try
+    {
+      XCAFDoc_DocumentTool.Set(document!.Main(), false);
+      document.SetUndoLimit(100);
+
+      document.OpenCommand();
+      var shapes = XCAFDoc_DocumentTool.ShapeTool(document.Main());
+      TDataStd_Name.Set(shapes.AddShape(new BRepPrimAPI_MakeBox(100, 60, 4).Shape(), false),
+                        "plate");
+      document.CommitCommand();
+
+      using var stream = new MemoryStream();
+      if (application.SaveAs(document, stream) != PCDM_StoreStatus.PCDM_SS_OK)
+      {
+        throw new IOException("saving the document failed");
+      }
+
+      return stream.ToArray();
+    }
+    finally
+    {
+      application.Close(document);
+    }
+  }
+  #endregion
+
+  #region update-assembly
+  /// <summary>
+  /// A part's new shape in the compounds of the assemblies that place it, and of those above them:
+  /// <c>UpdateAssemblies</c> does it for every assembly of the document.
+  /// </summary>
+  public static void UpdateAssembliesAbove(TDF_Label shape)
+  {
+    // the assemblies whose components place the shape, each once
+    var users = new TDF_LabelSequence();
+    XCAFDoc_ShapeTool.GetUsers(shape, users);
+    var assemblies = new List<TDF_Label>();
+    foreach (var component in users)
+    {
+      var assembly = component.Father();
+      if (!assemblies.Contains(assembly))
+      {
+        assemblies.Add(assembly);
+      }
+    }
+
+    foreach (var assembly in assemblies)
+    {
+      // an assembly's shape is the compound of its components' shapes, placed
+      var compound = new TopoDS_Compound();
+      var builder = new BRep_Builder();
+      builder.MakeCompound(compound);
+      var components = new TDF_LabelSequence();
+      XCAFDoc_ShapeTool.GetComponents(assembly, components);
+      foreach (var component in components)
+      {
+        builder.Add(compound, XCAFDoc_ShapeTool.GetShape(component));
+      }
+
+      new TNaming_Builder(assembly).Generated(compound);
+      UpdateAssembliesAbove(assembly);
+    }
+  }
+  #endregion
+
+  [Test]
+  public void SaveOwnDocument_OpensWithItsPart()
+  {
+    // Arrange
+    var application = new TDocStd_Application();
+    BinXCAFDrivers.DefineFormat(application);
+    using var stream = new MemoryStream(SaveOwnDocument());
+    TDocStd_Document? document = null;
+
+    // Act
+    var status = application.Open(stream, ref document);
+
+    // Assert
+    try
+    {
+      var roots = new TDF_LabelSequence();
+      XCAFDoc_DocumentTool.ShapeTool(document!.Main()).GetFreeShapes(roots);
+      using (Assert.EnterMultipleScope())
+      {
+        Assert.That(status, Is.EqualTo(PCDM_ReaderStatus.PCDM_RS_OK));
+        Assert.That(roots.Select(NameOf), Is.EqualTo(new[] { "plate" }));
+      }
+    }
+    finally
+    {
+      application.Close(document);
+    }
+  }
+
+  [Test]
+  public void UpdateAssembliesAbove_PutsANewPartShapeIntoItsAssembly()
+  {
+    // Arrange: a plate on a post, in an assembly, then a post twice as tall
+    var application = new TDocStd_Application();
+    BinXCAFDrivers.DefineFormat(application);
+    TDocStd_Document? document = null;
+    application.NewDocument("BinXCAF", ref document);
+    try
+    {
+      XCAFDoc_DocumentTool.Set(document!.Main(), false);
+      var shapes = XCAFDoc_DocumentTool.ShapeTool(document.Main());
+      var plate = shapes.AddShape(new BRepPrimAPI_MakeBox(100, 60, 4).Shape(), false);
+      var post = shapes.AddShape(new BRepPrimAPI_MakeBox(6, 6, 40).Shape(), false);
+      var table = shapes.NewShape();
+      shapes.AddComponent(table, plate, new TopLoc_Location());
+      shapes.AddComponent(table, post, new TopLoc_Location());
+      shapes.UpdateAssemblies();
+      shapes.SetShape(post, new BRepPrimAPI_MakeBox(6, 6, 80).Shape());
+
+      // Act
+      UpdateAssembliesAbove(post);
+
+      // Assert
+      Assert.That(Volume(XCAFDoc_ShapeTool.GetShape(table)),
+                  Is.EqualTo(100 * 60 * 4 + 6 * 6 * 80).Within(1e-6));
+    }
+    finally
+    {
+      application.Close(document);
+    }
+  }
+
+  private static double Volume(TopoDS_Shape shape)
+  {
+    var properties = new GProp_GProps();
+    BRepGProp.VolumeProperties(shape, properties);
+    return properties.Mass();
+  }
 
   [Test]
   public void RoundTrip()

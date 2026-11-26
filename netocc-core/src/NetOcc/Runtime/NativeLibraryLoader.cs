@@ -15,7 +15,7 @@ namespace OCC.Core;
 /// Loads the NetOcc native libraries (NetOcc&lt;Module&gt; with the wrappers of an OCCT module,
 /// NetOccRuntime) and, through the OS loader, the OCCT libraries next to them, before the first
 /// P/Invoke. Probed locations, relative to the app base directory, then to NetOcc.dll's own (a
-/// plugin's; on .NET Framework also a shadow copy's original): <c>&lt;arch&gt;/</c> (AnyCPU .NET
+/// plugin's; on .NET Framework also a shadow copy's original): <c>&lt;arch&gt;/</c> (the .NET
 /// Framework layout), <c>runtimes/&lt;rid&gt;/native/</c>, and the directory itself. The
 /// netstandard2.0 build has no resolver: it preloads on Windows only and leaves other systems to
 /// .NET's default probing.
@@ -46,20 +46,7 @@ internal static class NativeLibraryLoader
   internal static void Initialize()
   {
 #if NET5_0_OR_GREATER
-    // a library that is there but doesn't load fails with the OS's reason (a dependency missing);
-    // one that isn't there is left to the default probing
-    NativeLibrary.SetDllImportResolver(typeof(NativeLibraryLoader).Assembly, static (name, _, _) =>
-    {
-      if (!name.StartsWith(Prefix, StringComparison.Ordinal))
-      {
-        return IntPtr.Zero;
-      }
-
-      var handle = Load(name, out var failure);
-      return handle != IntPtr.Zero || failure is null
-        ? handle
-        : throw new DllNotFoundException(failure);
-    });
+    NativeLibrary.SetDllImportResolver(typeof(NativeLibraryLoader).Assembly, Resolve);
 #else
     // .NET Framework and the netstandard2.0 build have no resolver, but DllImport resolves by
     // module name, so a preloaded module wins: every NetOcc library of the first directory that has
@@ -94,6 +81,36 @@ internal static class NativeLibraryLoader
     }
 #endif
   }
+
+  /// <summary>
+  /// Another assembly's NetOcc libraries, resolved as NetOcc's (NetOcc.Vtk's NetOccVtk, next to
+  /// NetOcc's): its module initializer calls this. On .NET Framework, <see cref="Initialize"/>
+  /// preloaded them with NetOcc's.
+  /// </summary>
+  internal static void ResolveFor(System.Reflection.Assembly assembly)
+  {
+#if NET5_0_OR_GREATER
+    NativeLibrary.SetDllImportResolver(assembly, Resolve);
+#endif
+  }
+
+#if NET5_0_OR_GREATER
+  // a library that is there but doesn't load fails with the OS's reason (a dependency missing); one
+  // that isn't there is left to the default probing
+  private static IntPtr Resolve(string name, System.Reflection.Assembly assembly,
+                                DllImportSearchPath? searchPath)
+  {
+    if (!name.StartsWith(Prefix, StringComparison.Ordinal))
+    {
+      return IntPtr.Zero;
+    }
+
+    var handle = Load(name, out var failure);
+    return handle != IntPtr.Zero || failure is null
+      ? handle
+      : throw new DllNotFoundException(failure);
+  }
+#endif
 
 #if NETFRAMEWORK
   // .NET Framework runs on Windows only. RuntimeInformation arrived in 4.7.1, Is64BitProcess and

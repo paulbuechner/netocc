@@ -27,6 +27,7 @@
 #include <IMeshTools_Parameters.hxx>
 #include <IMeshTools_ShapeVisitor.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_Array1.hxx>
 #include <NCollection_CellFilter.hxx>
 #include <NCollection_DynamicArray.hxx>

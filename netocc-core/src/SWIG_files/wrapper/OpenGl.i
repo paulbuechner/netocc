@@ -24,13 +24,13 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -65,12 +65,17 @@
 %import "Graphic3d.i"
 %import "Aspect.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.BVH; using OCC.Core.Bnd; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.IntPatch; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BOPTools; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.BVH; using OCC.Core.Bnd; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.IntPatch; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BOPTools; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect;)
 
 %occt_transient(OpenGl_Caps)
+%occt_transient(OpenGl_Context)
+%occt_transient(OpenGl_FrameBuffer)
+%occt_transient(OpenGl_Texture)
 %occt_transient(OpenGl_GraphicDriver)
 %nodefaultctor OpenGl_GraphicDriver;
 %feature("valuewrapper") OpenGl_GraphicDriver;
+%occt_transient(OpenGl_Context_OpenGl_ResourcesMap)
+%netocc_address(%arg(const int*))
 
 enum OpenGl_ShaderProgramDumpLevel {
   OpenGl_ShaderProgramDumpLevel_Off = 0,
@@ -165,12 +170,280 @@ enum OpenGl_UniformStateType {
   OpenGl_UniformStateType_NB = 8,
 };
 
+%occt_sequence(NCollection_Sequence_Handle_OpenGl_Texture, opencascade::handle<OpenGl_Texture>, OpenGl_Texture)
+
 class OpenGl_Caps : public Standard_Transient {
 public:
   OpenGl_Caps();
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
   const opencascade::handle<Standard_Type>& DynamicType() const;
+};
+
+class OpenGl_Context : public Standard_Transient {
+public:
+  OpenGl_Context(const opencascade::handle<OpenGl_Caps>& theCaps = nullptr);
+  static const char* get_type_name();
+  static const opencascade::handle<Standard_Type>& get_type_descriptor();
+  const opencascade::handle<Standard_Type>& DynamicType() const;
+  static int GetPowerOfTwo(int theNumber, int theThreshold);
+  static TCollection_AsciiString FormatGlEnumHex(int theGlEnum);
+  static TCollection_AsciiString FormatPointer(const void* thePtr);
+  static TCollection_AsciiString FormatSize(size_t theSize);
+  static TCollection_AsciiString FormatGlError(int theGlError);
+  void forcedRelease();
+  void Share(const opencascade::handle<OpenGl_Context>& theShareCtx);
+  bool Init(bool theIsCoreProfile = false);
+  bool IsValid() const;
+  bool Init(Aspect_Drawable theSurface, Aspect_Display theDisplay, Aspect_RenderingContext theContext, bool theIsCoreProfile = false);
+  Aspect_Drawable Window() const;
+  Aspect_Display GetDisplay() const;
+  Aspect_RenderingContext RenderingContext() const;
+  static void ReadGlVersion(int& theGlVerMajor, int& theGlVerMinor);
+  bool CheckExtension(const char* theExtName) const;
+  static bool CheckExtension(const char* theExtString, const char* theExtName);
+  Aspect_GraphicsLibrary GraphicsLibrary() const;
+  bool IsGlGreaterEqual(int theVerMajor, int theVerMinor) const;
+  int VersionMajor() const;
+  int VersionMinor() const;
+  bool ResetErrors(bool theToPrintErrors = false);
+  bool IsCurrent() const;
+  bool MakeCurrent();
+  void SwapBuffers();
+  bool SetSwapInterval(int theInterval);
+  bool IsRender() const;
+  bool IsFeedback() const;
+  size_t AvailableMemory() const;
+  TCollection_AsciiString MemoryInfo() const;
+  void MemoryInfo(NCollection_IndexedDataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& theDict) const;
+  void DiagnosticInformation(NCollection_IndexedDataMap<TCollection_AsciiString, TCollection_AsciiString, NCollection_DefaultHasher<TCollection_AsciiString>>& theDict, Graphic3d_DiagnosticInfo theFlags) const;
+  void WindowBufferBits(BVH_Vec4i& theColorBits, BVH_Vec2i& theDepthStencilBits) const;
+  void ReleaseResource(const TCollection_AsciiString& theKey, bool theToDelay = false);
+  void ReleaseDelayed();
+  const OpenGl_Context_OpenGl_ResourcesMap& SharedResources() const;
+  int TextureWrapClamp() const;
+  bool HasTextureBaseLevel() const;
+  const opencascade::handle<Image_SupportedFormats>& SupportedTextureFormats() const;
+  int MaxDegreeOfAnisotropy() const;
+  int MaxTextureSize() const;
+  int MaxCombinedTextureUnits() const;
+  int MaxTextureUnitsFFP() const;
+  Graphic3d_TextureUnit SpriteTextureUnit() const;
+  bool HasTextureMultisampling() const;
+  int MaxMsaaSamples() const;
+  int MaxDumpSizeX() const;
+  int MaxDumpSizeY() const;
+  int MaxDrawBuffers() const;
+  int MaxColorAttachments() const;
+  int MaxClipPlanes() const;
+  bool HasRayTracing() const;
+  bool HasRayTracingTextures() const;
+  bool HasRayTracingAdaptiveSampling() const;
+  bool HasRayTracingAdaptiveSamplingAtomic() const;
+  bool HasSRGB() const;
+  bool ToRenderSRGB() const;
+  bool IsWindowSRGB() const;
+  void SetWindowSRGB(bool theIsSRgb);
+  bool IsWindowDeepColor() const;
+  BVH_Vec4f Vec4FromQuantityColor(const BVH_Vec4f& theColor) const;
+  const BVH_Vec4f& Vec4LinearFromQuantityColor(const BVH_Vec4f& theColor) const;
+  BVH_Vec4f Vec4sRGBFromQuantityColor(const BVH_Vec4f& theColor) const;
+  bool HasPBR() const;
+  Graphic3d_TextureUnit PBREnvLUTTexUnit() const;
+  Graphic3d_TextureUnit PBRDiffIBLMapSHTexUnit() const;
+  Graphic3d_TextureUnit PBRSpecIBLMapTexUnit() const;
+  Graphic3d_TextureUnit ShadowMapTexUnit() const;
+  Graphic3d_TextureUnit DepthPeelingDepthTexUnit() const;
+  Graphic3d_TextureUnit DepthPeelingFrontColorTexUnit() const;
+  bool ToUseVbo() const;
+  bool IsGlNormalizeEnabled() const;
+  bool SetGlNormalizeEnabled(bool isEnabled);
+  int PolygonMode() const;
+  int SetPolygonMode(int theMode);
+  bool IsPolygonHatchEnabled() const;
+  bool SetPolygonHatchEnabled(bool theIsEnabled);
+  int PolygonHatchStyle() const;
+  int SetPolygonHatchStyle(const opencascade::handle<Graphic3d_HatchStyle>& theStyle);
+  void SetPolygonOffset(const Graphic3d_PolygonOffset& theOffset);
+  const Graphic3d_PolygonOffset& PolygonOffset() const;
+  const opencascade::handle<Graphic3d_Camera>& Camera() const;
+  void SetCamera(const opencascade::handle<Graphic3d_Camera>& theCamera);
+  void ApplyModelWorldMatrix();
+  void ApplyWorldViewMatrix();
+  void ApplyModelViewMatrix();
+  void ApplyProjectionMatrix();
+  const opencascade::handle<Message_Messenger>& Messenger() const;
+  void PushMessage(unsigned int theSource, unsigned int theType, unsigned int theId, unsigned int theSeverity, const TCollection_ExtendedString& theMessage);
+  bool ExcludeMessage(unsigned int theSource, unsigned int theId);
+  bool IncludeMessage(unsigned int theSource, unsigned int theId);
+  bool HasStereoBuffers() const;
+  NetOcc_Address< const int* > Viewport() const;
+  void ResizeViewport(const int* theRect);
+  NetOcc_Address< const int* > VirtualViewport() const;
+  int ReadBuffer();
+  void SetReadBuffer(int theReadBuffer);
+  int DrawBuffer(int theIndex = 0) const;
+  void SetDrawBuffer(int theDrawBuffer);
+  void SetDrawBuffers(int theNb, NetOcc_Address< const int* > theDrawBuffers);
+  void SetReadDrawBuffer(int theBuffer);
+  bool IsFrameBufferSRGB() const;
+  void SetFrameBufferSRGB(bool theIsFbo, bool theIsFboSRgb = true);
+  const NCollection_Vec4_bool& ColorMaskRGBA() const;
+  void SetColorMaskRGBA(const NCollection_Vec4_bool& theToWriteColor);
+  bool ColorMask() const;
+  bool SetColorMask(bool theToWriteColor);
+  bool AllowSampleAlphaToCoverage() const;
+  void SetAllowSampleAlphaToCoverage(bool theToEnable);
+  bool SampleAlphaToCoverage() const;
+  bool SetSampleAlphaToCoverage(bool theToEnable);
+  Graphic3d_TypeOfBackfacingModel FaceCulling() const;
+  void SetFaceCulling(Graphic3d_TypeOfBackfacingModel theMode);
+  bool ToCullBackFaces() const;
+  void SetCullBackFaces(bool theToEnable);
+  void FetchState();
+  void SetColor4fv(const BVH_Vec4f& theColor);
+  void SetColor4fv(const BVH_Vec4f& theFrontColor, const BVH_Vec4f& theBackColor);
+  void SetTypeOfLine(Aspect_TypeOfLine theType, float theFactor = 1.0f);
+  void SetLineStipple(unsigned short thePattern);
+  void SetLineStipple(float theFactor, unsigned short thePattern);
+  void SetLineWidth(float theWidth);
+  void SetPointSize(float theSize);
+  void SetPointSpriteOrigin();
+  void SetTextureMatrix(const opencascade::handle<Graphic3d_TextureParams>& theParams, bool theIsTopDown);
+  void BindDefaultVao();
+  const opencascade::handle<OpenGl_FrameBuffer>& DefaultFrameBuffer() const;
+  opencascade::handle<OpenGl_FrameBuffer> SetDefaultFrameBuffer(const opencascade::handle<OpenGl_FrameBuffer>& theFbo);
+  bool IsDebugContext() const;
+  void EnableFeatures() const;
+  void DisableFeatures() const;
+  unsigned int Resolution() const;
+  float ResolutionRatio() const;
+  float RenderScale() const;
+  bool HasRenderScale() const;
+  float RenderScaleInv() const;
+  float LineWidthScale() const;
+  void SetResolution(unsigned int theResolution, float theRatio, float theScale);
+  void SetResolutionRatio(float theRatio);
+  float LineFeather() const;
+  void SetLineFeather(float theValue);
+  bool GetBufferSubData(unsigned int theTarget, intptr_t theOffset, intptr_t theSize, void* theData);
+  const TCollection_AsciiString& Vendor() const;
+  void DumpJson(std::ostream& theOStream, int theDepth = -1) const;
+  void DumpJsonOpenGlState(std::ostream& theOStream, int theDepth = -1);
+  void SetShadeModel(Graphic3d_TypeOfShadingModel theModel);
+};
+
+class OpenGl_FrameBuffer : public Standard_Transient {
+public:
+  OpenGl_FrameBuffer(const TCollection_AsciiString& theResourceId = TCollection_AsciiString::EmptyString());
+  static const char* get_type_name();
+  static const opencascade::handle<Standard_Type>& get_type_descriptor();
+  const opencascade::handle<Standard_Type>& DynamicType() const;
+  static bool BufferDump(const opencascade::handle<OpenGl_Context>& theGlCtx, const opencascade::handle<OpenGl_FrameBuffer>& theFbo, Image_PixMap& theImage, Graphic3d_BufferType theBufferType);
+  void Release(OpenGl_Context* theGlCtx);
+  int NbSamples() const;
+  int NbColorBuffers() const;
+  bool HasColor() const;
+  bool HasDepth() const;
+  BVH_Vec2i GetSize() const;
+  int GetSizeX() const;
+  int GetSizeY() const;
+  BVH_Vec2i GetVPSize() const;
+  int GetVPSizeX() const;
+  int GetVPSizeY() const;
+  BVH_Vec2i GetInitVPSize() const;
+  int GetInitVPSizeX() const;
+  int GetInitVPSizeY() const;
+  bool IsValid() const;
+  bool Init(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theSize, const NCollection_DynamicArray<int>& theColorFormats, const opencascade::handle<OpenGl_Texture>& theDepthStencilTexture, int theNbSamples = 0);
+  bool Init(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theSize, int theColorFormat, int theDepthFormat, int theNbSamples = 0);
+  bool Init(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theSize, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples = 0);
+  bool InitLazy(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theViewportSize, int theColorFormat, int theDepthFormat, int theNbSamples = 0);
+  bool InitLazy(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theViewportSize, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples = 0);
+  bool InitLazy(const opencascade::handle<OpenGl_Context>& theGlCtx, const OpenGl_FrameBuffer& theFbo, bool theToKeepMsaa = true);
+  bool InitRenderBuffer(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theSize, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples = 0);
+  bool InitWithRB(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theSize, int theColorFormat, int theDepthFormat, unsigned int theColorRBufferFromWindow);
+  bool InitWrapper(const opencascade::handle<OpenGl_Context>& theGlCtx);
+  bool InitWrapper(const opencascade::handle<OpenGl_Context>& theGlContext, const NCollection_Sequence<opencascade::handle<OpenGl_Texture>>& theColorTextures, const opencascade::handle<OpenGl_Texture>& theDepthTexture = occ::handle<OpenGl_Texture>());
+  void SetupViewport(const opencascade::handle<OpenGl_Context>& theGlCtx);
+  void ChangeViewport(int theVPSizeX, int theVPSizeY);
+  void BindBuffer(const opencascade::handle<OpenGl_Context>& theGlCtx);
+  void BindDrawBuffer(const opencascade::handle<OpenGl_Context>& theGlCtx);
+  void BindReadBuffer(const opencascade::handle<OpenGl_Context>& theGlCtx);
+  void UnbindBuffer(const opencascade::handle<OpenGl_Context>& theGlCtx);
+  const opencascade::handle<OpenGl_Texture>& ColorTexture(int theColorBufferIndex = 0) const;
+  const opencascade::handle<OpenGl_Texture>& DepthStencilTexture() const;
+  bool IsColorRenderBuffer() const;
+  unsigned int ColorRenderBuffer() const;
+  bool IsDepthStencilRenderBuffer() const;
+  unsigned int DepthStencilRenderBuffer() const;
+  size_t EstimatedDataSize() const;
+  bool initRenderBuffer(const opencascade::handle<OpenGl_Context>& theGlCtx, const BVH_Vec2i& theSize, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples, unsigned int theColorRBufferFromWindow);
+  %csattributes Init(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, const NCollection_DynamicArray<int>& theColorFormats, const opencascade::handle<OpenGl_Texture>& theDepthStencilTexture, int theNbSamples = 0) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool Init(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, const NCollection_DynamicArray<int>& theColorFormats, const opencascade::handle<OpenGl_Texture>& theDepthStencilTexture, int theNbSamples = 0);
+  %csattributes Init(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, int theColorFormat, int theDepthFormat, int theNbSamples = 0) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool Init(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, int theColorFormat, int theDepthFormat, int theNbSamples = 0);
+  %csattributes Init(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples = 0) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool Init(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples = 0);
+  %csattributes InitLazy(const opencascade::handle<OpenGl_Context>& theGlCtx, int theViewportSizeX, int theViewportSizeY, int theColorFormat, int theDepthFormat, int theNbSamples = 0) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool InitLazy(const opencascade::handle<OpenGl_Context>& theGlCtx, int theViewportSizeX, int theViewportSizeY, int theColorFormat, int theDepthFormat, int theNbSamples = 0);
+  %csattributes InitLazy(const opencascade::handle<OpenGl_Context>& theGlCtx, int theViewportSizeX, int theViewportSizeY, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples = 0) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool InitLazy(const opencascade::handle<OpenGl_Context>& theGlCtx, int theViewportSizeX, int theViewportSizeY, const NCollection_DynamicArray<int>& theColorFormats, int theDepthFormat, int theNbSamples = 0);
+  %csattributes InitWithRB(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, int theColorFormat, int theDepthFormat, unsigned int theColorRBufferFromWindow = 0) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool InitWithRB(const opencascade::handle<OpenGl_Context>& theGlCtx, int theSizeX, int theSizeY, int theColorFormat, int theDepthFormat, unsigned int theColorRBufferFromWindow = 0);
+};
+
+class OpenGl_Texture : public Standard_Transient {
+public:
+  OpenGl_Texture(const TCollection_AsciiString& theResourceId = TCollection_AsciiString::EmptyString(), const opencascade::handle<Graphic3d_TextureParams>& theParams = occ::handle<Graphic3d_TextureParams>());
+  static const char* get_type_name();
+  static const opencascade::handle<Standard_Type>& get_type_descriptor();
+  const opencascade::handle<Standard_Type>& DynamicType() const;
+  static size_t PixelSizeOfPixelFormat(int theInternalFormat);
+  bool IsValid() const;
+  unsigned int GetTarget() const;
+  const BVH_Vec3i& Size() const;
+  int SizeX() const;
+  int SizeY() const;
+  int SizeZ() const;
+  unsigned int TextureId() const;
+  unsigned int GetFormat() const;
+  int SizedFormat() const;
+  bool IsAlpha() const;
+  void SetAlpha(bool theValue);
+  bool IsTopDown() const;
+  void SetTopDown(bool theIsTopDown);
+  bool Create(const opencascade::handle<OpenGl_Context>& theCtx);
+  void Release(OpenGl_Context* theCtx);
+  bool InitSamplerObject(const opencascade::handle<OpenGl_Context>& theCtx);
+  void Bind(const opencascade::handle<OpenGl_Context>& theCtx) const;
+  void Unbind(const opencascade::handle<OpenGl_Context>& theCtx) const;
+  void Bind(const opencascade::handle<OpenGl_Context>& theCtx, Graphic3d_TextureUnit theTextureUnit) const;
+  void Unbind(const opencascade::handle<OpenGl_Context>& theCtx, Graphic3d_TextureUnit theTextureUnit) const;
+  size_t Revision() const;
+  void SetRevision(size_t theRevision);
+  bool Init(const opencascade::handle<OpenGl_Context>& theCtx, const Image_PixMap& theImage, Graphic3d_TypeOfTexture theType, bool theIsColorMap);
+  bool Init(const opencascade::handle<OpenGl_Context>& theCtx, const opencascade::handle<Graphic3d_TextureRoot>& theTextureMap);
+  bool GenerateMipmaps(const opencascade::handle<OpenGl_Context>& theCtx);
+  bool InitCompressed(const opencascade::handle<OpenGl_Context>& theCtx, const Image_CompressedPixMap& theImage, bool theIsColorMap);
+  bool Init2DMultisample(const opencascade::handle<OpenGl_Context>& theCtx, int theNbSamples, int theTextFormat, int theSizeX, int theSizeY);
+  bool HasMipmaps() const;
+  int MaxMipmapLevel() const;
+  int NbSamples() const;
+  size_t EstimatedDataSize() const;
+  bool IsPointSprite() const;
+  bool ImageDump(Image_PixMap& theImage, const opencascade::handle<OpenGl_Context>& theCtx, Graphic3d_TextureUnit theTexUnit, int theLevel = 0, int theCubeSide = 0) const;
+  %csattributes GetDataFormat(const opencascade::handle<OpenGl_Context>& theCtx, Image_Format theFormat, int& theTextFormat, unsigned int& thePixelFormat, unsigned int& theDataType) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  static bool GetDataFormat(const opencascade::handle<OpenGl_Context>& theCtx, Image_Format theFormat, int& theTextFormat, unsigned int& thePixelFormat, unsigned int& theDataType);
+  %csattributes GetDataFormat(const opencascade::handle<OpenGl_Context>& theCtx, const Image_PixMap& theData, int& theTextFormat, unsigned int& thePixelFormat, unsigned int& theDataType) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  static bool GetDataFormat(const opencascade::handle<OpenGl_Context>& theCtx, const Image_PixMap& theData, int& theTextFormat, unsigned int& thePixelFormat, unsigned int& theDataType);
+  %csattributes Init(const opencascade::handle<OpenGl_Context>& theCtx, int theTextFormat, unsigned int thePixelFormat, unsigned int theDataType, int theSizeX, int theSizeY, Graphic3d_TypeOfTexture theType, const Image_PixMap* theImage = nullptr) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool Init(const opencascade::handle<OpenGl_Context>& theCtx, int theTextFormat, unsigned int thePixelFormat, unsigned int theDataType, int theSizeX, int theSizeY, Graphic3d_TypeOfTexture theType, const Image_PixMap* theImage = nullptr);
+  %csattributes Init(const opencascade::handle<OpenGl_Context>& theCtx, const Image_PixMap& theImage, Graphic3d_TypeOfTexture theType) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool Init(const opencascade::handle<OpenGl_Context>& theCtx, const Image_PixMap& theImage, Graphic3d_TypeOfTexture theType);
+  %csattributes Init3D(const opencascade::handle<OpenGl_Context>& theCtx, int theTextFormat, unsigned int thePixelFormat, unsigned int theDataType, int theSizeX, int theSizeY, int theSizeZ, const void* thePixels) "[global::System.Obsolete(\"Deprecated in OCCT.\")]";
+  bool Init3D(const opencascade::handle<OpenGl_Context>& theCtx, int theTextFormat, unsigned int thePixelFormat, unsigned int theDataType, int theSizeX, int theSizeY, int theSizeZ, const void* thePixels);
+  bool InitCubeMap(const opencascade::handle<OpenGl_Context>& theCtx, const opencascade::handle<Graphic3d_CubeMap>& theCubeMap, size_t theSize, Image_Format theFormat, bool theToGenMipmap, bool theIsColorMap);
 };
 
 class OpenGl_GraphicDriver : public Graphic3d_GraphicDriver {
@@ -201,9 +474,15 @@ public:
   bool IsVerticalSync() const;
   void SetVerticalSync(bool theToEnable);
   bool MemoryInfo(size_t& theFreeBytes, TCollection_AsciiString& theInfo) const;
+  const opencascade::handle<OpenGl_Context>& GetSharedContext(bool theBound = false) const;
   Aspect_Display getRawGlDisplay() const;
   Aspect_RenderingContext getRawGlContext() const;
   void* getRawGlConfig() const;
   void setDeviceLost();
   size_t GetNextPrimitiveArrayUID() const;
+};
+
+class OpenGl_Context_OpenGl_ResourcesMap : public Standard_Transient {
+public:
+  OpenGl_Context_OpenGl_ResourcesMap();
 };

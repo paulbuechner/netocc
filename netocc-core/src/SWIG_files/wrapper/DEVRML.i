@@ -15,10 +15,10 @@
 %import "TCollection.i"
 %import "TColStd.i"
 %import "NCollection.i"
-%import "Resource.i"
 %import "Quantity.i"
 %import "OSD.i"
 %import "Message.i"
+%import "Resource.i"
 %import "CDM.i"
 %import "LDOM.i"
 %import "Storage.i"
@@ -109,7 +109,7 @@
 %import "XCAFPrs.i"
 %import "RWMesh.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Resource; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect; using OCC.Core.Prs3d; using OCC.Core.V3d; using OCC.Core.PrsMgr; using OCC.Core.SelectBasics; using OCC.Core.SelectMgr; using OCC.Core.StdSelect; using OCC.Core.Select3D; using OCC.Core.AIS; using OCC.Core.TDataStd; using OCC.Core.TNaming; using OCC.Core.TDataXtd; using OCC.Core.TPrsStd; using OCC.Core.BRepExtrema; using OCC.Core.UnitsMethods; using OCC.Core.XCAFDimTolObjects; using OCC.Core.XCAFNoteObjects; using OCC.Core.XCAFView; using OCC.Core.XCAFDoc; using OCC.Core.XCAFPrs; using OCC.Core.RWMesh;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.Resource; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.Image; using OCC.Core.Font; using OCC.Core.Media; using OCC.Core.Graphic3d; using OCC.Core.Aspect; using OCC.Core.Prs3d; using OCC.Core.V3d; using OCC.Core.PrsMgr; using OCC.Core.SelectBasics; using OCC.Core.SelectMgr; using OCC.Core.StdSelect; using OCC.Core.Select3D; using OCC.Core.AIS; using OCC.Core.TDataStd; using OCC.Core.TNaming; using OCC.Core.TDataXtd; using OCC.Core.TPrsStd; using OCC.Core.BRepExtrema; using OCC.Core.UnitsMethods; using OCC.Core.XCAFDimTolObjects; using OCC.Core.XCAFNoteObjects; using OCC.Core.XCAFView; using OCC.Core.XCAFDoc; using OCC.Core.XCAFPrs; using OCC.Core.RWMesh;)
 
 %occt_valuetype(DEVRML_ConfigurationNode_Vrml_InternalSection)
 %occt_transient(DEVRML_ConfigurationNode)
@@ -166,22 +166,22 @@ public:
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
   const opencascade::handle<Standard_Type>& DynamicType() const;
-  bool Read(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Write(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Read(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument);
-  bool Write(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument);
-  bool Read(const TCollection_AsciiString& thePath, TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Write(const TCollection_AsciiString& thePath, const TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS);
-  bool Read(const TCollection_AsciiString& thePath, TopoDS_Shape& theShape);
-  bool Write(const TCollection_AsciiString& thePath, const TopoDS_Shape& theShape);
-  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument);
-  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument);
-  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, TopoDS_Shape& theShape);
-  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const TopoDS_Shape& theShape);
+  bool Read(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Read(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(const TCollection_AsciiString& thePath, const opencascade::handle<TDocStd_Document>& theDocument, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Read(const TCollection_AsciiString& thePath, TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(const TCollection_AsciiString& thePath, const TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const TopoDS_Shape& theShape, opencascade::handle<XSControl_WorkSession>& theWS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Read(const TCollection_AsciiString& thePath, TopoDS_Shape& theShape, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(const TCollection_AsciiString& thePath, const TopoDS_Shape& theShape, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const opencascade::handle<TDocStd_Document>& theDocument, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Read(NCollection_List<DE_Provider_ReadStreamNode>& theStreams, TopoDS_Shape& theShape, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Write(NCollection_List<DE_Provider_WriteStreamNode>& theStreams, const TopoDS_Shape& theShape, const Message_ProgressRange& theProgress = Message_ProgressRange());
   TCollection_AsciiString GetFormat() const;
   TCollection_AsciiString GetVendor() const;
 };

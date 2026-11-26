@@ -15,8 +15,10 @@
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
     <RootNamespace>NetOcc.Samples</RootNamespace>
-    <!-- Readme.cs is a whole Program.cs, with its Main: no entry point from the test SDK besides it -->
+    <!-- Readme.cs and Programs/*.cs are whole programs, each with its Main: no entry point from the test SDK besides them,
+         and Readme.cs's is the test host's (a test project on .NET is an executable) -->
     <GenerateProgramFile>false</GenerateProgramFile>
+    <StartupObject>FusedPart.Program</StartupObject>
     <!-- the examples show what OCCT deprecates only where they say so -->
     <WarningsAsErrors>$(WarningsAsErrors);CS0618</WarningsAsErrors>
   </PropertyGroup>

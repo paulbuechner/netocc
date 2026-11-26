@@ -78,11 +78,11 @@
 %occt_valueclass(NCollection_SparseArray_int_ConstIterator)
 %netocc_keep_construct(NCollection_SparseArray_int_ConstIterator)
 
-enum TObj_DeletingMode {
+typedef enum {
   TObj_FreeOnly = 0,
   TObj_KeepDepending = 1,
   TObj_Forced = 2,
-};
+} TObj_DeletingMode;
 
 enum class TObj_Object_TypeFlags {
   Visible = 1,

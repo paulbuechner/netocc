@@ -161,32 +161,16 @@ internal static class MemberRules
   internal static IEnumerable<IReadOnlyList<ParameterModel>> HiddenConstructors(ClassModel c) =>
     Hidden(c, "");
 
-  // the parameters a declaration keeps: trailing Message_ProgressRange defaults go, C# callers
-  // don't pass progress (yet)
-  internal static List<ParameterModel> WithoutProgressDefaults(
-    IReadOnlyList<ParameterModel> parameters)
-  {
-    var kept = parameters.ToList();
-    while (kept.Count > 0 && IsProgressRange(kept[^1].Type) && kept[^1].Default is not null)
-    {
-      kept.RemoveAt(kept.Count - 1);
-    }
-
-    return kept;
-  }
-
   /// <summary>
   /// The parameters a declaration keeps, defaults from the fewest arguments a C++ call of this
   /// member alone takes, or null when no call is. A call SWIG writes (these arguments, or fewer
   /// where they have defaults) is ambiguous when an overload with other parameters takes the same
   /// arguments first and defaults the rest (<c>IntPolyh_Array(int = 256)</c> next to
   /// <c>IntPolyh_Array(int, int = 256)</c>: one argument). Such arities go, as C++ can't make those
-  /// calls either; overloads that differ only in const aren't ambiguous. Trailing
-  /// <c>Message_ProgressRange</c> defaults are left to C++ where the rest of the call stays
-  /// unambiguous (C# callers don't pass progress yet): not next to a <c>Perform()</c>
-  /// (<c>BOPAlgo_ParallelAlgo</c>, whose non-public one counts: C++ checks access after overloads).
-  /// Defaults run to the declaration's end, so a callable arity below an ambiguous one is left out
-  /// (<c>Left</c>).
+  /// calls either; overloads that differ only in const aren't ambiguous. Non-public overloads
+  /// count: C++ checks access after overloads (<c>BOPAlgo_ParallelAlgo</c>'s <c>Perform()</c> next
+  /// to its private <c>Perform(const Message_ProgressRange&amp; = {})</c>). Defaults run to the
+  /// declaration's end, so a callable arity below an ambiguous one is left out (<c>Left</c>).
   /// </summary>
   private static (List<ParameterModel>? Parameters, List<int> Left) Declared(
     IReadOnlyList<ParameterModel> parameters, IEnumerable<IReadOnlyList<ParameterModel>> overloads)
@@ -214,8 +198,7 @@ internal static class MemberRules
       return (null, []);
     }
 
-    var kept = WithoutProgressDefaults(parameters).Count;
-    var max = callable.Where(n => n <= kept).DefaultIfEmpty(callable.Min()).Max();
+    var max = callable.Max();
     var min = max;
     while (callable.Contains(min - 1))
     {
@@ -369,10 +352,6 @@ internal static class MemberRules
       .. parameters.Select((p, i) => i >= start && p.Default is { } value ? $" = {value}" : "")
     ];
   }
-
-  private static bool IsProgressRange(CppType type) =>
-    type is ReferenceType { Referee: NamedType { Name: "Message_ProgressRange" } }
-      or NamedType { Name: "Message_ProgressRange" };
 
   // a C# parameter name: a keyword gets a trailing _, a name taken already arg<index>
   internal static string SafeName(string name, int index, HashSet<string> taken)

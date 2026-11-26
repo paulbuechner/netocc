@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/NetOcc.Vtk/NetOcc.Vtk.csproj" />
+  </Folder>
+  <Folder Name="/test/">
+    <Project Path="test/NetOcc.Vtk.Tests/NetOcc.Vtk.Tests.csproj" />
+  </Folder>
+  <Folder Name="/demo/">
+    <Project Path="demo/NetOcc.Vtk.Viewer.Wpf/NetOcc.Vtk.Viewer.Wpf.csproj" />
+  </Folder>
+  <Folder Name="/netocc-core/">
+    <Project Path="../netocc-core/src/NetOcc/NetOcc.csproj" />
+  </Folder>
+</Solution>

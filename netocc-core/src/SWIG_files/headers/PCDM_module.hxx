@@ -9,6 +9,7 @@
 #include <LDOMParser.hxx>
 #include <LDOM_Element.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_Sequence.hxx>
 #include <Standard_Failure.hxx>
 #include <Standard_Persistent.hxx>

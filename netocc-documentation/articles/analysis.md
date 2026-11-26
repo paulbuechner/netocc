@@ -34,16 +34,8 @@ For many points on one solid, construct the classifier once with the solid and c
 
 Shapes from files, especially other systems' IGES and STEP, may have gaps, wrong tolerances or reversed faces. Algorithms given such shapes fail or produce garbage; check and repair first:
 
-```mermaid
-flowchart LR
-    input[shape from a file] --> check{"BRepCheck_Analyzer<br/>IsValid()"}
-    check -->|valid| use[use it]
-    check -->|invalid| fix["ShapeFix_Shape<br/>tolerances, orientation, wires"]
-    loose[loose faces] --> sew["BRepBuilderAPI_Sewing<br/>joins them into shells"]
-    sew --> fix
-    fix --> unify["ShapeUpgrade_UnifySameDomain<br/>merges split faces"]
-    unify --> use
-```
+<img class="diagram-light" src="../assets/analysis-repair.svg" width="800" height="536" alt="Checking and repairing" loading="lazy">
+<img class="diagram-dark" src="../assets/analysis-repair-dark.svg" width="800" height="536" alt="Checking and repairing" loading="lazy">
 
 Six loose faces sewn into a shell, made a solid, fixed:
 

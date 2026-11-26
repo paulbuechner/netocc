@@ -25,9 +25,12 @@
 %import "Geom2dEval.i"
 %import "Adaptor2d.i"
 %import "Geom2dAdaptor.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.GccEnt; using OCC.Core.GccInt; using OCC.Core.GccAna; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom2dAdaptor; using OCC.Core.math;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.GccEnt; using OCC.Core.GccInt; using OCC.Core.GccAna; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom2dAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math;)
 
 %occt_valueclass(Geom2dGcc)
 %occt_valueclass(Geom2dGcc_Circ2d2TanOn)

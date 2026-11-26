@@ -22,11 +22,12 @@ const string Usage = """
         toolkit -> package map from OCCT src/MODULES.cmake, TOOLKITS.cmake, PACKAGES.cmake
     dump      --occt-src <dir> --occt-include <dir> [--occt-lib <dir>] [--config config/modules.yaml] <package>
         what the parser sees in one package, parsed as generate parses it (development aid)
-    generate  --occt-src <dir> --occt-include <dir> --core <netocc-core> [--occt-lib <dir>] [--config config/modules.yaml] [--check] [names...]
+    generate  --occt-src <dir> --occt-include <dir> --core <netocc-core> [--occt-lib <dir>] [--config config/modules.yaml] [--netvtk <dir>] [--check] [names...]
         writes <netocc-core>/src/SWIG_files/{wrapper,headers} for the named packages, toolkits or modules (default: config's generate list) and
         src/SWIG_files/{modules,classes}.json; skipped members go to log/skips/<package>.txt. --occt-lib: OCCT's DLLs
         (default <occt-include>/../../bin), whose exports tell which declared members exist. --check: write nothing,
         exit 1 if netocc-core's files differ from the output. A package that doesn't parse fails the run, which then writes nothing.
+        --netvtk: NetVtk's SWIG files (its package's swig/), for config/vtk.yaml's modules on VTK (NetOcc.Vtk, --core ../netocc-vtk).
     docs      --occt-src <dir> --occt-include <dir> --core <netocc-core> --assembly <NetOcc.dll> --out <NetOcc.xml> [--xml <compiler's xml>] [--config config/modules.yaml]
         OCCT's documentation comments as NetOcc's XML documentation file (IntelliSense), merged with the compiler's
         (--xml, the hand-written members'). Without src/ in --occt-src, the headers come from --occt-include by name.
@@ -68,13 +69,14 @@ try
     case "generate":
     {
       var line = CommandLine.Parse("generate", args[1..], [
-        "--occt-src", "--occt-include", "--occt-lib", "--core", "--config"
+        "--occt-src", "--occt-include", "--occt-lib", "--core", "--config", "--netvtk"
       ], ["--check"]);
       var include = line.Required("--occt-include");
       return Generate.Run(
         new Workspace(line.Option("--config") ?? defaultConfig, line.Required("--occt-src"),
                       include), include, line.Option("--occt-lib") ?? OcctLibraries(include),
-        line.Required("--core"), line.Names, Console.Out, line.Flag("--check"));
+        line.Required("--core"), line.Names, Console.Out, line.Flag("--check"),
+        line.Option("--netvtk"));
     }
 
     case "docs":

@@ -28,14 +28,21 @@
   <ItemGroup>
     <None Include="$(NetOccStage)\native\*" Pack="true" PackagePath="runtimes/$(NetOccRid)/native/" Visible="false" />
     <None Include="$(NetOccStage)\THIRD-PARTY-NOTICES.txt" Pack="true" PackagePath="/" Visible="false" />
+    <None Include="$(NetOccStage)\sbom.cdx.json" Pack="true" PackagePath="sbom/" Visible="false" />
     <!-- empty lib/ placeholders: compatible with .NET Framework 3.5+ and netstandard2.0 consumers (.NET 6+ included) -->
     <None Include="_._" Pack="true" PackagePath="lib/net35/;lib/netstandard2.0/" Visible="false" />
-    <!-- Windows only: .NET Framework ignores runtimes/, so the targets copy the natives into x64\ or x86\ next to the app -->
-    <None Include="$(PackageId).targets" Condition="Exists('$(PackageId).targets')" Pack="true" PackagePath="build/net35/;buildTransitive/net35/" />
+    <!-- which natives an app gets (NetOcc.runtime.targets): its architecture's in x64\ or x86\ on .NET Framework, which
+         ignores runtimes/, and only those of the modules it selects; net35 for .NET Framework, netstandard2.0 for .NET -->
+    <None Include="NetOcc.runtime.targets" Pack="true" Visible="false"
+          PackagePath="build/net35/$(PackageId).targets;buildTransitive/net35/$(PackageId).targets;build/netstandard2.0/$(PackageId).targets;buildTransitive/netstandard2.0/$(PackageId).targets" />
+    <None Include="$(NetOccStage)\natives.targets" Pack="true" Visible="false"
+          PackagePath="build/net35/$(PackageId).natives.targets;buildTransitive/net35/$(PackageId).natives.targets;build/netstandard2.0/$(PackageId).natives.targets;buildTransitive/netstandard2.0/$(PackageId).natives.targets" />
   </ItemGroup>
 
   <Target Name="NetOccCheckStage" BeforeTargets="GenerateNuspec">
     <Error Condition="!Exists('$(NetOccStage)\native')" Text="No natives in $(NetOccStage)\native: run build.py native for $(NetOccRid) first." />
+    <Error Condition="!Exists('$(NetOccStage)\sbom.cdx.json')" Text="No SBOM in $(NetOccStage): run build.py native for $(NetOccRid) again." />
+    <Error Condition="!Exists('$(NetOccStage)\natives.targets')" Text="No natives.targets in $(NetOccStage): pack through build.py pack." />
   </Target>
 
 </Project>

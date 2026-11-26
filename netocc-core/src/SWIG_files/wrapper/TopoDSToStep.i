@@ -184,8 +184,8 @@ public:
 class TopoDSToStep_Builder : public TopoDSToStep_Root {
 public:
   TopoDSToStep_Builder();
-  TopoDSToStep_Builder(const TopoDS_Shape& S, TopoDSToStep_Tool& T, const opencascade::handle<Transfer_FinderProcess>& FP, int theTessellatedGeomParam, const StepData_Factors& theLocalFactors = StepData_Factors());
-  void Init(const TopoDS_Shape& S, TopoDSToStep_Tool& T, const opencascade::handle<Transfer_FinderProcess>& FP, int theTessellatedGeomParam, const StepData_Factors& theLocalFactors = StepData_Factors());
+  TopoDSToStep_Builder(const TopoDS_Shape& S, TopoDSToStep_Tool& T, const opencascade::handle<Transfer_FinderProcess>& FP, int theTessellatedGeomParam, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const TopoDS_Shape& S, TopoDSToStep_Tool& T, const opencascade::handle<Transfer_FinderProcess>& FP, int theTessellatedGeomParam, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   TopoDSToStep_BuilderError Error() const;
   const opencascade::handle<StepShape_TopologicalRepresentationItem>& Value() const;
   const opencascade::handle<StepVisual_TessellatedItem>& TessellatedValue() const;
@@ -199,22 +199,22 @@ public:
 
 class TopoDSToStep_MakeBrepWithVoids : public TopoDSToStep_Root {
 public:
-  TopoDSToStep_MakeBrepWithVoids(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
+  TopoDSToStep_MakeBrepWithVoids(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   const opencascade::handle<StepShape_BrepWithVoids>& Value() const;
   const opencascade::handle<StepVisual_TessellatedItem>& TessellatedValue() const;
 };
 
 class TopoDSToStep_MakeFacetedBrep : public TopoDSToStep_Root {
 public:
-  TopoDSToStep_MakeFacetedBrep(const TopoDS_Shell& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  TopoDSToStep_MakeFacetedBrep(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
+  TopoDSToStep_MakeFacetedBrep(const TopoDS_Shell& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  TopoDSToStep_MakeFacetedBrep(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   const opencascade::handle<StepShape_FacetedBrep>& Value() const;
   const opencascade::handle<StepVisual_TessellatedItem>& TessellatedValue() const;
 };
 
 class TopoDSToStep_MakeFacetedBrepAndBrepWithVoids : public TopoDSToStep_Root {
 public:
-  TopoDSToStep_MakeFacetedBrepAndBrepWithVoids(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
+  TopoDSToStep_MakeFacetedBrepAndBrepWithVoids(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   const opencascade::handle<StepShape_FacetedBrepAndBrepWithVoids>& Value() const;
   const opencascade::handle<StepVisual_TessellatedItem>& TessellatedValue() const;
 };
@@ -227,17 +227,17 @@ public:
 
 class TopoDSToStep_MakeManifoldSolidBrep : public TopoDSToStep_Root {
 public:
-  TopoDSToStep_MakeManifoldSolidBrep(const TopoDS_Shell& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  TopoDSToStep_MakeManifoldSolidBrep(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
+  TopoDSToStep_MakeManifoldSolidBrep(const TopoDS_Shell& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  TopoDSToStep_MakeManifoldSolidBrep(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   const opencascade::handle<StepShape_ManifoldSolidBrep>& Value() const;
   const opencascade::handle<StepVisual_TessellatedItem>& TessellatedValue() const;
 };
 
 class TopoDSToStep_MakeShellBasedSurfaceModel : public TopoDSToStep_Root {
 public:
-  TopoDSToStep_MakeShellBasedSurfaceModel(const TopoDS_Face& F, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  TopoDSToStep_MakeShellBasedSurfaceModel(const TopoDS_Shell& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
-  TopoDSToStep_MakeShellBasedSurfaceModel(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors());
+  TopoDSToStep_MakeShellBasedSurfaceModel(const TopoDS_Face& F, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  TopoDSToStep_MakeShellBasedSurfaceModel(const TopoDS_Shell& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
+  TopoDSToStep_MakeShellBasedSurfaceModel(const TopoDS_Solid& S, const opencascade::handle<Transfer_FinderProcess>& FP, const StepData_Factors& theLocalFactors = StepData_Factors(), const Message_ProgressRange& theProgress = Message_ProgressRange());
   const opencascade::handle<StepShape_ShellBasedSurfaceModel>& Value() const;
   const opencascade::handle<StepVisual_TessellatedItem>& TessellatedValue() const;
 };
@@ -281,10 +281,10 @@ public:
 class TopoDSToStep_MakeTessellatedItem : public TopoDSToStep_Root {
 public:
   TopoDSToStep_MakeTessellatedItem();
-  TopoDSToStep_MakeTessellatedItem(const TopoDS_Face& theFace, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, bool theToPreferSurfaceSet, const StepData_Factors& theLocalFactors);
-  TopoDSToStep_MakeTessellatedItem(const TopoDS_Shell& theShell, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, const StepData_Factors& theLocalFactors);
-  void Init(const TopoDS_Face& theFace, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, bool theToPreferSurfaceSet, const StepData_Factors& theLocalFactors);
-  void Init(const TopoDS_Shell& theShell, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, const StepData_Factors& theLocalFactors);
+  TopoDSToStep_MakeTessellatedItem(const TopoDS_Face& theFace, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, bool theToPreferSurfaceSet, const StepData_Factors& theLocalFactors, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  TopoDSToStep_MakeTessellatedItem(const TopoDS_Shell& theShell, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, const StepData_Factors& theLocalFactors, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const TopoDS_Face& theFace, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, bool theToPreferSurfaceSet, const StepData_Factors& theLocalFactors, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void Init(const TopoDS_Shell& theShell, TopoDSToStep_Tool& theTool, const opencascade::handle<Transfer_FinderProcess>& theFP, const StepData_Factors& theLocalFactors, const Message_ProgressRange& theProgress = Message_ProgressRange());
   const opencascade::handle<StepVisual_TessellatedItem>& Value() const;
 };
 

@@ -5,6 +5,7 @@
 #pragma once
 #include <LDOM_Element.hxx>
 #include <Message_Messenger.hxx>
+#include <Message_ProgressRange.hxx>
 #include <Standard_Transient.hxx>
 #include <Standard_Type.hxx>
 #include <TDocStd_Application.hxx>

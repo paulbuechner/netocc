@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A C++ exception becomes an OcctException</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Sequence · errors.md</p>
+    <h1>A C++ exception becomes an OcctException</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="errors-exceptions-title errors-exceptions-desc">
+        <title id="errors-exceptions-title">A C++ exception becomes an OcctException</title>
+        <desc id="errors-exceptions-desc">new gp_Dir(0, 0, 0) goes from your code through the C# proxy and a P/Invoke into the native wrapper and OCCT; OCCT throws Standard_ConstructionError, the wrapper passes its type and message to the proxy through a callback, and the proxy throws an OcctException.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Lifelines: your code 124, C# proxy 308, native wrapper 492, OCCT 676. -->
+        <g stroke="rgba(45,49,66,0.22)" stroke-width="1" stroke-dasharray="3,3">
+          <line x1="124" y1="96" x2="124" y2="408"/>
+          <line x1="308" y1="96" x2="308" y2="408"/>
+          <line x1="492" y1="96" x2="492" y2="408"/>
+          <line x1="676" y1="96" x2="676" y2="408"/>
+        </g>
+
+        <!-- Activation bars. -->
+        <g>
+          <rect x="304" y="136" width="8" height="256" fill="#f5f5f5"/>
+          <rect x="488" y="184" width="8" height="160" fill="#f5f5f5"/>
+          <rect x="672" y="232" width="8" height="64" fill="#f5f5f5"/>
+        </g>
+        <g fill="rgba(45,49,66,0.06)" stroke="#4f5d75" stroke-width="0.8">
+          <rect x="304" y="136" width="8" height="256"/>
+          <rect x="488" y="184" width="8" height="160"/>
+          <rect x="672" y="232" width="8" height="64"/>
+        </g>
+
+        <!-- Calls solid, throws dashed back. -->
+        <line x1="124" y1="144" x2="304" y2="144" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="312" y1="192" x2="488" y2="192" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="496" y1="240" x2="672" y2="240" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)"/>
+        <line x1="672" y1="288" x2="496" y2="288" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+        <line x1="488" y1="336" x2="312" y2="336" stroke="#4f5d75" stroke-width="1.2" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+        <line x1="304" y1="384" x2="124" y2="384" stroke="#bf4520" stroke-width="1.4" stroke-dasharray="5,4" marker-end="url(#arrow-accent)"/>
+
+        <g font-family="'Geist Mono', monospace" font-size="8" letter-spacing="0.06em" text-anchor="middle">
+          <rect x="168" y="112" width="96" height="24" rx="2" fill="#f5f5f5"/>
+          <text x="216" y="121" fill="#5a6580">NEW</text>
+          <text x="216" y="132" fill="#4f5d75" font-size="9" letter-spacing="0">gp_Dir(0, 0, 0)</text>
+
+          <rect x="372" y="172" width="56" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="400" y="181" fill="#5a6580">P/INVOKE</text>
+
+          <rect x="536" y="208" width="96" height="24" rx="2" fill="#f5f5f5"/>
+          <text x="584" y="217" fill="#5a6580">CALL</text>
+          <text x="584" y="228" fill="#4f5d75" font-size="9" letter-spacing="0">gp_Dir(0, 0, 0)</text>
+
+          <rect x="504" y="256" width="160" height="24" rx="2" fill="#f5f5f5"/>
+          <text x="584" y="265" fill="#5a6580">THROW</text>
+          <text x="584" y="276" fill="#4f5d75" font-size="9" letter-spacing="0">Standard_ConstructionError</text>
+
+          <rect x="356" y="304" width="88" height="24" rx="2" fill="#f5f5f5"/>
+          <text x="400" y="313" fill="#5a6580">TYPE + MESSAGE</text>
+          <text x="400" y="324" fill="#5a6580">VIA A CALLBACK</text>
+
+          <rect x="172" y="352" width="88" height="24" rx="2" fill="#f5f5f5"/>
+          <text x="216" y="361" fill="#bf4520">THROW</text>
+          <text x="216" y="372" fill="#bf4520" font-size="9" letter-spacing="0">OcctException</text>
+        </g>
+
+        <!-- Actors; the wrapper, where the exception is caught, is focal. -->
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <rect x="48" y="40" width="152" height="56" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580"/>
+          <text x="124" y="64" fill="#2d3142" font-size="12" font-weight="600">your code</text>
+          <text x="124" y="80" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">application · C#</text>
+
+          <rect x="232" y="40" width="152" height="56" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="308" y="64" fill="#2d3142" font-size="12" font-weight="600">C# proxy</text>
+          <text x="308" y="80" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">NetOcc · C#</text>
+
+          <rect x="416" y="40" width="152" height="56" rx="6" fill="#f5f5f5"/>
+          <rect x="416" y="40" width="152" height="56" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="492" y="64" fill="#2d3142" font-size="12" font-weight="600">native wrapper</text>
+          <text x="492" y="80" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">NetOcc · C++</text>
+
+          <rect x="600" y="40" width="152" height="56" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="676" y="64" fill="#2d3142" font-size="12" font-weight="600">OCCT</text>
+          <text x="676" y="80" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">library · C++</text>
+        </g>
+
+        <text x="48" y="440" fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">C++ EXCEPTIONS NEVER CROSS INTO .NET ON THEIR OWN</text>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

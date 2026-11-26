@@ -13,6 +13,10 @@ Why NetOcc is built the way it is. How the parts fit: [How NetOcc works](archite
 | Handles | SWIG's `ref`/`unref` on `Standard_Transient`: each proxy holds one reference | OCCT's own reference counting decides lifetimes |
 | Strings | `TCollection_AsciiString` UTF-8, `TCollection_ExtendedString` UTF-16, both `string`; `Standard_GUID` is `System.Guid` | Unicode paths work on every platform; OCCT 8's `Standard_UUID` has `Guid`'s layout |
 | OCAF lifetime | label, attribute and `TNaming_Builder` proxies keep their `TDF_Data` alive | finalizers run in any order, long after `Close` |
+| Subclassing | SWIG directors for the classes OCCT is meant to be derived from (netocc-gen's `directors`: progress indicators, printers, presentations, owners, the view controller), not every class | each director gets a C++ subclass overriding all its virtual members, a C# delegate per member and a lookup of overrides; lifetime, identity and exceptions need the runtime's care (`Directors.i`, `Directors.cs`) |
+| Director lifetime | a GC handle, strong from the moment the object is passed to OCCT until a sweep after a full collection finds only its proxy's reference; a disposed object held by OCCT is released once OCCT lets go | OCCT holds by reference count, which the GC doesn't see, and `Standard_Transient`'s counting isn't virtual: nothing tells C# when OCCT takes or drops a reference |
+| Exceptions in overrides | caught at the callback, parked under a number, rethrown in C++ right after the callback (a result's or parameter's conversion) as `NetOcc_ManagedException`; the outer call's `OcctException` carries it as `InnerException` | a .NET exception can't unwind through C++; OCCT unwinds as from its own |
+| Progress | trailing `Message_ProgressRange` defaults wrapped, as overloads | a C# `Message_ProgressIndicator` hands out ranges to report and cancel through |
 | Platforms | win-x64, win-x86, linux-x64, osx-arm64; one AnyCPU assembly | win-x86, since .NET Framework's AnyCPU apps often run as 32-bit processes |
 | Frameworks | net35, net45, net452, net462, net6.0, net8.0, net10.0, and netstandard2.0 | .NET Framework apps from 3.5 on get a build of their own; netstandard2.0 serves libraries |
 | OCCT | vcpkg manifest, built from source with OCCT's precondition checks on, binary-cached | the same OCCT on every platform, and checks that throw instead of crashing |
@@ -62,9 +66,10 @@ Hand-written, in `netocc-core/src/SWIG_files/common/`; every generated module in
 
 ## OCCT through vcpkg
 
-- **Manifest mode:** `netocc-core/vcpkg.json` depends on `opencascade` (FreeType, RapidJSON; no FreeImage, TBB or VTK), `vcpkg-configuration.json` pins the registry's git baseline, and an override pins OCCT's version.
+- **Manifest mode:** `netocc-core/vcpkg.json` depends on `opencascade` (FreeType, RapidJSON, TBB, and VTK for NetOcc.Vtk from NetVtk's registry; no FreeImage), `vcpkg-configuration.json` pins the registry's git baseline, and an override pins OCCT's version. TBB comes with hwloc, its default on Windows and Linux: the port asks for TBB's defaults, and only an overlay port would drop it.
 - **Nothing global:** `build.py occt` puts the install, buildtree, packages, downloads, registry cache and binary cache under `netocc-core/.vcpkg/`.
-- **Overlay triplets:** release builds only, and OCCT's precondition checks on (`BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF`): release OCCT compiles them out by default, and bad input then crashes instead of throwing.
+- **Overlay triplets** (NetVtk's, copied: the same VTK build): release builds only. **The opencascade overlay port** keeps OCCT's precondition checks on (`BUILD_RELEASE_DISABLE_EXCEPTIONS=OFF`): release OCCT compiles them out by default, and bad input then crashes instead of throwing.
+- **OCCT allocates through oneTBB** (`USE_MMGR_TYPE=TBB`): BRepMesh takes blocks of 1 MB per face, which the system allocator maps and unmaps each time; meshing a box took as long in native C++ as through NetOcc. Not chosen: jemalloc (not in the pinned port), a smaller block size in BRepMesh (a patch to keep).
 - **Caching:** CI keeps each triplet's binary archives in the Actions cache, pruned to what the install uses and saved when the set changes.
 - **The toolkit map** comes from vcpkg's buildtree, which keeps OCCT's CMake lists the install leaves out.
 - **Not chosen:** building OCCT ourselves (then FreeType and RapidJSON are ours to build), Open Cascade's installers (Windows only), conda-forge's OCCT (conda in a .NET build).

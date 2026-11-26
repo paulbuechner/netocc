@@ -4,14 +4,8 @@ NetOcc is generated from OCCT's headers: a C++ signature decides its C# signatur
 
 ## What a C++ type becomes
 
-```mermaid
-flowchart LR
-    transient["Standard_Transient subclass<br/>Geom_Circle, AIS_Shape"] -->|holds one reference| c1["C# class"]
-    other["any other class<br/>TopoDS_Shape, BRepPrimAPI_MakeBox"] -->|owns the object| c2["C# class"]
-    value["fixed-layout value<br/>gp_Pnt, Bnd_Box, Quantity_Color"] -->|same memory layout| c3["C# struct"]
-    enumeration["enum"] --> c4["C# enum"]
-    functions["namespace functions<br/>TopoDS::Face"] --> c5["static class"]
-```
+<img class="diagram-light" src="../assets/mapping-types.svg" width="800" height="452" alt="What a C++ type becomes" loading="lazy">
+<img class="diagram-dark" src="../assets/mapping-types-dark.svg" width="800" height="452" alt="What a C++ type becomes" loading="lazy">
 
 All classes are `IDisposable`, see [Object lifetimes](lifetimes.md).
 
@@ -52,8 +46,9 @@ Plain data (OCCT 8's evaluation results) is a struct with public fields: `curve.
 | `T*` of a class | the proxy, `null` for `nullptr` |
 | `void*`, function pointers, pointers OCCT keeps | `IntPtr` |
 | `int (&)[3]` | an array of exactly three |
-| `Message_ProgressRange` at the end, defaulted | left out |
+| `Message_ProgressRange` at the end, defaulted | an overload without it too, like any default |
 | default arguments | overloads |
+| a virtual member of a [class C# subclasses](subclassing.md) | `virtual` (protected ones `protected virtual`); OCCT calls the override |
 
 [!code-csharp[](../samples/Mapping.cs#ref-parameters)]
 

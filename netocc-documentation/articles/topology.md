@@ -6,18 +6,8 @@ A shape is topology (what is connected to what) over geometry (where it is): fac
 
 `TopoDS_Shape` is the base of all; each type is made of the one below:
 
-```mermaid
-flowchart TD
-    compound["TopoDS_Compound<br/><i>any shapes, grouped</i>"]
-    compsolid["TopoDS_CompSolid<br/><i>solids sharing faces</i>"]
-    solid["TopoDS_Solid<br/><i>a volume bounded by shells</i>"]
-    shell["TopoDS_Shell<br/><i>faces joined at edges</i>"]
-    face["TopoDS_Face<br/><i>part of a surface, bounded by wires</i>"]
-    wire["TopoDS_Wire<br/><i>edges joined at vertices</i>"]
-    edge["TopoDS_Edge<br/><i>part of a curve</i>"]
-    vertex["TopoDS_Vertex<br/><i>a point</i>"]
-    compound --> compsolid --> solid --> shell --> face --> wire --> edge --> vertex
-```
+<img class="diagram-light" src="../assets/topology-types.svg" width="800" height="568" alt="The shape types" loading="lazy">
+<img class="diagram-dark" src="../assets/topology-types-dark.svg" width="800" height="568" alt="The shape types" loading="lazy">
 
 `ShapeType()` tells which one a `TopoDS_Shape` is; `TopoDS.Solid`, `TopoDS.Face`, `TopoDS.Edge` and so on cast to it, and throw `Standard_TypeMismatch` for the wrong type.
 
@@ -25,19 +15,8 @@ flowchart TD
 
 A `TopoDS_Shape` is a light value: a reference to the shared `TopoDS_TShape` that holds the topology, a location and an orientation. Two shapes can share the TShape and still differ:
 
-```mermaid
-classDiagram
-    class TopoDS_Shape {
-        TShape() the shared topology and geometry
-        Location() TopLoc_Location, where it's placed
-        Orientation() TopAbs_Orientation, FORWARD or REVERSED
-    }
-    class TopoDS_TShape {
-        sub-shapes
-        geometry via BRep_TFace, BRep_TEdge, BRep_TVertex
-    }
-    TopoDS_Shape --> TopoDS_TShape : refers to
-```
+<img class="diagram-light" src="../assets/topology-shape.svg" width="800" height="240" alt="What a shape is" loading="lazy">
+<img class="diagram-dark" src="../assets/topology-shape-dark.svg" width="800" height="240" alt="What a shape is" loading="lazy">
 
 [!code-csharp[](../samples/Topology.cs#identity)]
 
@@ -66,14 +45,8 @@ Maps and `TopExp` use `IsSame`: a face and its reversed twin are one entry.
 
 ## Geometry behind the topology
 
-```mermaid
-flowchart LR
-    vertex[TopoDS_Vertex] -->|BRep_Tool.Pnt| pnt[gp_Pnt]
-    edge[TopoDS_Edge] -->|BRep_Tool.Curve| curve["Geom_Curve<br/>+ range first..last"]
-    edge -->|BRep_Tool.CurveOnSurface| pcurve["Geom2d_Curve<br/>on each face"]
-    face[TopoDS_Face] -->|BRep_Tool.Surface| surface[Geom_Surface]
-    face -->|BRep_Tool.Triangulation| mesh[Poly_Triangulation]
-```
+<img class="diagram-light" src="../assets/topology-geometry.svg" width="800" height="460" alt="Geometry behind the topology" loading="lazy">
+<img class="diagram-dark" src="../assets/topology-geometry-dark.svg" width="800" height="460" alt="Geometry behind the topology" loading="lazy">
 
 [!code-csharp[](../samples/Topology.cs#geometry)]
 

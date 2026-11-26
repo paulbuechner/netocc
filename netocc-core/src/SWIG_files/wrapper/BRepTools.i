@@ -24,13 +24,13 @@
 %import "Geom2dEval.i"
 %import "Adaptor2d.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -63,7 +63,7 @@
 %import "Poly.i"
 %import "BRep.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep;)
 
 %occt_valueclass(BRepTools)
 %occt_transient(BRepTools_Modification)
@@ -126,12 +126,12 @@ public:
   static bool IsReallyClosed(const TopoDS_Edge& E, const TopoDS_Face& F);
   static void DetectClosedness(const TopoDS_Face& theFace, bool& theUclosed, bool& theVclosed);
   static void Dump(const TopoDS_Shape& Sh, std::ostream& S);
-  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream);
-  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream, bool theWithTriangles, bool theWithNormals, TopTools_FormatVersion theVersion);
-  static void Read(TopoDS_Shape& Sh, std::istream& S, const BRep_Builder& B);
-  static bool Write(const TopoDS_Shape& theShape, const char* theFile);
-  static bool Write(const TopoDS_Shape& theShape, const char* theFile, bool theWithTriangles, bool theWithNormals, TopTools_FormatVersion theVersion);
-  static bool Read(TopoDS_Shape& Sh, const char* File, const BRep_Builder& B);
+  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static void Write(const TopoDS_Shape& theShape, std::ostream& theStream, bool theWithTriangles, bool theWithNormals, TopTools_FormatVersion theVersion, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static void Read(TopoDS_Shape& Sh, std::istream& S, const BRep_Builder& B, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static bool Write(const TopoDS_Shape& theShape, const char* theFile, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static bool Write(const TopoDS_Shape& theShape, const char* theFile, bool theWithTriangles, bool theWithNormals, TopTools_FormatVersion theVersion, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  static bool Read(TopoDS_Shape& Sh, const char* File, const BRep_Builder& B, const Message_ProgressRange& theProgress = Message_ProgressRange());
   static double EvalAndUpdateTol(const TopoDS_Edge& theE, const opencascade::handle<Geom_Curve>& theC3d, const opencascade::handle<Geom2d_Curve>& theC2d, const opencascade::handle<Geom_Surface>& theS, double theF, double theL);
   static TopAbs_Orientation OriEdgeInFace(const TopoDS_Edge& theEdge, const TopoDS_Face& theFace);
   static void RemoveInternals(TopoDS_Shape& theS, bool theForce = false);
@@ -218,7 +218,7 @@ public:
   BRepTools_Modifier(const TopoDS_Shape& S);
   BRepTools_Modifier(const TopoDS_Shape& S, const opencascade::handle<BRepTools_Modification>& M);
   void Init(const TopoDS_Shape& S);
-  void Perform(const opencascade::handle<BRepTools_Modification>& M);
+  void Perform(const opencascade::handle<BRepTools_Modification>& M, const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool IsDone() const;
   bool IsMutableInput() const;
   void SetMutableInput(bool theMutableInput);
@@ -294,21 +294,21 @@ public:
   void Clear();
   void AddGeometry(const TopoDS_Shape& S);
   void DumpGeometry(std::ostream& OS) const;
-  void WriteGeometry(std::ostream& OS);
-  void ReadGeometry(std::istream& IS);
+  void WriteGeometry(std::ostream& OS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void ReadGeometry(std::istream& IS, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void DumpGeometry(const TopoDS_Shape& S, std::ostream& OS) const;
   void WriteGeometry(const TopoDS_Shape& S, std::ostream& OS) const;
   void ReadGeometry(TopAbs_ShapeEnum T, std::istream& IS, TopoDS_Shape& S);
   void AddShapes(TopoDS_Shape& S1, const TopoDS_Shape& S2);
   void Check(TopAbs_ShapeEnum T, TopoDS_Shape& S);
-  void ReadPolygon3D(std::istream& IS);
-  void WritePolygon3D(std::ostream& OS, bool Compact = true) const;
+  void ReadPolygon3D(std::istream& IS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void WritePolygon3D(std::ostream& OS, bool Compact = true, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
   void DumpPolygon3D(std::ostream& OS) const;
-  void ReadTriangulation(std::istream& IS);
-  void WriteTriangulation(std::ostream& OS, bool Compact = true) const;
+  void ReadTriangulation(std::istream& IS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void WriteTriangulation(std::ostream& OS, bool Compact = true, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
   void DumpTriangulation(std::ostream& OS) const;
-  void ReadPolygonOnTriangulation(std::istream& IS);
-  void WritePolygonOnTriangulation(std::ostream& OS, bool Compact = true) const;
+  void ReadPolygonOnTriangulation(std::istream& IS, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void WritePolygonOnTriangulation(std::ostream& OS, bool Compact = true, const Message_ProgressRange& theProgress = Message_ProgressRange()) const;
   void DumpPolygonOnTriangulation(std::ostream& OS) const;
 };
 

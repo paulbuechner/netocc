@@ -143,7 +143,7 @@ enum RWObj_SubMeshReason {
 class RWObj {
 public:
   RWObj();
-  static opencascade::handle<Poly_Triangulation> ReadFile(const char* theFile);
+  static opencascade::handle<Poly_Triangulation> ReadFile(const char* theFile, const Message_ProgressRange& aProgress = Message_ProgressRange());
 };
 
 class RWObj_Material {

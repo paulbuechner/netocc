@@ -38,6 +38,9 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
+import loads
+import sbom
+
 ROOT = Path(__file__).resolve().parent
 TOOLS = ROOT / ".tools"
 VCPKG_STATE = ROOT / ".vcpkg"
@@ -291,14 +294,21 @@ def sift_swig_messages(module: str, messages: str) -> tuple[list[str], int, list
 
 
 def cmd_generate(_: argparse.Namespace) -> None:
+    generate_modules(SWIG_FILES, GENERATED, native_libraries())
+
+
+def generate_modules(swig_files: Path, generated: Path, libraries: dict[str, list[str]],
+                     includes: list[Path] | None = None) -> None:
+    """SWIG over swig_files' modules into generated/cxx/<library> and generated/cs/<module>, with SWIG's guards.
+    includes: more directories for %include and %import after swig_files' own (../netocc-vtk: NetOcc's modules, NetVtk's
+    interop)."""
     swig = swig_executable()
     env = swig_env()
-    libraries = native_libraries()
     library_of = {module: library for library, modules in libraries.items() for module in modules}
-    cxx_dir = GENERATED / "cxx"
-    cs_root = GENERATED / "cs"
-    if GENERATED.exists():
-        shutil.rmtree(GENERATED)
+    cxx_dir = generated / "cxx"
+    cs_root = generated / "cs"
+    if generated.exists():
+        shutil.rmtree(generated)
     cxx_dir.mkdir(parents=True)
 
     # C++ per library (CMake builds one from each directory), C# per module
@@ -312,11 +322,12 @@ def cmd_generate(_: argparse.Namespace) -> None:
                "-namespace", f"OCC.Core.{module}",
                "-dllimport", library_of[module],
                "-I" + str(SWIG_FILES / "common"),
-               "-I" + str(SWIG_FILES / "wrapper"),
-               "-I" + str(SWIG_FILES),  # %include "extras/<Pkg>.i"
+               "-I" + str(swig_files / "wrapper"),
+               "-I" + str(swig_files),  # %include "extras/<Pkg>.i"
+               *("-I" + str(d) for d in includes or []),
                "-outdir", cs_dir,
                "-o", cxx_dir / library_of[module] / f"{module}_wrap.cxx",
-               SWIG_FILES / "wrapper" / f"{module}.i"]
+               swig_files / "wrapper" / f"{module}.i"]
         return module, subprocess.run([str(c) for c in cmd], env=env, capture_output=True, text=True,
                                       encoding="utf-8", errors="replace")
 
@@ -340,6 +351,11 @@ def cmd_generate(_: argparse.Namespace) -> None:
                 unbased.append(module)
     if failed:
         sys.exit(f"SWIG failed for {', '.join(failed)}")
+    in_types = fix_director_in_types(cs_root)
+    lookups = cache_director_lookups(cs_root)
+    unchecked = unchecked_director_callbacks(cxx_dir)
+    if unchecked:
+        sys.exit(f"director callbacks without the check that rethrows a C# exception (Directors.i): {', '.join(unchecked[:5])}")
     if dropped:
         sys.exit(f"SWIG dropped overloads (Warning 516) in {', '.join(dropped)}")
     # a class of the module without its base, or netocc-gen's import order broken
@@ -350,8 +366,72 @@ def cmd_generate(_: argparse.Namespace) -> None:
     opaque = sorted(str(f.relative_to(cs_root)) for f in cs_root.rglob("*.cs") if "SWIGTYPE_" in f.read_text(encoding="utf-8"))
     if opaque:
         sys.exit(f"SWIG left unmapped types (SWIGTYPE_*) in {len(opaque)} file(s), e.g. {', '.join(opaque[:5])}")
-    print(f"SWIG: {len(library_of)} modules in {len(libraries)} libraries -> {GENERATED}; {harmless} imported classes seen "
-          "before their base in the importing module (Warning 401, left out)", flush=True)
+    print(f"SWIG: {len(library_of)} modules in {len(libraries)} libraries -> {generated}; {harmless} imported classes seen "
+          f"before their base in the importing module (Warning 401, left out); {lookups} director classes, {in_types} parameter types by in",
+          flush=True)
+
+
+# a director's method types (SwigDerivedClassHasMethod), as SWIG writes them from the cstype: it spells ref and out
+# parameters' types as T.MakeByRefType(), but an in one as typeof(in T), which C# doesn't take
+DIRECTOR_IN_TYPE = re.compile(r"typeof\(in ([\w.]+)\)")
+
+
+def fix_director_in_types(cs_root: Path) -> int:
+    """Rewrites SWIG's typeof(in T) in director classes to typeof(T).MakeByRefType(), the type reflection gives an in
+    parameter; the number rewritten."""
+    count = 0
+    for path in cs_root.rglob("*.cs"):
+        text = path.read_text(encoding="utf-8")
+        if "typeof(in " not in text:
+            continue
+        fixed, n = DIRECTOR_IN_TYPE.subn(r"typeof(\1).MakeByRefType()", text)
+        path.write_text(fixed, encoding="utf-8", newline="")
+        count += n
+    return count
+
+
+# SWIG's lookup of a C# override in a director class, which reflects over the object's type on every call of a virtual
+# member: replaced by Directors.Overrides, which caches it per type and member
+DIRECTOR_LOOKUP = re.compile(
+    r"  private bool SwigDerivedClassHasMethod\(string methodName, global::System\.Type\[\] methodTypes\) \{\n"
+    r".*?methodInfo\.DeclaringType\.IsSubclassOf\(typeof\((\w+)\)\).*?\n    return false;\n  \}\n", re.S)
+
+
+def cache_director_lookups(cs_root: Path) -> int:
+    """Replaces SwigDerivedClassHasMethod in the director classes with Directors.Overrides; the classes changed. Fails
+    when a director class keeps SWIG's: another SWIG writes it differently."""
+    count = 0
+    for path in cs_root.rglob("*.cs"):
+        text = path.read_text(encoding="utf-8")
+        if "private bool SwigDerivedClassHasMethod(" not in text:
+            continue
+        fixed, n = DIRECTOR_LOOKUP.subn(
+            lambda m: "  // SWIG's lookup of an override, cached per type and member (Directors.Overrides)\n"
+                      "  private bool SwigDerivedClassHasMethod(string methodName, global::System.Type[] methodTypes) {\n"
+                      f"    return global::OCC.Core.Directors.Overrides(this.GetType(), typeof({m.group(1)}), methodName, methodTypes);\n"
+                      "  }\n", text)
+        if n != 1:
+            sys.exit(f"{path.relative_to(cs_root)}: SWIG's SwigDerivedClassHasMethod not found as expected")
+        path.write_text(fixed, encoding="utf-8", newline="")
+        count += 1
+    return count
+
+
+def unchecked_director_callbacks(cxx_dir: Path) -> list[str]:
+    """The director methods (SwigDirector_*::Name) in which a callback isn't followed by NetOcc_DirectorCheck: SWIG runs
+    it in a result's directorout and a parameter's directorargout, so a typemap of its own on a director's type that
+    lacks it would let a C# exception go unnoticed."""
+    unchecked = []
+    method = re.compile(r"^\w[^\n]*SwigDirector_(\w+)::(\w+)\([^\n]*\{\n(.*?)^\}", re.S | re.M)
+    for path in sorted(cxx_dir.rglob("*_wrap.cxx")):
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for match in method.finditer(text):
+            body = match.group(3)
+            for call in re.finditer(r"swig_callback\w+\(", body):
+                # the callback's else block ends at the method's first two-space closing brace after it
+                if "NetOcc_DirectorCheck();" not in body[call.end():].split("\n  }", 1)[0]:
+                    unchecked.append(f"{match.group(1)}::{match.group(2)}")
+    return unchecked
 
 
 # --------------------------------------------------------------------------- native
@@ -411,6 +491,8 @@ def cmd_native(args: argparse.Namespace) -> None:
     if not host_is_windows():
         flatten_stage(stage)
     write_notices(args.triplet, stage, stage.parent / "THIRD-PARTY-NOTICES.txt")
+    sbom.write(stage, stage.parent / sbom.FILE, f"NetOcc.runtime.{rid}", installed=vcpkg_installed(args.triplet),
+               triplet=args.triplet, repository=REPOSITORY)
 
 
 def loader_name(library: Path) -> str | None:
@@ -439,35 +521,11 @@ def flatten_stage(stage: Path) -> None:
             library.rename(stage / name)
 
 
-# header-only ports compiled into the shipped libraries: no file of theirs is staged, but their code is (RWGltf's JSON)
-COMPILED_IN = ["rapidjson"]
-
-
-def library_stem(name: str) -> str | None:
-    """A shared library's name without its version and extension (libz.so.1.3.1, libz.1.dylib, z.dll: libz, libz, z), so a
-    port's installed file and its staged copy (renamed to the SONAME) match; None for other files."""
-    match = re.fullmatch(r"(.+?)(?:\.so(?:\.\d+)*|(?:\.\d+)*\.dylib|\.dll)", name, re.I)
-    return match.group(1).lower() if match else None
-
-
-def shipped_ports(triplet: str, stage: Path) -> list[str]:
-    """The vcpkg ports whose libraries the stage holds (vcpkg's installed file lists: <port>_<version>_<triplet>.list),
-    and the compiled-in header-only ones. Not build tools (gperf) or empty ports (pthread), whose licenses would go
-    into the package for nothing."""
-    staged = {stem for path in stage.iterdir() if (stem := library_stem(path.name))}
-    ports = set()
-    for listing in (vcpkg_installed(triplet) / "vcpkg" / "info").glob(f"*_{triplet}.list"):
-        port = listing.name.split("_", 1)[0]
-        if port in COMPILED_IN or any(library_stem(Path(f).name) in staged for f in listing.read_text(encoding="utf-8").splitlines()):
-            ports.add(port)
-    return sorted(ports)
-
-
 def write_notices(triplet: str, stage: Path, target: Path) -> None:
     """NetOcc's license, NOTICE and the license of every vcpkg port the stage ships, for the runtime package."""
     parts = [("NetOcc", (ROOT / "LICENSE").read_text(encoding="utf-8")),
              ("NetOcc NOTICE", (ROOT / "NOTICE").read_text(encoding="utf-8"))]
-    for port in shipped_ports(triplet, stage):
+    for port in sbom.shipped_ports(vcpkg_installed(triplet), triplet, stage):
         license_file = vcpkg_prefix(triplet) / "share" / port / "copyright"
         parts.append((port, license_file.read_text(encoding="utf-8", errors="replace")))
     rule = "=" * 78
@@ -728,10 +786,12 @@ def cmd_changelog(args: argparse.Namespace) -> None:
 
 
 def check_changes(base: str) -> None:
-    """A pull request that changes what the packages hold says so: an entry in changes/ (or an edit of CHANGELOG.md)."""
-    changed = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD", "--", "."], cwd=ROOT, check=True,
-                             capture_output=True, text=True).stdout.split()
-    shipped = [p for p in changed if p.startswith(("netocc-core/src/", "netocc-core/pack/"))]
+    """A pull request that changes what the packages hold (NetOcc's, ../netocc-vtk's NetOcc.Vtk) says so: an entry in
+    changes/ (or an edit of CHANGELOG.md)."""
+    changed = subprocess.run(["git", "diff", "--name-only", f"{base}...HEAD", "--", ".", "../netocc-vtk"], cwd=ROOT,
+                             check=True, capture_output=True, text=True).stdout.split()
+    shipped = [p for p in changed if p.startswith(("netocc-core/src/", "netocc-core/pack/", "netocc-vtk/src/",
+                                                   "netocc-vtk/pack/"))]
     noted = [p for p in changed if p.startswith("netocc-core/changes/") or p == "netocc-core/CHANGELOG.md"]
     if shipped and not noted:
         sys.exit("this changes the packages but adds no changelog entry: python build.py change <type> \"what changed\" "
@@ -791,6 +851,8 @@ def cmd_release(args: argparse.Namespace) -> None:
 
 # --------------------------------------------------------------------------- packages
 PACKAGE_TESTS = ROOT / "test" / "NetOcc.PackageTests"
+# the NetOcc modules the package tests use, for their run with NetOccModules
+PACKAGE_TEST_MODULES = "FoundationClasses;ModelingData;ModelingAlgorithms;DataExchange"
 
 
 def pack_notes(version: str) -> str:
@@ -820,6 +882,28 @@ def write_restore_config() -> Path:
     return config
 
 
+def dependency_problems(package: Path, expected: dict[str, str]) -> list[str]:
+    """The dependencies of a .nupkg that differ from the expected ones (id -> version as a nuspec writes it: 1.2 for >= 1.2,
+    [1.2] exactly) in any of its framework groups, as "<id> <version>" or "<id> missing"; empty when all match."""
+    import zipfile
+    from xml.etree import ElementTree
+    with zipfile.ZipFile(package) as archive:
+        nuspec = next(name for name in archive.namelist() if "/" not in name and name.endswith(".nuspec"))
+        root = ElementTree.fromstring(archive.read(nuspec))
+
+    def local(element: ElementTree.Element) -> str:
+        return element.tag.rsplit("}", 1)[-1]
+
+    problems: list[str] = []
+    for group in [e for e in root.iter() if local(e) == "group"] or [root]:
+        declared = {d.get("id"): d.get("version") for d in group.iter() if local(d) == "dependency"}
+        for name, version in expected.items():
+            problem = None if declared.get(name) == version else f"{name} {declared.get(name) or 'missing'}"
+            if problem and problem not in problems:
+                problems.append(problem)
+    return problems
+
+
 def cmd_pack(args: argparse.Namespace) -> None:
     version = args.version or local_version(occt_version())
     check_version(version)
@@ -838,6 +922,9 @@ def cmd_pack(args: argparse.Namespace) -> None:
 
     ci = ["-p:ContinuousIntegrationBuild=true"] if os.environ.get("GITHUB_ACTIONS") else []
     for rid in rids:
+        sbom.stamp(natives(rid).parent / sbom.FILE, version)
+        # what each native loads, for the targets' module selection (NetOccModules)
+        loads.write(natives(rid), natives(rid).parent / "natives.targets", f"NetOcc.runtime.{rid}", "NetOcc")
         run(["dotnet", "pack", ROOT / "pack" / "NetOcc.runtime.csproj", "-c", "Release", "-o", PACKAGES,
              f"-p:NetOccRid={rid}", f"-p:Version={version}", *ci])
 
@@ -886,9 +973,11 @@ def cmd_test_package(args: argparse.Namespace) -> None:
     if not (PACKAGES / "NetOcc.version.props").exists():
         sys.exit("no packages: run build.py pack first")
     frameworks = ["net8.0", "net48"] if host_is_windows() else ["net8.0"]
-    for framework in frameworks:
-        run(["dotnet", "test", PACKAGE_TESTS / "NetOcc.PackageTests.csproj", "-c", "Release", "--arch", args.arch,
-             "--framework", framework])
+    # all modules, then the ones the tests use (NetOccModules from the environment: -p: splits values at ';')
+    for env in (None, dict(os.environ, NetOccModules=PACKAGE_TEST_MODULES)):
+        for framework in frameworks:
+            run(["dotnet", "test", PACKAGE_TESTS / "NetOcc.PackageTests.csproj", "-c", "Release", "--arch", args.arch,
+                 "--framework", framework], env=env)
 
 
 # --------------------------------------------------------------------------- command line

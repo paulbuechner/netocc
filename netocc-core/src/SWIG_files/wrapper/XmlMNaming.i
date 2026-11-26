@@ -95,8 +95,8 @@ public:
   opencascade::handle<TDF_Attribute> NewEmpty() const;
   bool Paste(const XmlObjMgt_Persistent& theSource, const opencascade::handle<TDF_Attribute>& theTarget, XmlObjMgt_RRelocationTable& theRelocTable) const;
   void Paste(const opencascade::handle<TDF_Attribute>& theSource, XmlObjMgt_Persistent& theTarget, XmlObjMgt_SRelocationTable& theRelocTable) const;
-  void ReadShapeSection(const LDOM_Element& anElement);
-  void WriteShapeSection(LDOM_Element& anElement, TDocStd_FormatVersion theStorageFormatVersion);
+  void ReadShapeSection(const LDOM_Element& anElement, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void WriteShapeSection(LDOM_Element& anElement, TDocStd_FormatVersion theStorageFormatVersion, const Message_ProgressRange& theRange = Message_ProgressRange());
   void Clear();
   TopTools_LocationSet& GetShapesLocations();
   static const char* get_type_name();

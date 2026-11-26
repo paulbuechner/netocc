@@ -173,9 +173,9 @@ public:
   bool BeginTransfer();
   void EndTransfer();
   void PrepareTransfer();
-  void TransferRoots();
-  bool Transfer(int num);
-  void TransferList(const opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>>& list);
+  void TransferRoots(const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Transfer(int num, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  void TransferList(const opencascade::handle<NCollection_HSequence<opencascade::handle<Standard_Transient>>>& list, const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool IsDone() const;
   int NbShapes() const;
   opencascade::handle<NCollection_HSequence<TopoDS_Shape>> Shapes() const;

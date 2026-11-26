@@ -24,6 +24,9 @@
 %import "Geom.i"
 %import "GeomEval.i"
 %import "TopAbs.i"
+%import "Quantity.i"
+%import "OSD.i"
+%import "Message.i"
 %import "math.i"
 %import "Adaptor3d.i"
 %import "AppParCurves.i"
@@ -31,9 +34,6 @@
 %import "Approx.i"
 %import "Geom2dAdaptor.i"
 %import "GeomAdaptor.i"
-%import "Quantity.i"
-%import "OSD.i"
-%import "Message.i"
 %import "TopLoc.i"
 %import "TopoDS.i"
 %import "BRepAdaptor.i"
@@ -90,7 +90,7 @@
 %import "BRepPrimAPI.i"
 %import "Draft.i"
 #endif
-%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepBuilderAPI; using OCC.Core.Bisector; using OCC.Core.MAT; using OCC.Core.TColGeom2d; using OCC.Core.BRepMAT2d; using OCC.Core.AppBlend; using OCC.Core.Convert; using OCC.Core.Law; using OCC.Core.TColGeom; using OCC.Core.GeomFill; using OCC.Core.PLib; using OCC.Core.AdvApprox; using OCC.Core.AdvApp2Var; using OCC.Core.LProp; using OCC.Core.GeomLProp; using OCC.Core.Plate; using OCC.Core.GeomPlate; using OCC.Core.BRepFill; using OCC.Core.BRepAlgo; using OCC.Core.ChFiDS; using OCC.Core.BRepOffset; using OCC.Core.BRepPrim; using OCC.Core.Sweep; using OCC.Core.BRepSweep; using OCC.Core.BRepPrimAPI; using OCC.Core.Draft;)
+%netocc_csimports(using OCC.Core.GeomAbs; using OCC.Core.Standard; using OCC.Core.NCollection; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.gp; using OCC.Core.TColgp; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.TopAbs; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.TopTools; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.BRepBuilderAPI; using OCC.Core.Bisector; using OCC.Core.MAT; using OCC.Core.TColGeom2d; using OCC.Core.BRepMAT2d; using OCC.Core.AppBlend; using OCC.Core.Convert; using OCC.Core.Law; using OCC.Core.TColGeom; using OCC.Core.GeomFill; using OCC.Core.PLib; using OCC.Core.AdvApprox; using OCC.Core.AdvApp2Var; using OCC.Core.LProp; using OCC.Core.GeomLProp; using OCC.Core.Plate; using OCC.Core.GeomPlate; using OCC.Core.BRepFill; using OCC.Core.BRepAlgo; using OCC.Core.ChFiDS; using OCC.Core.BRepOffset; using OCC.Core.BRepPrim; using OCC.Core.Sweep; using OCC.Core.BRepSweep; using OCC.Core.BRepPrimAPI; using OCC.Core.Draft;)
 
 %occt_valueclass(BRepOffsetAPI_DraftAngle)
 %occt_valueclass(BRepOffsetAPI_FindContigousEdges)
@@ -127,7 +127,7 @@ public:
   Draft_ErrorStatus Status() const;
   const NCollection_List<TopoDS_Shape>& ConnectedFaces(const TopoDS_Face& F) const;
   const NCollection_List<TopoDS_Shape>& ModifiedFaces() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   void CorrectWires();
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& S);
   const NCollection_List<TopoDS_Shape>& Modified(const TopoDS_Shape& S);
@@ -169,7 +169,7 @@ public:
   BRepOffsetAPI_MakeEvolved();
   BRepOffsetAPI_MakeEvolved(const TopoDS_Shape& theSpine, const TopoDS_Wire& theProfile, GeomAbs_JoinType theJoinType = GeomAbs_Arc, bool theIsAxeProf = true, bool theIsSolid = false, bool theIsProfOnSpine = false, double theTol = 0.0000001, bool theIsVolume = false, bool theRunInParallel = false);
   const BRepFill_Evolved& Evolved() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const NCollection_List<TopoDS_Shape>& GeneratedShapes(const TopoDS_Shape& SpineShape, const TopoDS_Shape& ProfShape) const;
   const TopoDS_Shape& Top() const;
   const TopoDS_Shape& Bottom() const;
@@ -187,7 +187,7 @@ public:
   int Add(const TopoDS_Face& Support, GeomAbs_Shape Order);
   int Add(const gp_Pnt& Point);
   int Add(double U, double V, const TopoDS_Face& Support, GeomAbs_Shape Order);
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsDone() const;
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& S);
   double G0Error() const;
@@ -208,7 +208,7 @@ public:
   void SetApprox(bool ToApprox);
   void AddWire(const TopoDS_Wire& Spine);
   void Perform(double Offset, double Alt = 0.0);
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& S);
   static TopoDS_Face ConvertFace(const TopoDS_Face& theFace, double theAngleTolerance);
 };
@@ -217,9 +217,9 @@ class BRepOffsetAPI_MakeOffsetShape : public BRepBuilderAPI_MakeShape {
 public:
   BRepOffsetAPI_MakeOffsetShape();
   void PerformBySimple(const TopoDS_Shape& theS, double theOffsetValue);
-  void PerformByJoin(const TopoDS_Shape& S, double Offset, double Tol, BRepOffset_Mode Mode = BRepOffset_Skin, bool Intersection = false, bool SelfInter = false, GeomAbs_JoinType Join = GeomAbs_Arc, bool RemoveIntEdges = false);
+  void PerformByJoin(const TopoDS_Shape& S, double Offset, double Tol, BRepOffset_Mode Mode = BRepOffset_Skin, bool Intersection = false, bool SelfInter = false, GeomAbs_JoinType Join = GeomAbs_Arc, bool RemoveIntEdges = false, const Message_ProgressRange& theRange = Message_ProgressRange());
   const BRepOffset_MakeOffset& MakeOffset() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& S);
   const NCollection_List<TopoDS_Shape>& Modified(const TopoDS_Shape& S);
   bool IsDeleted(const TopoDS_Shape& S);
@@ -231,7 +231,7 @@ public:
   BRepOffsetAPI_MakePipe(const TopoDS_Wire& Spine, const TopoDS_Shape& Profile);
   BRepOffsetAPI_MakePipe(const TopoDS_Wire& Spine, const TopoDS_Shape& Profile, GeomFill_Trihedron aMode, bool ForceApproxC1 = false);
   const BRepFill_Pipe& Pipe() const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   TopoDS_Shape FirstShape();
   TopoDS_Shape LastShape();
   const NCollection_List<TopoDS_Shape>& Generated(const TopoDS_Shape& S);
@@ -261,7 +261,7 @@ public:
   void SetForceApproxC1(bool ForceApproxC1);
   void SetTransitionMode(BRepBuilderAPI_TransitionMode Mode = BRepBuilderAPI_Transformed);
   void Simulate(int NumberOfSection, NCollection_List<TopoDS_Shape>& Result);
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool MakeSolid();
   TopoDS_Shape FirstShape();
   TopoDS_Shape LastShape();
@@ -277,15 +277,15 @@ class BRepOffsetAPI_MakeThickSolid : public BRepOffsetAPI_MakeOffsetShape {
 public:
   BRepOffsetAPI_MakeThickSolid();
   void MakeThickSolidBySimple(const TopoDS_Shape& theS, double theOffsetValue);
-  void MakeThickSolidByJoin(const TopoDS_Shape& S, const NCollection_List<TopoDS_Shape>& ClosingFaces, double Offset, double Tol, BRepOffset_Mode Mode = BRepOffset_Skin, bool Intersection = false, bool SelfInter = false, GeomAbs_JoinType Join = GeomAbs_Arc, bool RemoveIntEdges = false);
-  void Build();
+  void MakeThickSolidByJoin(const TopoDS_Shape& S, const NCollection_List<TopoDS_Shape>& ClosingFaces, double Offset, double Tol, BRepOffset_Mode Mode = BRepOffset_Skin, bool Intersection = false, bool SelfInter = false, GeomAbs_JoinType Join = GeomAbs_Arc, bool RemoveIntEdges = false, const Message_ProgressRange& theRange = Message_ProgressRange());
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const NCollection_List<TopoDS_Shape>& Modified(const TopoDS_Shape& S);
 };
 
 class BRepOffsetAPI_MiddlePath : public BRepBuilderAPI_MakeShape {
 public:
   BRepOffsetAPI_MiddlePath(const TopoDS_Shape& aShape, const TopoDS_Shape& StartShape, const TopoDS_Shape& EndShape);
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
 };
 
 class BRepOffsetAPI_NormalProjection : public BRepBuilderAPI_MakeShape {
@@ -298,7 +298,7 @@ public:
   void SetMaxDistance(double MaxDist);
   void SetLimit(bool FaceBoundaries = true);
   void Compute3d(bool With3d = true);
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   bool IsDone() const;
   const TopoDS_Shape& Projection() const;
   const TopoDS_Shape& Couple(const TopoDS_Edge& E) const;
@@ -324,7 +324,7 @@ public:
   int MaxDegree() const;
   bool UseSmoothing() const;
   void CriteriumWeight(double& W1, double& W2, double& W3) const;
-  void Build();
+  void Build(const Message_ProgressRange& theRange = Message_ProgressRange());
   const TopoDS_Shape& FirstShape() const;
   const TopoDS_Shape& LastShape() const;
   TopoDS_Shape GeneratedFace(const TopoDS_Shape& Edge) const;

@@ -15,10 +15,10 @@
 %import "TCollection.i"
 %import "TColStd.i"
 %import "NCollection.i"
-%import "Resource.i"
 %import "Quantity.i"
 %import "OSD.i"
 %import "Message.i"
+%import "Resource.i"
 %import "CDM.i"
 %import "LDOM.i"
 %import "Storage.i"
@@ -88,7 +88,7 @@
 %import "IGESGeom.i"
 %import "IGESSolid.i"
 #endif
-%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Resource; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.IGESData; using OCC.Core.IGESBasic; using OCC.Core.IGESGeom; using OCC.Core.IGESSolid;)
+%netocc_csimports(using OCC.Core.Standard; using OCC.Core.TCollection; using OCC.Core.TColStd; using OCC.Core.NCollection; using OCC.Core.Quantity; using OCC.Core.OSD; using OCC.Core.Message; using OCC.Core.Resource; using OCC.Core.CDM; using OCC.Core.LDOM; using OCC.Core.Storage; using OCC.Core.PCDM; using OCC.Core.CDF; using OCC.Core.TDF; using OCC.Core.TDocStd; using OCC.Core.TopAbs; using OCC.Core.gp; using OCC.Core.TopLoc; using OCC.Core.TopoDS; using OCC.Core.GeomAbs; using OCC.Core.TColgp; using OCC.Core.Geom; using OCC.Core.GeomEval; using OCC.Core.Geom2d; using OCC.Core.Geom2dEval; using OCC.Core.Adaptor2d; using OCC.Core.math; using OCC.Core.Adaptor3d; using OCC.Core.Geom2dAdaptor; using OCC.Core.GeomAdaptor; using OCC.Core.BRepAdaptor; using OCC.Core.IntSurf; using OCC.Core.Intf; using OCC.Core.IntCurveSurface; using OCC.Core.IntCurvesFace; using OCC.Core.BRepClass3d; using OCC.Core.IntRes2d; using OCC.Core.IntCurve; using OCC.Core.Geom2dInt; using OCC.Core.HatchGen; using OCC.Core.Geom2dHatch; using OCC.Core.AppParCurves; using OCC.Core.AppCont; using OCC.Core.Approx; using OCC.Core.Extrema; using OCC.Core.GeomAPI; using OCC.Core.IntAna; using OCC.Core.ApproxInt; using OCC.Core.IntImp; using OCC.Core.GeomInt; using OCC.Core.IntTools; using OCC.Core.BVH; using OCC.Core.IntPatch; using OCC.Core.BOPTools; using OCC.Core.Bnd; using OCC.Core.TopTools; using OCC.Core.MoniTool; using OCC.Core.Interface; using OCC.Core.IFGraph; using OCC.Core.IFSelect; using OCC.Core.TColGeom; using OCC.Core.ShapeExtend; using OCC.Core.TShort; using OCC.Core.Poly; using OCC.Core.BRep; using OCC.Core.BRepTools; using OCC.Core.ShapeBuild; using OCC.Core.ShapeProcess; using OCC.Core.XSAlgo; using OCC.Core.Transfer; using OCC.Core.XSControl; using OCC.Core.DE; using OCC.Core.IGESData; using OCC.Core.IGESBasic; using OCC.Core.IGESGeom; using OCC.Core.IGESSolid;)
 
 %occt_valueclass(IGESToBRep)
 %occt_transient(IGESToBRep_Actor)
@@ -127,7 +127,7 @@ public:
   void SetContinuity(int continuity = 0);
   int GetContinuity() const;
   bool Recognize(const opencascade::handle<Standard_Transient>& start);
-  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP);
+  opencascade::handle<Transfer_Binder> Transfer(const opencascade::handle<Standard_Transient>& start, const opencascade::handle<Transfer_TransientProcess>& TP, const Message_ProgressRange& theProgress = Message_ProgressRange());
   double UsedTolerance() const;
   static const char* get_type_name();
   static const opencascade::handle<Standard_Type>& get_type_descriptor();
@@ -175,8 +175,8 @@ public:
   int GetContinuity() const;
   void SetTransferProcess(const opencascade::handle<Transfer_TransientProcess>& TP);
   opencascade::handle<Transfer_TransientProcess> GetTransferProcess() const;
-  TopoDS_Shape TransferCurveAndSurface(const opencascade::handle<IGESData_IGESEntity>& start);
-  TopoDS_Shape TransferGeometry(const opencascade::handle<IGESData_IGESEntity>& start);
+  TopoDS_Shape TransferCurveAndSurface(const opencascade::handle<IGESData_IGESEntity>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  TopoDS_Shape TransferGeometry(const opencascade::handle<IGESData_IGESEntity>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
   void SendFail(const opencascade::handle<IGESData_IGESEntity>& start, const Message_Msg& amsg);
   void SendWarning(const opencascade::handle<IGESData_IGESEntity>& start, const Message_Msg& amsg);
   void SendMsg(const opencascade::handle<IGESData_IGESEntity>& start, const Message_Msg& amsg);
@@ -196,13 +196,13 @@ public:
   IGESToBRep_BRepEntity();
   IGESToBRep_BRepEntity(const IGESToBRep_CurveAndSurface& CS);
   IGESToBRep_BRepEntity(double eps, double epsGeom, double epsCoeff, bool mode, bool modeapprox, bool optimized);
-  TopoDS_Shape TransferBRepEntity(const opencascade::handle<IGESData_IGESEntity>& start);
+  TopoDS_Shape TransferBRepEntity(const opencascade::handle<IGESData_IGESEntity>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
   TopoDS_Vertex TransferVertex(const opencascade::handle<IGESSolid_VertexList>& start, int index);
   TopoDS_Shape TransferEdge(const opencascade::handle<IGESSolid_EdgeList>& start, int index);
   TopoDS_Shape TransferLoop(const opencascade::handle<IGESSolid_Loop>& start, const TopoDS_Face& Face, const gp_Trsf2d& trans, double uFact);
   TopoDS_Shape TransferFace(const opencascade::handle<IGESSolid_Face>& start);
-  TopoDS_Shape TransferShell(const opencascade::handle<IGESSolid_Shell>& start);
-  TopoDS_Shape TransferManifoldSolid(const opencascade::handle<IGESSolid_ManifoldSolid>& start);
+  TopoDS_Shape TransferShell(const opencascade::handle<IGESSolid_Shell>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  TopoDS_Shape TransferManifoldSolid(const opencascade::handle<IGESSolid_ManifoldSolid>& start, const Message_ProgressRange& theProgress = Message_ProgressRange());
 };
 
 class IGESToBRep_BasicCurve : public IGESToBRep_CurveAndSurface {
@@ -269,8 +269,8 @@ public:
   opencascade::handle<IGESToBRep_Actor> Actor() const;
   void Clear();
   bool Check(bool withprint) const;
-  void TransferRoots(bool onlyvisible = true);
-  bool Transfer(int num);
+  void TransferRoots(bool onlyvisible = true, const Message_ProgressRange& theProgress = Message_ProgressRange());
+  bool Transfer(int num, const Message_ProgressRange& theProgress = Message_ProgressRange());
   bool IsDone() const;
   double UsedTolerance() const;
   int NbShapes() const;

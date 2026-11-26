@@ -22,7 +22,7 @@ internal sealed partial class InterfaceWriter
 {
   private void WriteClass(StringBuilder body, ClassModel c, ModuleContext module)
   {
-    var baseName = c.Name == RootTransient
+    var baseName = c.Name == RootTransient || Kind(c) == WrapKind.VtkDerived
       ? null
       : c.Ancestors.FirstOrDefault(a => registry.Class(a) is { Kind: not WrapKind.ValueType })
         ?? (Kind(c) == WrapKind.Transient ? RootTransient : null);
@@ -39,8 +39,17 @@ internal sealed partial class InterfaceWriter
                       ? $"class {c.Name} {{"
                       : $"class {c.Name} : public {baseName} {{")
       .AppendLine("public:");
-    Constructors(body, c, module);
+    if (Kind(c) != WrapKind.VtkDerived)
+    {
+      Constructors(body, c, module, c.Constructors, IsDirector(c));
+    }
+
     Methods(body, c, module);
+    if (IsDirector(c))
+    {
+      DirectorMembers(body, c, module);
+    }
+
     body.AppendLine("};").AppendLine();
     foreach (var name in (c.Operators ?? []).Select(o => o.Name)
              .Where(n => !MemberRules.IsCoveredOperator(n, c))
@@ -50,35 +59,43 @@ internal sealed partial class InterfaceWriter
     }
   }
 
-  private void Constructors(StringBuilder body, ClassModel c, ModuleContext module)
+  /// <param name="ctors">
+  /// The constructors to declare: the public ones, or a director's protected ones.
+  /// </param>
+  /// <param name="isDirector">
+  /// A director class: SWIG constructs the C++ subclass that calls C# back, so an abstract class
+  /// gets its constructors too.
+  /// </param>
+  private void Constructors(StringBuilder body, ClassModel c, ModuleContext module,
+                            IReadOnlyList<ConstructorModel> ctors, bool isDirector = false)
   {
     var label = $"{c.Name}::{c.Name}";
     // an object the shim creates is deleted by its proxy: without a usable destructor, the
     // finalizer would throw
     var deletable = c.Traits.HasPublicDestructor || Kind(c) == WrapKind.Transient;
-    if (!c.Traits.IsCreatable && c.Constructors.Count > 0)
+    if (!c.Traits.IsCreatable && ctors.Count > 0)
     {
       module.Skipped.Add($"{label}: the class declares only placement forms of operator new");
     }
-    else if (!deletable && !c.Traits.IsAbstract && c.Constructors.Count > 0)
+    else if (!deletable && !c.Traits.IsAbstract && ctors.Count > 0)
     {
       module.Skipped.Add(
         $"{label}: the destructor isn't public or doesn't link, so C# couldn't release the object");
     }
 
-    if (c.Traits.IsAbstract || !c.Traits.IsCreatable || !deletable)
+    if ((c.Traits.IsAbstract && !isDirector) || !c.Traits.IsCreatable || !deletable)
     {
       return;
     }
 
-    var overloads = c.Constructors.Select(o => o.Parameters).ToList();
+    var overloads = ctors.Select(o => o.Parameters).ToList();
+    var picked = c.Constructors.Select(o => o.Parameters).Concat(HiddenConstructors(c)).ToList();
     var referenced = Referenced(c);
     List<(ConstructorModel Model, MappedMember Member)> constructors = [];
-    foreach (var ctor in c.Constructors)
+    foreach (var ctor in ctors)
     {
-      if (Declarable(module.Config, label, ctor.Parameters, overloads,
-                     overloads.Concat(HiddenConstructors(c)), NotCallable(label, ctor),
-                     module.Skipped) is { } declared
+      if (Declarable(module.Config, label, ctor.Parameters, overloads, picked,
+                     NotCallable(label, ctor), module.Skipped) is { } declared
           && Map(c.Name, c.Name, declared, module, KeptStream("a constructor")) is { } member)
       {
         constructors.Add((ctor, member));
@@ -142,9 +159,11 @@ internal sealed partial class InterfaceWriter
   /// </summary>
   private bool IsKept(CppType type, MappedType mapped, HashSet<string> referenced)
   {
+    // a VTK object counts its references: what keeps it registers one (NetVtkInterop.i)
     if (Target(type) is not { } target
         || mapped.CsType == SignatureMapper.CsAddress
-        || registry.Class(target) is { Kind: WrapKind.ValueType })
+        || registry.Class(target) is
+          { Kind: WrapKind.ValueType or WrapKind.Vtk or WrapKind.VtkDerived })
     {
       return false;
     }
@@ -191,6 +210,13 @@ internal sealed partial class InterfaceWriter
           module.Skipped.Add($"{label}: {rangeSkip}");
         }
 
+        continue;
+      }
+
+      // a VTK class's New() is its C# constructor (%netvtk_new), and NewInstance() a new object of
+      // its class, which C# makes with new
+      if (Kind(c) == WrapKind.VtkDerived && m.Name is "New" or "NewInstance")
+      {
         continue;
       }
 
@@ -270,7 +296,13 @@ internal sealed partial class InterfaceWriter
 
       if (accessor is null)
       {
-        body.AppendLine($"  {modifier}{text.Declaration}{qualifier};");
+        // a director's virtual member: OCCT calls a C# override (Directors.i)
+        var overridable = IsDirector(c)
+                          && m.IsVirtual
+                          && !m.IsStatic
+                          && Overridable(c, m, member, module);
+        body.AppendLine(
+          $"  {modifier}{(overridable ? "virtual " : "")}{text.Declaration}{qualifier}{(overridable && m.IsPure ? " = 0" : "")};");
       }
       else
       {

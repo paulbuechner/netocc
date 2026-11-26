@@ -9,6 +9,7 @@
 #include <Geom_Curve.hxx>
 #include <Geom_Plane.hxx>
 #include <Geom_Surface.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_CellFilter.hxx>
 #include <NCollection_DataMap.hxx>
 #include <NCollection_List.hxx>

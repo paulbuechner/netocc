@@ -9,6 +9,7 @@
 #include <GeomAbs_Shape.hxx>
 #include <Geom_Curve.hxx>
 #include <Geom_Surface.hxx>
+#include <Message_ProgressRange.hxx>
 #include <NCollection_IndexedMap.hxx>
 #include <NCollection_List.hxx>
 #include <OSD_FileSystem.hxx>

@@ -70,6 +70,7 @@ USINGS
 %include "Types.i"
 %include "References.i"
 %include "Exceptions.i"
+%include "Directors.i"
 %include "Strings.i"
 %include "ValueTypes.i"
 %include "Std.i"

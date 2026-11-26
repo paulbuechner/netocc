@@ -6,19 +6,8 @@ XCAF (Extended CAF) documents hold what a STEP file has beyond geometry: product
 
 A table made of a plate and one post placed four times:
 
-```mermaid
-flowchart TD
-    main["0:1 main"] --> shapes["0:1:1 shapes<br/>XCAFDoc_ShapeTool"]
-    main --> colors["0:1:2 colors<br/>XCAFDoc_ColorTool"]
-    main --> layers["0:1:3 layers<br/>XCAFDoc_LayerTool"]
-    shapes --> plate["0:1:1:1 plate<br/><i>a part: a shape</i>"]
-    shapes --> post["0:1:1:2 post<br/><i>a part</i>"]
-    shapes --> table["0:1:1:3 table<br/><i>an assembly</i>"]
-    table --> c1["0:1:1:3:1<br/><i>a component: plate at its place</i>"]
-    table --> c2["0:1:1:3:2 ... 0:1:1:3:5<br/><i>components: post, four places</i>"]
-    c1 -.->|refers to| plate
-    c2 -.->|refers to| post
-```
+<img class="diagram-light" src="../assets/xcaf-labels.svg" width="800" height="500" alt="An XCAF document's label tree" loading="lazy">
+<img class="diagram-dark" src="../assets/xcaf-labels-dark.svg" width="800" height="500" alt="An XCAF document's label tree" loading="lazy">
 
 | Label | `XCAFDoc_ShapeTool` test | Holds |
 |---|---|---|
@@ -42,6 +31,18 @@ Walk the tree from the free shapes, following references and composing locations
 [!code-csharp[](../samples/Xcaf.cs#read-assembly)]
 
 Colors come in three kinds: `XCAFDoc_ColorGen` (the whole shape), `XCAFDoc_ColorSurf` (faces), `XCAFDoc_ColorCurv` (edges). Readers put a STEP file's colors where the file had them; ask for more than one kind. Faces can have their own colors: `XCAFDoc_ShapeTool.GetSubShapes` lists the labels of colored sub-shapes.
+
+## A document of your own
+
+`XCAFApp_Application` is one per process. An application of your own keeps its documents apart: define the XDE formats on it, and set a new document's XDE labels up.
+
+[!code-csharp[](../samples/Xcaf.cs#own-application)]
+
+## Editing parts
+
+An assembly's shape is the compound of its components, which OCCT doesn't rebuild when a part changes. `UpdateAssemblies` rebuilds them after an edit, visiting every assembly and component of the document; after one part changed, rebuild only the assemblies above it:
+
+[!code-csharp[](../samples/Xcaf.cs#update-assembly)]
 
 ## Showing a document
 

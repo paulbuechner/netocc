@@ -56,8 +56,8 @@ public:
   opencascade::handle<TDF_Attribute> NewEmpty() const;
   bool Paste(const BinObjMgt_Persistent& Source, const opencascade::handle<TDF_Attribute>& Target, BinObjMgt_RRelocationTable& RelocTable) const;
   void Paste(const opencascade::handle<TDF_Attribute>& Source, BinObjMgt_Persistent& Target, NCollection_IndexedMap<opencascade::handle<Standard_Transient>, NCollection_DefaultHasher<opencascade::handle<Standard_Transient>>>& RelocTable) const;
-  void ReadShapeSection(std::istream& theIS);
-  void WriteShapeSection(std::ostream& theOS, int theDocVer);
+  void ReadShapeSection(std::istream& theIS, const Message_ProgressRange& therange = Message_ProgressRange());
+  void WriteShapeSection(std::ostream& theOS, int theDocVer, const Message_ProgressRange& therange = Message_ProgressRange());
   void Clear();
   bool IsWithTriangles() const;
   bool IsWithNormals() const;

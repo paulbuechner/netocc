@@ -28,10 +28,7 @@ internal sealed record MemberText(string Signature, string Declaration,
 /// A member whose parameters map: what <see cref="Overloads.Claim"/> weighs and
 /// <see cref="Overloads.Declare"/> writes.
 /// </summary>
-/// <param name="Parameters">
-/// The parameters a declaration keeps (<see cref="MemberRules.WithoutProgressDefaults"/>) with
-/// their mappings.
-/// </param>
+/// <param name="Parameters">The parameters a declaration keeps, with their mappings.</param>
 internal sealed record MappedMember(string Label, string Name,
                                     List<(ParameterModel Parameter, MappedType Type)> Parameters)
 {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 544" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="architecture-call-title architecture-call-desc" width="800" height="544">
+        <title id="architecture-call-title">A call</title>
+        <desc id="architecture-call-desc">Constructing BRepPrimAPI_MakeBox from C# P/Invokes into NetOccModelingAlgorithms, which constructs it in TKPrim and hands the pointer to the proxy that owns it; Shape() P/Invokes again and returns a new TopoDS_Shape as a TopoDS_Shape proxy.</desc>
+        <defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="544" rx="12"/></clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+          <marker id="arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bf4520"/></marker>
+        </defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- The managed/native boundary each P/Invoke crosses. -->
+        <line x1="396" y1="40" x2="396" y2="504" stroke="rgba(45,49,66,0.16)" stroke-width="1"/>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" letter-spacing="0.14em">
+          <text x="384" y="52" text-anchor="end">MANAGED</text>
+          <text x="408" y="52">NATIVE</text>
+        </g>
+
+        <!-- Lifelines. -->
+        <g stroke="rgba(45,49,66,0.22)" stroke-width="1" stroke-dasharray="3,3">
+          <line x1="88" y1="112" x2="88" y2="504"/>
+          <line x1="300" y1="112" x2="300" y2="504"/>
+          <line x1="504" y1="112" x2="504" y2="504"/>
+          <line x1="712" y1="112" x2="712" y2="504"/>
+        </g>
+
+        <!-- Activation bars. -->
+        <g fill="#ebebec" stroke="#4f5d75" stroke-width="0.8">
+          <rect x="296" y="152" width="8" height="160"/>
+          <rect x="296" y="360" width="8" height="120"/>
+          <rect x="500" y="200" width="8" height="112"/>
+          <rect x="500" y="408" width="8" height="36"/>
+          <rect x="708" y="236" width="8" height="32"/>
+        </g>
+
+        <!-- Messages: calls solid, returns dashed, the two P/Invokes accent. -->
+        <g fill="none" stroke-width="1.2">
+          <path d="M88,152 H294" stroke="#4f5d75" marker-end="url(#arrow)"/>
+          <path d="M304,200 H498" stroke="#bf4520" marker-end="url(#arrow-accent)"/>
+          <path d="M508,236 H706" stroke="#4f5d75" marker-end="url(#arrow)"/>
+          <path d="M708,268 H510" stroke="#4f5d75" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+          <path d="M500,312 H306" stroke="#4f5d75" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+          <path d="M88,360 H294" stroke="#4f5d75" marker-end="url(#arrow)"/>
+          <path d="M304,408 H498" stroke="#bf4520" marker-end="url(#arrow-accent)"/>
+          <path d="M500,444 H306" stroke="#4f5d75" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+          <path d="M296,480 H90" stroke="#4f5d75" stroke-dasharray="5,4" marker-end="url(#arrow)"/>
+        </g>
+
+        <!-- Message labels: code verbatim, prose in caps. -->
+        <g fill="#f5f5f5">
+          <rect x="104" y="132" width="176" height="12" rx="2"/>
+          <rect x="312" y="168" width="176" height="24" rx="2"/>
+          <rect x="520" y="216" width="176" height="12" rx="2"/>
+          <rect x="580" y="248" width="56" height="12" rx="2"/>
+          <rect x="360" y="280" width="80" height="24" rx="2"/>
+          <rect x="164" y="340" width="56" height="12" rx="2"/>
+          <rect x="316" y="376" width="172" height="24" rx="2"/>
+          <rect x="352" y="424" width="96" height="12" rx="2"/>
+          <rect x="144" y="460" width="96" height="12" rx="2"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" text-anchor="middle">
+          <text x="192" y="141">new BRepPrimAPI_MakeBox(10, 20, 30)</text>
+          <text x="400" y="177" fill="#bf4520" letter-spacing="0.06em">P/INVOKE</text>
+          <text x="400" y="189">new_BRepPrimAPI_MakeBox(10, 20, 30)</text>
+          <text x="608" y="225">new BRepPrimAPI_MakeBox(10, 20, 30)</text>
+          <text x="608" y="257" letter-spacing="0.06em">POINTER</text>
+          <text x="400" y="289" letter-spacing="0.06em">POINTER,</text>
+          <text x="400" y="301" letter-spacing="0.06em">OWNED BY PROXY</text>
+          <text x="192" y="349">Shape()</text>
+          <text x="400" y="385" fill="#bf4520" letter-spacing="0.06em">P/INVOKE</text>
+          <text x="400" y="397">BRepPrimAPI_MakeBox_Shape(pointer)</text>
+          <text x="400" y="433">a new TopoDS_Shape</text>
+          <text x="192" y="469">TopoDS_Shape proxy</text>
+        </g>
+
+        <!-- Participants, after the lifelines. -->
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142" text-anchor="middle">
+          <rect x="40" y="64" width="96" height="48" rx="6" fill="#e4e6e8" stroke="#5a6580"/>
+          <text x="88" y="92">your code</text>
+          <rect x="216" y="64" width="168" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="300" y="85">BRepPrimAPI_MakeBox</text>
+          <rect x="410" y="64" width="188" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="504" y="92">NetOccModelingAlgorithms</text>
+          <rect x="664" y="64" width="96" height="48" rx="6" fill="#efeff0" stroke="rgba(45,49,66,0.30)"/>
+          <text x="712" y="85">TKPrim</text>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="9" fill="#4f5d75" text-anchor="middle">
+          <text x="300" y="100">C#</text>
+          <text x="712" y="100">OCCT</text>
+        </g>
+      </g></svg>

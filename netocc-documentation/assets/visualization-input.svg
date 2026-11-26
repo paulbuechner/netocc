@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 800 364" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="visualization-input-title visualization-input-desc" width="800" height="364">
+        <title id="visualization-input-title">Mouse input</title>
+        <desc id="visualization-input-desc">The window procedure passes mouse positions to AIS_ViewController, which returns true when something changed; FlushViewEvents then has the controller rotate, pan or zoom the V3d_View's camera and redraw it.</desc>
+        <defs><style>@font-face{font-family:'Geist';font-weight:600;font-style:normal;src:url(data:font/woff;base64,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) format('woff')}
+@font-face{font-family:'Geist Mono';font-weight:400;font-style:normal;src:url(data:font/woff;base64,d09GRgABAAAAAA0EABAAAAAAEIAAAbN1AAAAAAAAAAAAAAAAAAAAAAAAAABHREVGAAAMWAAAABwAAAAcADgAN0dQT1MAAAx0AAAAIAAAACBEdkx1R1NVQgAADJQAAAApAAAAKrj6uPRPUy8yAAAB4AAAAEwAAABgVvhkaFNUQVQAAAzAAAAAQQAAAEjniss3Y21hcAAAAoAAAAB5AAAAnANnA0hnYXNwAAAMUAAAAAgAAAAIAAAAEGdseWYAAANgAAAIggAAC6SNDwRCaGVhZAAAAWwAAAA2AAAANiz72dhoaGVhAAABpAAAACAAAAAkBkgD7mhtdHgAAAIsAAAAVAAAALRmvA0XbG9jYQAAAwQAAABcAAAAXEOpRldtYXhwAAABxAAAABoAAAAgADQARm5hbWUAAAvkAAAAUwAAAGYIeBVOcG9zdAAADDgAAAAWAAAAIP+fADNwcmVwAAAC/AAAAAcAAAAHaAaMhQABAAAAAbN1b0b2FV8PPPUAAwPoAAAAAOVYqlcAAAAA5jM4qwAU/14CRAMgAAAABgACAAAAAAAAeJxjYGRgYH777yYDA1MEg8i/FUwuzC8YUIEuAJbmBjt4nGNgZGBg0GUwZmBiEARiEA8BgHwAC8oAewAAeJxjYGGKYJzAwMrAwNTFFMHAwOANoRnjGIwY7YCijAycDDDAyIAEwoKcfRgOMCgwVDK//XeTgYHFgbELpoZJiOkYkFJgYAMA8EQLEnicY/zCYMQUwSAFxGpAHAXFKVC+DRAHADFIjRuSGhBbAyovB8UgNWZo8vZQswKgOAqqJwSIrZDEYHZEQWkRqFkmQMwAxB+AeAEIMzAwMgAA6HAcLHicY2BgYGJgYGAGYhEgyQimWRg6gLQcgwBQhI9BgUGTQYfBkcGTIYAhiCGcIYohlSGTIYehgKHy/3+gOgUGDbC8M4MvUD4EKJ/IkMGQzZDHUASU52Bg+v/3/4H/+//v+b/7/67/O/5v+r8BCNf/Xwe2DQ8AAHONIpoAAAC4Af+FsASNAAAAABUALgBdAH0AkwCpAOMBAAEVATMBTAF+AaEB0gHjAgECFAIzAkkCkgLLAvoDMwNlA4kDlAOqA8ID3wQFBDEEaASOBNME8AUSBSQFQAVZBXgFeAWIBacFxQXSeJxtVm1MW9cZvueY2AYM5mKMQ0II9jU2Bs8YX+wLxnZi/IF9HX8AF2OMSZcMMkITlELCEEuihG356CJI1yhT/6RbptFonaamldKsqiq1XWg0TW0mbSTN9mOLtvVPlUVTpkVTfNl7rh0CXYV8bYnzfj3P8z7nUphyrE2ij2SNlIxSUNQQraeb9LTegS6KV5FV/MNl2Y2nvEPWT1GY2gYPH16h5FQZRc1oWA0jk3GcXrft3tF7uRs36AZU2YBX8m48lz/3W0GgEGVae4SteJXaQVEhg8nk7HC5WEetTmEyMQa5XFtTW8s6XJxOLke2wVmvd3Zw7/drc/RAZ1e8uTne5UurRzRnqrLL0zPLI9+dkscTgdO5kVOB9OCWYz+AfrLQjwP6KaM00A8NmWu1NXI5Y4akzg4Tw2Sv5c7HYudz/fGJmZmJOF4ZeH16+kq/cPbs2fPQHYmvhvhyEq3XPvvLorfEZZQQ30b78Yrw9/4vyCRjcLZeqlU4y5EHPYZuirPNKCW+hVf6LeIX/eKnxalbYGrTpqm/OraLY5wszZh1lRi1xI4Fd80O+MeD6iyd3MUlLC3JLjbagn/x31TJ1sr2eNXAz+cBBPe3A/IeoYCC8wVvv/jaNSWb+gbU9BT7U0tI0Ga9Ap4MrYNGPWkrumBNp63iUSteEd8wGNBw3o1GDQbxZxCZgkhlEQXSkFOvZWhWm7p+Hd28fl3ADYKQfyBQcNIBJ02FGuMykh0UoJG+ZUh+RpleuNB8YSGtPJPCpvzLIISbOAJimM3fh9jwRqxZJHWHODo8j8rV6Xnx32o4/x0ZvgAB50vyM8AuQdEBKKqpnZtxJBybAT+geB1PZBWOeb3HhMKTI/LhpGdVenl2bjmdXp6bXU4L/lOjo6d7ek6Pjp7yU0UFkYlUlHaTghiaXtfQPX7K45niF+aEVEqYwysd+4LBfR3il2gitNsfJFnIbLWQpZZ0KmUhSRRmoFzHmG14Y7rwvSMLtoippLdXXp2mZXVO26UFPpHgF/DKS99yxK0yVYkn+LsP9RaN+ABNB7y+HoJ8M1SwQwXY0H1FhhD6HCs/x9PAziLhH9Ai/NMSVk6At4aITPohR9Yjp9LJWCyZPlW1OI8+FR2ZXC5DvudJbANkdxeyz8gkTmWPV3MfbP0gtwqsTOPFvHvDKfX6KekkI2NlhxLZnrJELlHWk00s8Ft5iDqEg/n38SWg056/s0E7pURlSA8jIL3WgS6IZ9B98Si6lMb1Qjr/N4Hg6Vp7DGcbYH8gaqjAPMd1ELIVZkkDWuCcZbXAFPzXzFZiSQ9OhSSGfzhStr6ht71dnE81rH4p+83JqiqDfJvK0LYVVSmcKZMrYrzqamFVRn9rMEYbgz3tNkVsdGb8z9WVPEK17WYDt5NvClhtjWUWfZOF6AQ6sksMGwtaNHMKhqyZD29QpLPjuR7jLWFHRcWWPUJpaVu4JXyA4w7EAvG4vz3c1BRS1TuNapCSeF9bZ28MHh8cPB5MTY7kDrZlfJ5hO2E8DBXrAYMdX+sh2pqCcYJ1uAvy7M55yjOqXjY6MBBlY6pMuW+vKnhCEI6HWvu75c6ug7ncQY9H3j1kJwg3rz1G4sZ5nueni560YcOgGiqXRgi3htpKS4U9WypUbLjJHmpqCrf743FVYYRGe50WmfLuObXRWZ+yD3t8mbaDuZFJUnEXzFMH8+iIjjZts1a/fgvI9FI95Igd7u5+MRqa9Ignt/SFOgIVWe2xfyKTPNHtTRbH8h8frhtMtzcrekdQKB6JFT1aKU1V8MAiOWBQEjFaekwoK7OHLV1Ji8B17ob7QLyLrZ3b2ZFu8U3kjfMJXvzN2prkiHb8SYmJ3Hhw21l3UEWftONq8ArJJ3WwhmCTDJP6o+Ux2vnuuwKP3rDwYidfvFla1t2ORqxCw5gV2qyA8JHf/+nAryagdBva8VfxsydTLwM6z9y7XPJW0i7cDSBzegtZFNrYeOJ0NCbeRX9pwNsajXwsmv+ygedJV2RhSiRcSSXdV2eGoYW4rKzMyVu8fS2C22PpMePqs6Vt3gbXSCeZmo8zgXbxY8KRGzhqgFxqavvXOm5B30QN1uhhj+dwtPjs6yMfwguIAKQgnAimiN7Ih+RNrU1K+6ylGPKGAV0+TystMEdzm7YnlcCqmlFvctxuH09aettLVZdDyWTIFmgyBi/ja3Ny3+7EyWj0ZKLeYagUn9yfGB2dsGb8/oy1iH098LRV4klBiCpUBLIkQMysNvuOxfLOHaVSGew6fMjsrG++wzejzyz8ojwU2LOz2yo+aJbQTQEiSujc9mzrJamStQBbf74zYPESLrW6BkyGQq7QWFdJRtm7q9tf63HHh4y2rL9nuEOZkeudRnfnNre9P2vkXlDZ+xzy9k6DUdegLau0+FptkZa2uE1e31pnM2xv1CgrLB5rW8AIGDokbS8WFLJv3eFZLSIKmY/vEQzMotiCViM8eiqWNDE8ul1QCHgXegJ41Pz/zcA4yauXIrlX4Lp8ESFVUZVVvbgXDYofxaN9vciTf/g9hb933b2rYRck7wfb/8+t3JUruVu4Wgyi9/MP4Qzkx8HifkhnNNLtIDtxMBdK9CdCuYnJcBjOh9ER8SJ6L/+QvGJBnAviDBBHdkUjY3UcKyPL4vr41/t/eG7s5of7X30VVSF8+7b4VPzX6ipEdICejBBRBWpyEuvgmEJTIKdz3vrtCs2OW7mf/jh3V+1xXuZpjQMroep7+TdbmyH60dpeNEHNk1mGyCuYVvHI5ZrzXL06f+SXBK+frP0I3cQPpZu0QDIHF4zELhpLDOr1gwkhJhgMQmwqtPRKNPrKUqj34lIksrQU2Rw9xPiwJBW2oIrHxTBBSjJFAiJLF3uLSSiEKDyOMvgTeBOn/NAXojJ4fP9+6n8XaLL5AAB4nC3KOwqAMBRE0RtNo0gWYG+W4B5sbVIHCRrwA6L7dyAWD84dHmAZqTG2ocJBsYFOVTzI/W9Pi2cmsfKyE7kJqqzeeJh0UXtm0dfFoTo/P80K2gB4nGNgZgCD/3MYjIAUIwMaAAAqlAHSAAAAAQAB//8ADwABAAAADAAAAAAAAAACAAIAAQAZAAEAGwAnAAEAAQAAAAoAHAAeAAFERkxUAAgABAAAAAD//wAAAAAAAHicY2BkYGDgYlBj0GBgcnHzCWHgy0ksyWOQYGABijP8/88ABwBtlwVdAAAAeJxjYGRgZOBgYGJgYBABkyoMTOXpGSWMQGZmSWIOoypQngUoxwwUYGJgYpwApPYA2cxAcSZGNQYQACoGANWdBXEAAAA=) format('woff')}</style><clipPath id="netocc-card"><rect width="800" height="364" rx="12"/></clipPath>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs><g clip-path="url(#netocc-card)">
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Lifelines. -->
+        <line x1="140" y1="84" x2="140" y2="324" stroke="rgba(45,49,66,0.20)" stroke-dasharray="3,3"/>
+        <line x1="420" y1="84" x2="420" y2="324" stroke="rgba(45,49,66,0.20)" stroke-dasharray="3,3"/>
+        <line x1="660" y1="84" x2="660" y2="324" stroke="rgba(45,49,66,0.20)" stroke-dasharray="3,3"/>
+
+        <!-- Activation bars: the controller holds control for each call. -->
+        <g fill="#ebebec" stroke="#4f5d75" stroke-width="0.8">
+          <rect x="416" y="124" width="8" height="40"/>
+          <rect x="416" y="212" width="8" height="88"/>
+        </g>
+
+        <!-- Calls: solid. Return: dashed. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)">
+          <line x1="140" y1="124" x2="416" y2="124"/>
+          <line x1="416" y1="164" x2="140" y2="164" stroke-dasharray="5,4"/>
+          <line x1="140" y1="212" x2="416" y2="212"/>
+          <line x1="424" y1="256" x2="660" y2="256"/>
+          <line x1="424" y1="300" x2="660" y2="300"/>
+        </g>
+
+        <!-- Message labels on paper masks. -->
+        <g fill="#f5f5f5">
+          <rect x="156" y="102" width="244" height="14" rx="2"/>
+          <rect x="232" y="142" width="92" height="14" rx="2"/>
+          <rect x="190" y="190" width="176" height="14" rx="2"/>
+          <rect x="504" y="224" width="76" height="24" rx="2"/>
+          <rect x="520" y="280" width="44" height="12" rx="2"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="9" fill="#2d3142" text-anchor="middle">
+          <text x="278" y="113">UpdateMousePosition(point, buttons, keys)</text>
+          <text x="278" y="201">FlushViewEvents(context, view)</text>
+        </g>
+        <text x="278" y="153" font-family="'Geist Mono', monospace" font-size="9" fill="#2d3142" text-anchor="middle">true<tspan font-size="8" fill="#4f5d75" letter-spacing="0.08em"> IF CHANGED</tspan></text>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#4f5d75" text-anchor="middle" letter-spacing="0.08em">
+          <text x="542" y="233">ROTATE, PAN,</text>
+          <text x="542" y="244">ZOOM CAMERA</text>
+          <text x="542" y="289">REDRAW</text>
+        </g>
+
+        <!-- Actors: the window procedure (your code), the controller (focal), the view. -->
+        <g font-family="'Geist', sans-serif" font-size="12" font-weight="600" fill="#2d3142" text-anchor="middle">
+          <rect x="60" y="40" width="160" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="60" y="40" width="160" height="44" rx="6" fill="rgba(79,93,117,0.10)" stroke="#5a6580"/>
+          <text x="140" y="66">window procedure</text>
+          <rect x="340" y="40" width="160" height="44" rx="6" fill="#f5f5f5"/>
+          <rect x="340" y="40" width="160" height="44" rx="6" fill="rgba(191,69,32,0.08)" stroke="#bf4520"/>
+          <text x="420" y="66">AIS_ViewController</text>
+          <rect x="580" y="40" width="160" height="44" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="660" y="66">V3d_View</text>
+        </g>
+      </g></svg>

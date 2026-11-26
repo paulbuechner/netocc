@@ -15,5 +15,11 @@ __pycache__/
 /.format/
 /NetOcc.Format.slnx
 
+# local development: local-dev.props (from its template) and personal solutions (NetOcc.Vtk.<user>.slnx)
+/netocc-vtk/local-dev.props
+/netocc-vtk/*.slnx
+!/netocc-vtk/NetOcc.Vtk.slnx
+!/netocc-vtk/NetOcc.Vtk.local-dev.slnx
+
 # logs of build.py, docker runs and scratch work
 /netocc-*/log/

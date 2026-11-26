@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>netocc-gen's passes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Geist', system-ui, sans-serif; background: #f5f5f5; color: #2d3142; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 3rem 2rem; }
+    .frame { max-width: 1200px; width: 100%; }
+    .diagram-container { width: 100%; overflow-x: auto; }
+    .eyebrow { font-family: 'Geist Mono', ui-monospace, monospace; font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #4f5d75; margin-bottom: 0.5rem; }
+    h1 { font-family: 'Instrument Serif', serif; font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 1.5rem; }
+    svg { width: 100%; min-width: 800px; display: block; }
+    @media print { .diagram-container { overflow-x: visible; } svg { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <p class="eyebrow">Architecture · netocc-generator/README.md</p>
+    <h1>netocc-gen's passes</h1>
+    <div class="diagram-container">
+      <svg viewBox="0 0 800 704" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="readme-architecture-title readme-architecture-desc">
+        <title id="readme-architecture-title">netocc-gen's passes</title>
+        <desc id="readme-architecture-desc">Bootstrap writes config/toolkits.yaml from OCCT's source; Parse reads it with OCCT's headers and DLLs and config/modules.yaml, Map adds the types netocc-core's hand-written .i files provide, and Emit writes netocc-core's wrapper .i files and module headers and the skip logs.</desc>
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/></marker>
+        </defs>
+        <rect width="100%" height="100%" fill="#f5f5f5"/>
+
+        <!-- Zones, left to right, each starting where its first node sits. -->
+        <g fill="rgba(45,49,66,0.02)" stroke="rgba(45,49,66,0.10)" stroke-width="0.8">
+          <rect x="40" y="40" width="200" height="416" rx="8"/>
+          <rect x="316" y="120" width="176" height="416" rx="8"/>
+          <rect x="560" y="364" width="200" height="248" rx="8"/>
+        </g>
+        <g fill="#5a6580" font-size="8" font-family="'Geist Mono', monospace" letter-spacing="0.14em">
+          <text x="56" y="57">INPUTS</text>
+          <text x="332" y="137">NETOCC-GEN</text>
+          <text x="576" y="381">OUTPUTS</text>
+        </g>
+
+        <!-- Connectors first. -->
+        <g fill="none" stroke="#4f5d75" stroke-width="1.2" marker-end="url(#arrow)">
+          <path d="M140,120 V151"/>
+          <path d="M224,176 H331"/>
+          <path d="M224,248 H331"/>
+          <path d="M224,320 H331"/>
+          <path d="M224,408 H331"/>
+          <path d="M404,344 V375"/>
+          <path d="M404,440 V471"/>
+          <path d="M476,480 H516 Q524,480 524,472 V428 Q524,420 532,420 H575"/>
+          <path d="M476,496 H575"/>
+          <path d="M476,512 H516 Q524,512 524,520 V564 Q524,572 532,572 H575"/>
+        </g>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" letter-spacing="0.06em">
+          <rect x="148" y="130" width="56" height="12" rx="2" fill="#f1f1f1"/>
+          <text x="152" y="139">BOOTSTRAP</text>
+          <rect x="246" y="388" width="64" height="12" rx="2" fill="#f5f5f5"/>
+          <text x="278" y="397" text-anchor="middle">THEIR TYPES</text>
+        </g>
+
+        <g font-family="'Geist', sans-serif" text-anchor="middle">
+          <!-- Inputs. -->
+          <rect x="56" y="72" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="72" width="168" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="140" y="92" fill="#2d3142" font-size="12" font-weight="600">OCCT 8.0.1 source</text>
+          <text x="140" y="107" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">(vcpkg buildtree)</text>
+
+          <rect x="56" y="152" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="152" width="168" height="48" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="140" y="172" fill="#2d3142" font-size="12" font-weight="600">config/toolkits.yaml</text>
+          <text x="140" y="187" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">generated</text>
+
+          <rect x="56" y="224" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="224" width="168" height="48" rx="6" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="140" y="244" fill="#2d3142" font-size="12" font-weight="600">OCCT headers + DLLs</text>
+          <text x="140" y="259" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">(vcpkg install)</text>
+
+          <rect x="56" y="296" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="296" width="168" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="140" y="324" fill="#2d3142" font-size="12" font-weight="600">config/modules.yaml</text>
+
+          <rect x="56" y="376" width="168" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="56" y="376" width="168" height="64" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="140" y="404" fill="#2d3142" font-size="12" font-weight="600">netocc-core</text>
+          <text x="140" y="419" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">hand-written .i</text>
+
+          <!-- The three passes. -->
+          <rect x="332" y="152" width="144" height="192" rx="6" fill="#f5f5f5"/>
+          <rect x="332" y="152" width="144" height="192" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="404" y="244" fill="#2d3142" font-size="12" font-weight="600">Parse</text>
+          <text x="404" y="259" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">ClangSharp/libclang</text>
+
+          <rect x="332" y="376" width="144" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="332" y="376" width="144" height="64" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="404" y="398" fill="#2d3142" font-size="12" font-weight="600">Map</text>
+          <text x="404" y="414" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">TypeRegistry,</text>
+          <text x="404" y="426" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">SignatureMapper</text>
+
+          <rect x="332" y="472" width="144" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="332" y="472" width="144" height="48" rx="6" fill="#ffffff" stroke="#2d3142"/>
+          <text x="404" y="492" fill="#2d3142" font-size="12" font-weight="600">Emit</text>
+          <text x="404" y="507" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">InterfaceWriter</text>
+
+          <!-- Outputs. -->
+          <rect x="576" y="396" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="396" width="168" height="48" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="660" y="416" fill="#2d3142" font-size="12" font-weight="600">netocc-core</text>
+          <text x="660" y="431" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">src/SWIG_files/wrapper/*.i</text>
+
+          <rect x="576" y="464" width="168" height="64" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="464" width="168" height="64" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="660" y="486" fill="#2d3142" font-size="12" font-weight="600">netocc-core</text>
+          <text x="660" y="502" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">src/SWIG_files/headers/</text>
+          <text x="660" y="514" fill="#4f5d75" font-size="9" font-family="'Geist Mono', monospace">*_module.hxx</text>
+
+          <rect x="576" y="548" width="168" height="48" rx="6" fill="#f5f5f5"/>
+          <rect x="576" y="548" width="168" height="48" rx="6" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="660" y="576" fill="#2d3142" font-size="12" font-weight="600">log/skips/*.txt</text>
+        </g>
+
+        <!-- Legend: the two fills that need decoding. -->
+        <line x1="40" y1="636" x2="760" y2="636" stroke="rgba(45,49,66,0.10)" stroke-width="0.8"/>
+        <g font-family="'Geist Mono', monospace" font-size="8" fill="#5a6580" letter-spacing="0.14em">
+          <text x="40" y="664">LEGEND</text>
+          <rect x="120" y="654" width="20" height="12" rx="2" fill="rgba(45,49,66,0.05)" stroke="#4f5d75"/>
+          <text x="148" y="664">GENERATED</text>
+          <rect x="248" y="654" width="20" height="12" rx="2" fill="rgba(45,49,66,0.03)" stroke="rgba(45,49,66,0.30)"/>
+          <text x="276" y="664">FROM OCCT</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</body>
+</html>

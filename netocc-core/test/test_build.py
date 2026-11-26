@@ -1,16 +1,19 @@
 # SPDX-FileCopyrightText: 2026 Paul Büchner
 # SPDX-License-Identifier: MIT
 
-"""Tests of build.py's versions, changelog and SWIG message rules: python test/test_build.py (stdlib unittest)."""
+"""Tests of build.py's versions, changelog, SWIG message and package rules: python test/test_build.py (stdlib unittest)."""
 from __future__ import annotations
 
 import importlib.util
+import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 from unittest import mock
 
 CORE = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(CORE))  # build.py imports sbom.py beside it
 _spec = importlib.util.spec_from_file_location("build", CORE / "build.py")
 build = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(build)
@@ -194,13 +197,37 @@ class SwigMessageTests(unittest.TestCase):
         self.assertEqual(kept, messages.splitlines()[2:])
 
 
-class LibraryTests(unittest.TestCase):
-    def test_library_stem_matches_a_staged_copy_with_its_installed_file(self):
-        # Act
-        stems = [build.library_stem(n) for n in ("libz.so.1", "libz.so.1.3.2", "libz.1.dylib", "z.dll", "z.lib", "gperf")]
+class PackageTests(unittest.TestCase):
+    def test_dependency_problems_name_each_dependency_a_group_has_at_another_version_or_lacks(self):
+        # Arrange (a nuspec as NuGet writes it, a group per framework)
+        nuspec = """<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Demo</id>
+    <version>8.0.1.2-local.2</version>
+    <dependencies>
+      <group targetFramework="net10.0">
+        <dependency id="NetOcc" version="8.0.1.2-local.1" exclude="Build,Analyzers" />
+        <dependency id="NetVtk" version="[9.7.1.1]" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETFramework3.5">
+        <dependency id="NetOcc" version="8.0.1.2-local.2" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
+"""
+        with tempfile.TemporaryDirectory() as directory:
+            package = Path(directory, "Demo.8.0.1.2-local.2.nupkg")
+            with zipfile.ZipFile(package, "w") as archive:
+                archive.writestr("Demo.nuspec", nuspec)
 
-        # Assert
-        self.assertEqual(stems, ["libz", "libz", "libz", "z", None, None])
+            # Act
+            problems = (build.dependency_problems(package, {"NetOcc": "8.0.1.2-local.1", "NetVtk": "[9.7.1.1]"}),
+                        build.dependency_problems(package, {"NetVtk": "[9.7.1.1]"}))
+
+        # Assert (the second group differs in NetOcc and lacks NetVtk)
+        self.assertEqual(problems, (["NetOcc 8.0.1.2-local.2", "NetVtk missing"], ["NetVtk missing"]))
 
 
 if __name__ == "__main__":

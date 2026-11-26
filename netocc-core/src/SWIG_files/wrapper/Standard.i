@@ -22,6 +22,7 @@
 %occt_valueclass(Standard_Failure)
 %occt_valueclass(Standard_AbortiveTransaction)
 %occt_handle(Standard_Transient, Standard_Transient)
+%netocc_directed(Standard_Transient)
 %occt_transient(Standard_Type)
 %nodefaultctor Standard_Type;
 %feature("valuewrapper") Standard_Type;
